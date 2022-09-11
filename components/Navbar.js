@@ -93,7 +93,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"]; // 点用户图�
             一家连锁酒店
           </Typography>
           {pages.map((item) => (
-            <Button color="inherit" size="large">{item.name}</Button>
+            <Button key={item.name} color="inherit" size="large">{item.name}</Button>
           ))}
         </Box>
         {/*用户图标大小屏都在最右边*/}
