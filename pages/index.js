@@ -16,22 +16,18 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HotelIcon from "@mui/icons-material/Hotel";
+import NavBar from "../components/Navbar";
+import Footer from "../components/Footer";
+import Layout from "../components/Layout";
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const theme = createTheme();
 
-export default function Album() {
+export default function Home() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <HotelIcon  sx={{ mr: 2 }} /> {/* hotel icon*/}
-          <Typography variant="h6" color="inherit" noWrap>
-            Hotel name
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      {/* <NavBar/> */}
       <main>
         {/* Hero unit */}
         <Box
@@ -55,7 +51,7 @@ export default function Album() {
               variant="h5"
               align="center"
               color="text.secondary"
-              paragraph
+              paragraphp
             >
               Something short and leading about the collection below—its
               contents, the creator, etc. Make it short and sweet, but not too
@@ -112,21 +108,16 @@ export default function Album() {
           </Grid>
         </Container>
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-      </Box>
-      {/* End footer */}
+      {/* <Footer/> */}
     </ThemeProvider>
   );
+}
+
+
+Home.getLayout=function getLayout(page){
+  return(
+    <Layout>
+      {page}
+    </Layout>
+  )
 }
