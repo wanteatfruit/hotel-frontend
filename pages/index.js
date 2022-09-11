@@ -16,24 +16,19 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HotelIcon from "@mui/icons-material/Hotel";
+import NavBar from "../components/Navbar";
+import Footer from "../components/Footer";
+import Layout from "../components/Layout";
+import { cities } from "../data";
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const theme = createTheme();
 
-export default function Album() {
+export default function Home() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="relative">
-        <Toolbar>
-          <HotelIcon  sx={{ mr: 2 }} /> {/* hotel icon*/}
-          <Typography variant="h6" color="inherit" noWrap>
-            Hotel name
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      {/* <NavBar/> */}
       <main>
-        <Link href="/test_signin">sign in</Link>
         {/* Hero unit */}
         <Box
           sx={{
@@ -50,17 +45,15 @@ export default function Album() {
               color="text.primary"
               gutterBottom
             >
-              Album layout
+              一家连锁酒店
             </Typography>
             <Typography
               variant="h5"
               align="center"
               color="text.secondary"
-              paragraph
             >
-              Something short and leading about the collection below—its
-              contents, the creator, etc. Make it short and sweet, but not too
-              short so folks don&apos;t simply skip over it entirely.
+              Discover contemporary luxury with signature oriental charm in our
+              meticulously designed hotels, resorts and residences.
             </Typography>
             <Stack
               sx={{ pt: 4 }}
@@ -73,63 +66,54 @@ export default function Album() {
             </Stack>
           </Container>
         </Box>
-        <Container sx={{ py: 8 }} maxWidth="md">
-          {/* End hero unit */}
-          <Grid container spacing={4}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
+        <div>
+          {" "}
+          {/*can add animation later*/}
+          <Container sx={{ py: 8 }} maxWidth="lg">
+            {/*城市卡片*/}
+            <Grid container spacing={4}>
+              {cities.map((item) => (
+                <Grid item key={item} xs={12} sm={6} md={4}>
+                  <Card
                     sx={{
-                      // 16:9
-                      pt: "56.25%",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
                     }}
-                    image="https://source.unsplash.com/random"
-                    alt="random"
-                  />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography gutterBottom variant="h5" component="h2">
-                      Heading
-                    </Typography>
-                    <Typography>
-                      This is a media card. You can use this section to describe
-                      the content.
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">View</Button>
-                    <Button size="small">Edit</Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
+                  >
+                    <CardMedia
+                      component="img"
+                      sx={{
+                      }}
+                      image="https://www.michelin.com.cn/map-guide/assets/img/gz-mouseover.jpg"
+                      alt="random"
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        {item.name}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small">View</Button>
+                      <Button size="small">Edit</Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </Container>
+        </div>
       </main>
-      {/* Footer */}
-      <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          Something here to give the footer a purpose!
-        </Typography>
-      </Box>
-      {/* End footer */}
+      {/* <Footer/> */}
     </ThemeProvider>
-
-
   );
+}
+
+
+Home.getLayout=function getLayout(page){
+  return(
+    <Layout>
+      {page}
+    </Layout>
+  )
 }

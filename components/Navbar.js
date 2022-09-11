@@ -8,14 +8,9 @@ import { List,Box, Button, Drawer, IconButton, ListItem, ListItemButton, ListIte
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in user
+import { pages,settings } from "../data";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({isLoggedIn}) {
-  const pages = [
-    { name: "City", link: "/city" },
-    { name: "Hotel", link: "/hotel" },
-    { name: "Rooms", link: "/rooms" },
-  ]; // 跳转到的界面名称
-const settings = ["Profile", "Account", "Dashboard", "Logout"]; // 点用户图标后出来的选项
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
