@@ -79,23 +79,26 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"]; // 点用户图�
         />
         {/*大屏显示完整跳转名称*/}
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <HotelIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          
+
+          <HotelIcon sx={{ display: { xs: "none", md: "flex" }, mr: 2, mt:1 }} />
           {/* 大屏显示酒店logo和名称*/}
           <Typography
             variant="h6"
             color="inherit"
             noWrap
-            sx={{ display: { xs: "none", md: "flex" } }}
+            gutterBottom
+            sx={{ display: { xs: "none", md: "flex" },mt:1,mr:1 }}
           >
-            Hotel name
+            一家连锁酒店
           </Typography>
           {pages.map((item) => (
-            <Button color="inherit">{item.name}</Button>
+            <Button color="inherit" size="large">{item.name}</Button>
           ))}
         </Box>
         {/*用户图标大小屏都在最右边*/}
         <Box>
-          {/*icon*/}
+          {/*avatar，后续可改成avatar组件*/}
           <Tooltip title="Account center">
             <IconButton onClick={handleOpenUserMenu} color="inherit">
               {!isLoggedIn && <AccountCircleIcon />}
