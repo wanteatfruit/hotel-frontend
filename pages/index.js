@@ -19,12 +19,8 @@ import HotelIcon from "@mui/icons-material/Hotel";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Layout from "../components/Layout";
+import { cities } from "../data";
 
-const cities = [
-  { name: "广州", id: 1 },
-  { name: "深圳", id: 2 },
-  { name: "香港", id: 3 },
-];
 const theme = createTheme();
 
 export default function Home() {
@@ -55,7 +51,6 @@ export default function Home() {
               variant="h5"
               align="center"
               color="text.secondary"
-              paragraphp
             >
               Discover contemporary luxury with signature oriental charm in our
               meticulously designed hotels, resorts and residences.
