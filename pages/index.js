@@ -33,6 +33,7 @@ export default function Home() {
       <CssBaseline />
       {/* <NavBar/> */}
       <main>
+        <Link href="/test_signin">sign in</Link>
         {/* Hero unit */}
         <Box
           sx={{
@@ -111,6 +112,8 @@ export default function Home() {
       </main>
       {/* <Footer/> */}
     </ThemeProvider>
+
+
   );
 }
 
