@@ -36,7 +36,7 @@ export default function NavBar({isLoggedIn}) {
   }
 
   return (
-    <AppBar position="relative">
+      <AppBar position="relative" sx={{background: '#2E3B55', zIndex: (theme) => theme.zIndex.drawer + 1}}>
       {/* <Container maxWidth="xl"> */}
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/*设置小屏菜单显示*/}
