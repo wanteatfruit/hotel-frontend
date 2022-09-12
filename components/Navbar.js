@@ -4,11 +4,12 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
-import { List,Box, Button, Drawer, IconButton, ListItem, ListItemButton, ListItemText, Menu, MenuItem, Tooltip } from "@mui/material";
+import { List,Box, Button, Drawer, IconButton, ListItem, ListItemButton, ListItemText, Menu, MenuItem, Tooltip, Divider } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in user
-import { pages,settings } from "../data";
+import { login, pages,settings } from "../data";
+import Booking from "./BookingMenu";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({isLoggedIn}) {
 
@@ -40,13 +41,13 @@ export default function NavBar({isLoggedIn}) {
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/*设置小屏菜单显示*/}
 
-        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+        <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}>
           <IconButton onClick={handleDrawerToggle} color="inherit">
             <MenuIcon />
           </IconButton>
           <Drawer open={drawerOpen} onClose={handleDrawerToggle}>
             <List>
-              <ListItem sx={{width:"fit-content"}}>
+              <ListItem sx={{ width: "fit-content" }}>
                 <ListItemButton onClick={handleDrawerToggle}>
                   <CloseIcon />
                 </ListItemButton>
@@ -64,35 +65,39 @@ export default function NavBar({isLoggedIn}) {
               ))}
             </List>
           </Drawer>
+          <HotelIcon
+            sx={{
+              display: { xs: "flex", md: "none" },
+              alignItems: "center",
+              ml: 1,
+            }}
+          />
         </Box>
         {/* 小屏只显示logo，在屏幕中心*/}
-        <HotelIcon
-          sx={{
-            display: { xs: "flex", md: "none" },
-            alignItems: "center",
-          }}
-        />
+
         {/*大屏显示完整跳转名称*/}
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          
-
-          <HotelIcon sx={{ display: { xs: "none", md: "flex" }, mr: 2, mt:1 }} />
+          <HotelIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 2, mt: 1 }}
+          />
           {/* 大屏显示酒店logo和名称*/}
           <Typography
             variant="h6"
             color="inherit"
             noWrap
             gutterBottom
-            sx={{ display: { xs: "none", md: "flex" },mt:1,mr:1 }}
+            sx={{ display: { xs: "none", md: "flex" }, mt: 1, mr: 1 }}
           >
             一家连锁酒店
           </Typography>
           {pages.map((item) => (
-            <Button key={item.name} color="inherit" size="large">{item.name}</Button>
+            <Button key={item.name} color="inherit" size="large">
+              {item.name}
+            </Button>
           ))}
         </Box>
         {/*用户图标大小屏都在最右边*/}
-        <Box>
+        <Box sx={{ display: "flex" }}>
           {/*avatar，后续可改成avatar组件*/}
           <Tooltip title="Account center">
             <IconButton onClick={handleOpenUserMenu} color="inherit">
@@ -107,12 +112,29 @@ export default function NavBar({isLoggedIn}) {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map((item) => (
-              <MenuItem key={item} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{item}</Typography>
-              </MenuItem>
-            ))}
+            {isLoggedIn &&
+              settings.map((item) => (
+                <MenuItem key={item} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{item}</Typography>
+                </MenuItem>
+              ))}
+            {!isLoggedIn &&
+              login.map((item) => (
+                <MenuItem key={item} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{item}</Typography>
+                </MenuItem>
+              ))}
           </Menu>
+          <Divider
+            orientation="vertical"
+            color="success"
+            flexItem
+            sx={{ mx: 2 }}
+          />
+          {/* <Button color="error" size="large" variant="contained">
+            Book
+          </Button> */}
+          <Booking />
         </Box>
       </Toolbar>
       {/* </Container> */}

@@ -27,7 +27,9 @@ export default function Home() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* <NavBar/> */}
+      <div>
+        <NavBar />
+      </div>
       <main>
         {/* Hero unit */}
         <Box
@@ -47,11 +49,7 @@ export default function Home() {
             >
               一家连锁酒店
             </Typography>
-            <Typography
-              variant="h5"
-              align="center"
-              color="text.secondary"
-            >
+            <Typography variant="h5" align="center" color="text.secondary">
               Discover contemporary luxury with signature oriental charm in our
               meticulously designed hotels, resorts and residences.
             </Typography>
@@ -61,7 +59,7 @@ export default function Home() {
               spacing={2}
               justifyContent="center"
             >
-              <Button variant="contained">Main call to action</Button>
+              <Button variant="contained">订房</Button>
               <Button variant="outlined">Secondary action</Button>
             </Stack>
           </Container>
@@ -83,8 +81,7 @@ export default function Home() {
                   >
                     <CardMedia
                       component="img"
-                      sx={{
-                      }}
+                      sx={{}}
                       image="https://www.michelin.com.cn/map-guide/assets/img/gz-mouseover.jpg"
                       alt="random"
                     />
@@ -104,16 +101,16 @@ export default function Home() {
           </Container>
         </div>
       </main>
-      {/* <Footer/> */}
+      <Footer/>
     </ThemeProvider>
   );
 }
 
 
-Home.getLayout=function getLayout(page){
-  return(
-    <Layout>
-      {page}
-    </Layout>
-  )
-}
+// Home.getLayout=function getLayout(page){
+//   return(
+//     <Layout>
+//       {page}
+//     </Layout>
+//   )
+// }
