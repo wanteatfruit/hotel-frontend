@@ -33,6 +33,7 @@ export default function Album() {
         </Toolbar>
       </AppBar>
       <main>
+        <Link href="/test_signin">sign in</Link>
         {/* Hero unit */}
         <Box
           sx={{
@@ -128,5 +129,7 @@ export default function Album() {
       </Box>
       {/* End footer */}
     </ThemeProvider>
+
+
   );
 }
