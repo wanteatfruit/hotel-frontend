@@ -8,5 +8,6 @@ export const login = ["Login"];
 export const cities = [
   { name: "广州", id: 1 },
   { name: "深圳", id: 2 },
-  { name: "香港", id: 3 },
+  { name: "上海", id: 3 },
+  { name: "重庆", id: 4},
 ];

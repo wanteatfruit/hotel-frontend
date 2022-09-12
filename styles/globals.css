@@ -1,3 +1,10 @@
+:root{
+  --ticket-height:220px;
+  --ticket-width:500px;
+  --ticket-pic-width:400px;
+  --ticket-bg-primary : ghostwhite;
+}
+
 html,
 body {
   padding: 0;

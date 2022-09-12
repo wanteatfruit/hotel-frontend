@@ -1,0 +1,162 @@
+.ticket {
+  position: relative;
+  max-height: var(--ticket-height);
+  width: var(--ticket-width);
+  background-color:var(--ticket-bg-primary) ;
+  overflow: hidden;
+}
+
+.ticket::before {
+  content: "";
+  z-index: 99;
+  position: absolute;
+  top: -20px;
+  left: 25px;
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
+  background-color: var(--ticket-bg-primary);
+}
+
+.ticket::after {
+  content: "";
+  z-index: 99;
+  position: absolute;
+  bottom: -20px;
+  left: 25px;
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
+  background-color: var(--ticket-bg-primary);
+}
+
+.ticket ul {
+  z-index: 99;
+  position: absolute;
+  left: 39px;
+  bottom: 4px;
+  padding-left: 0px;
+  margin-bottom: 0px;
+  list-style-type: none;
+}
+
+.ticket ul li {
+
+  width: 3px;
+  height: 3px;
+  border-radius: 3px;
+  margin: 6px 0;
+  background-color: white;
+}
+
+.ticketHeading {
+  margin: 0;
+  z-index: 1;
+  position: absolute;
+  bottom: 10px;
+  right: 130px;
+  font-size: 60px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+}
+
+.arrow {
+  z-index: 1;
+  cursor: pointer;
+  position: absolute;
+  right: 75px;
+  bottom: 22px;
+  font-size: 40px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.pic_sz {
+  background-image: url("https://images.unsplash.com/photo-1634647626782-f5fffa9fd9b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80");
+  background-size: 100% 100%;
+  filter: grayscale(100%);
+  width: var(--ticket-pic-width);
+  height: var(--ticket-height);
+  transition: all 0.2s ease;
+}
+
+.pic_gz {
+  background-image: url("https://images.pexels.com/photos/5265116/pexels-photo-5265116.jpeg?auto=compress&cs=tinysrgb&w=1600");
+  background-size: 100% 100%;
+  filter: grayscale(100%);
+  width: var(--ticket-pic-width);
+  height: var(--ticket-height);
+  transition: all 0.2s ease;
+}
+
+.pic_sh {
+  background-image: url("https://images.pexels.com/photos/745243/pexels-photo-745243.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+  background-size: 100% 100%;
+  filter: grayscale(100%);
+  width: var(--ticket-pic-width);
+  height: var(--ticket-height);
+  transition: all 0.2s ease;
+}
+
+.pic_cq{
+  background-image: url("https://images.pexels.com/photos/13427045/pexels-photo-13427045.jpeg?auto=compress&cs=tinysrgb&w=1600");
+  background-size: 100% 100%;
+  filter: grayscale(100%);
+  width: var(--ticket-pic-width);
+  height: var(--ticket-height);
+  transition: all 0.2s ease;
+}
+
+.side {
+  z-index: 99;
+  position: absolute;
+  top: 20px;
+  right: 70px;
+  color: #333;
+  opacity: 0.7;
+  font-size: 12px;
+  letter-spacing: 1px;
+  writing-mode: vertical-lr;
+  transition: all 0.2s ease;
+}
+
+.button{
+     position: absolute;
+      right: 14px;
+      bottom: 14px;
+      width: 30px;
+      height: 30px;
+      background-color: rgb(224, 100, 148);
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      outline:none;
+      transition: all 0.3s ease;
+      mix-blend-mode: hard-light;
+}
+
+.ticket:hover button{
+  transform: scale(16.5);
+}
+
+
+.ticket:hover .pic_sz{
+  filter: grayscale(0);
+}
+.ticket:hover .pic_gz{
+  filter: grayscale(0);
+}
+.ticket:hover .pic_sh{
+  filter: grayscale(0);
+}
+.ticket:hover .pic_cq{
+  filter: grayscale(0);
+}
+.ticket:hover .arrow{
+  opacity: 1;
+  transform: scale(2);
+}
