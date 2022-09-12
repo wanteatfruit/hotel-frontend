@@ -1,7 +1,5 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
-import CameraIcon from "@mui/icons-material/PhotoCamera";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -10,14 +8,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import HotelIcon from "@mui/icons-material/Hotel";
-import NavBar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 
 const cities = [
@@ -33,7 +27,7 @@ export default function Home() {
       <CssBaseline />
       {/* <NavBar/> */}
       <main>
-        <Link href="/test_signin">sign in</Link>
+        <Link href="/account-center">Account Center Temporary</Link>
         {/* Hero unit */}
         <Box
           sx={{
