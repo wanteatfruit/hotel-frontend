@@ -1,17 +1,18 @@
 import DrawerLeft from "./drawer-left";
 import Box from "@mui/material/Box";
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout";
 import {useState} from 'react';
 import Container from "@mui/material/Container";
 import {createTheme} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
+import Account from "./account";
 
 export default function AccountCenter() {
     const [drawerItem, setDrawerItem] = useState(0);
 
 
     function accountContent() {
-        return <h1>Account</h1>
+        return <Account/>;
     }
 
     function ordersContent() {

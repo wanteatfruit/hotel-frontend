@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useState} from "react";
-import Router from "next/router";
+import {useRouter} from "next/router";
 
 function Copyright(props) {
     return (
@@ -30,9 +30,15 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignInSide() {
+export default function ConfirmSignIn() {
+    const router = useRouter();
+    console.log(router.query);
     const [succeed, setSucceed] = useState(true);
     const handleSubmit = (event) => {
+        if (succeed) {
+            // query.setTopUpAmount(query.amount);
+            router.push("/account-center/top-up");
+        }
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
@@ -72,8 +78,15 @@ export default function SignInSide() {
                         <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                             <LockOutlinedIcon/>
                         </Avatar>
-                        <Typography component="h1" variant="h5">
+                        <Typography component="h3"
+                                    variant="h4"
+                                    align="center"
+                                    color="text.primary"
+                                    gutterBottom>
                             Sign in
+                        </Typography>
+                        <Typography variant="h5" align="center" color="text.secondary" component="p">
+                            Confirm to pay
                         </Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <TextField
@@ -96,17 +109,13 @@ export default function SignInSide() {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary"/>}
-                                label="Remember me"
-                            />
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{mt: 3, mb: 2}}
                             >
-                                Sign In
+                                Confirm
                             </Button>
                             <Grid container>
                                 <Grid item xs>

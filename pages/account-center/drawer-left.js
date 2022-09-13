@@ -57,6 +57,7 @@ export default function DrawerLeft({setDrawerItem}) {
                     sx={{
                         width: drawerWidth,
                         flexShrink: 0,
+                        alignItems: "center",
                         [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'}
                     }}
                 >

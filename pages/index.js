@@ -31,7 +31,7 @@ export default function Home() {
         <NavBar />
       </div>
       <main>
-          <Link href={"/account-center"}>temporary account center</Link>
+          <Link href={"/account-center/account-center"}>temporary account center</Link>
         {/* Hero unit */}
         <Box
           sx={{
