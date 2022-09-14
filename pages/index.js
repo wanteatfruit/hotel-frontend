@@ -70,7 +70,7 @@ export default function Home() {
           {/*can add animation later*/}
           <Container sx={{ py: 8, }} maxWidth="lg">
             {/*城市卡片*/}
-            <Grid container spacing={6} sx={{marginLeft:0}}>
+            <Grid container spacing={8} sx={{}}>
               <Grid item><TicketSZ /></Grid>
               <Grid item>
                 <TicketGZ />
