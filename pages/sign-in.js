@@ -36,7 +36,7 @@ export default function SignIn() {
     const [succeed, setSucceed] = useState(false);
     const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        // const data = new FormData(event.currentTarget);
         // console.log({
         //     username: data.get('username'),
         //     password: data.get('password'),
@@ -92,7 +92,7 @@ export default function SignIn() {
                                 id="username"
                                 label="Username Address"
                                 name="username"
-                                autoComplete="username"
+                                autoComplete="用户名"
                                 autoFocus
                             />
                             <TextField
@@ -103,7 +103,7 @@ export default function SignIn() {
                                 label="Password"
                                 type="password"
                                 id="password"
-                                autoComplete="current-password"
+                                autoComplete="密码"
                             />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary"/>}

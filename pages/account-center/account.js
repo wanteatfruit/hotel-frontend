@@ -4,7 +4,6 @@ import ListItem from '@mui/material/ListItem';
 import {Divider} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import {useState} from "react";
 import Link from "next/link";
 
 function getUserInfo() {
@@ -32,35 +31,31 @@ function getListItemContent(name, value) {
 export default function Account() {
     const gapHeight = 4;
     let userInfo = getUserInfo();
-    const [topUpAmount, setTopUpAmount] = useState(0);
     return (
         <>
             <List>
                 <ListItem>
                     <Grid container>
-                        {getListItemContent("Name", userInfo.name)}
+                        {getListItemContent("姓名", userInfo.name)}
                     </Grid>
                 </ListItem>
                 <Divider sx={{my: gapHeight}}/>
                 <ListItem>
                     <Grid container>
-                        {getListItemContent("User ID", userInfo.id)}
+                        {getListItemContent("ID", userInfo.id)}
                     </Grid>
                 </ListItem>
                 <Divider sx={{my: gapHeight}}/>
                 <ListItem>
                     <Grid container>
-                        {getListItemContent("Balance", userInfo.balance)}
+                        {getListItemContent("余额", userInfo.balance)}
                         <Grid xs={2}>
                             <Link
                                 href={{
                                     pathname: "/account-center/top-up",
-                                    query: {
-                                        setTopUpAmount: {setTopUpAmount} // should be `title` not `id`
-                                    },
                                 }}
                             >
-                                <Typography sx={{textDecoration: 'underline'}}>Top Up</Typography>
+                                <Typography sx={{textDecoration: 'underline'}}>充值</Typography>
                             </Link>
                         </Grid>
                     </Grid>
@@ -68,13 +63,13 @@ export default function Account() {
                 <Divider sx={{my: gapHeight}}/>
                 <ListItem>
                     <Grid container>
-                        {getListItemContent("Telephone", userInfo.telephone)}
+                        {getListItemContent("电话", userInfo.telephone)}
                     </Grid>
                 </ListItem>
                 <Divider sx={{my: gapHeight}}/>
                 <ListItem>
                     <Grid container>
-                        {getListItemContent("Reward Points", userInfo.points)}
+                        {getListItemContent("积分", userInfo.points)}
                     </Grid>
                 </ListItem>
             </List>

@@ -17,8 +17,8 @@ function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
+            <Link color="inherit" href="https://github.com/wanteatfruit/hotel-frontend">
+                SUSTech-Hotel
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -35,7 +35,7 @@ export default function ConfirmSignIn() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            email: data.get('email'),
+            username: data.get('username'),
             password: data.get('password'),
         });
         setSucceed(true);
@@ -78,25 +78,18 @@ export default function ConfirmSignIn() {
                         <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                             <LockOutlinedIcon/>
                         </Avatar>
-                        <Typography component="h3"
-                                    variant="h4"
-                                    align="center"
-                                    color="text.primary"
-                                    gutterBottom>
-                            Sign in
-                        </Typography>
                         <Typography variant="h5" align="center" color="text.secondary" component="p">
-                            Confirm to pay
+                            支付确认
                         </Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <TextField
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                id="username"
+                                label="用户名"
+                                name="username"
+                                autoComplete="用户名"
                                 autoFocus
                             />
                             <TextField
@@ -104,10 +97,10 @@ export default function ConfirmSignIn() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="密码"
                                 type="password"
                                 id="password"
-                                autoComplete="current-password"
+                                autoComplete="密码"
                             />
                             <Button
                                 type="submit"
@@ -115,14 +108,14 @@ export default function ConfirmSignIn() {
                                 variant="contained"
                                 sx={{mt: 3, mb: 2}}
                             >
-                                Confirm
+                                确认
                             </Button>
                             <Grid container>
                                 <Grid item>
                                     <Link variant="body2" href={{
                                         pathname: "/sign-up",
                                         query: {href: '/account-center/confirm-sign-in', original_href: ""}
-                                    }}>{"Don't have an account? Sign Up"}</Link>
+                                    }}><Typography>注册新账号</Typography></Link>
                                 </Grid>
                             </Grid>
                             <Copyright sx={{mt: 5}}/>

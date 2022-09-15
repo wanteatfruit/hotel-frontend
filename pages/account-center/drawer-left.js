@@ -64,7 +64,7 @@ export default function DrawerLeft({setDrawerItem}) {
                     <Toolbar/>
                     <Box sx={{overflow: 'auto'}}>
                         <List>
-                            {['Account', 'Orders', 'Marks', 'Store'].map((text, index) => (
+                            {['账户', '订单', '收藏', '积分商城'].map((text, index) => (
                                 drawerItemChoose(index, text, setDrawerItem)
                             ))}
                         </List>

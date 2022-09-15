@@ -3,9 +3,9 @@ import Box from "@mui/material/Box";
 import Layout from "../../components/Layout";
 import {useState} from 'react';
 import Container from "@mui/material/Container";
-import {createTheme} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Account from "./account";
+import Orders from "./orders";
 
 export default function AccountCenter() {
     const [drawerItem, setDrawerItem] = useState(0);
@@ -16,7 +16,7 @@ export default function AccountCenter() {
     }
 
     function ordersContent() {
-        return <h1>Order</h1>
+        return <Orders/>;
     }
 
     function marksContent() {
@@ -40,14 +40,6 @@ export default function AccountCenter() {
         }
     }
 
-    // return (
-    // <>
-    //     <Layout>
-    //         <DrawerLeft setDrawerItem={setDrawerItem}></DrawerLeft>
-    //
-    //     </Layout>
-    // </>
-    const mdTheme = createTheme();
     return (
         <Layout>
             <Box sx={{display: 'flex'}}>

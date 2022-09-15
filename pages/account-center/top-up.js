@@ -19,7 +19,7 @@ import {useRouter} from "next/router";
 
 const tiers = [
     {
-        title: 'Silver',
+        title: '',
         price: '1000',
         description: [
             'Extra 100$ as gift',
@@ -99,7 +99,7 @@ export default function TopUp() {
                         id="amount"
                         name="amount"
                         label="Error"
-                        helperText="Invalid Number"
+                        helperText="请输入数字"
                         variant="filled"
                     />
                 </>
@@ -121,10 +121,7 @@ export default function TopUp() {
                         color="text.primary"
                         gutterBottom
                     >
-                        Promotions !!!
-                    </Typography>
-                    <Typography variant="h5" align="center" color="text.secondary" component="p">
-                        Check the following about the details
+                        充值活动
                     </Typography>
                 </Container>
                 {/* End hero unit */}
@@ -194,15 +191,15 @@ export default function TopUp() {
                 <Container maxWidth="md" component="main" sx={{pt: 20, pb: 6}}>
                     <Grid component="form" onSubmit={handleSubmit} justifyContent="flex-end">
                         <Grid xs={2} sm={2} md={4}>
-                            <Typography sx={{fontWeight: 'bold', fontSize: 30}}> Normal Top
-                                Up </Typography>
+                            <Typography sx={{fontWeight: 'bold', fontSize: 30}}>普通充值</Typography>
                         </Grid>
+                        <br/>
                         <Grid xs={5} sm={5} md={4}>
                             {getTextField()}
                         </Grid>
                         <br/>
                         <Grid xs={2} sm={2} md={2}>
-                            <Button type="submit" variant="contained">Confirm</Button>
+                            <Button type="submit" variant="contained"><Typography>确认</Typography></Button>
                         </Grid>
                     </Grid>
                 </Container>
