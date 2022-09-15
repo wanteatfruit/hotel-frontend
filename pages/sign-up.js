@@ -5,21 +5,21 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import Link from 'next/link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Paper from "@mui/material/Paper";
+import {useRouter} from "next/router";
 
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
+            <Link color="inherit" href="https://github.com/wanteatfruit/hotel-frontend">
+                SUSTech-Hotel
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -29,7 +29,9 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignUpSide() {
+export default function SignUp() {
+    const router = useRouter();
+    const query = router.query;
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -37,6 +39,10 @@ export default function SignUpSide() {
             email: data.get('email'),
             password: data.get('password'),
         });
+        router.push({
+            pathname: query['href'],
+            query: {href: query['original_href']}
+        })
     };
 
     return (
@@ -134,15 +140,18 @@ export default function SignUpSide() {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <Link href="#" variant="body2">
+                                    <Link href={{
+                                        pathname: query['href'],
+                                        query: {href: query['original_href']}
+                                    }} variant="body2">
                                         Already have an account? Sign in
                                     </Link>
                                 </Grid>
                             </Grid>
+                            <Copyright sx={{mt: 5}}/>
                         </Box>
                     </Box>
                 </Grid>
-                <Copyright sx={{mt: 5}}/>
             </Grid>
         </ThemeProvider>
     );

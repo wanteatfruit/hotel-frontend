@@ -3,16 +3,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import Link from 'next/link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 
 function Copyright(props) {
@@ -32,20 +30,22 @@ const theme = createTheme();
 
 export default function ConfirmSignIn() {
     const router = useRouter();
-    console.log(router.query);
-    const [succeed, setSucceed] = useState(true);
+    const [succeed, setSucceed] = useState(false);
     const handleSubmit = (event) => {
-        if (succeed) {
-            // query.setTopUpAmount(query.amount);
-            router.push("/account-center/top-up");
-        }
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
             email: data.get('email'),
             password: data.get('password'),
         });
+        setSucceed(true);
     };
+
+    useEffect(() => {
+        if (succeed) {
+            router.push("/account-center/top-up")
+        }
+    })
 
     return (
         <ThemeProvider theme={theme}>
@@ -118,15 +118,11 @@ export default function ConfirmSignIn() {
                                 Confirm
                             </Button>
                             <Grid container>
-                                <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
-                                        {"Don't have an account? Sign Up"}
-                                    </Link>
+                                    <Link variant="body2" href={{
+                                        pathname: "/sign-up",
+                                        query: {href: '/account-center/confirm-sign-in', original_href: ""}
+                                    }}>{"Don't have an account? Sign Up"}</Link>
                                 </Grid>
                             </Grid>
                             <Copyright sx={{mt: 5}}/>
