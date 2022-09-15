@@ -20,6 +20,7 @@ import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 import { cities } from "../data";
+import Ticket, { TicketCQ, TicketGZ, TicketSH, TicketSZ } from "../components/CityTicket";
 
 const theme = createTheme();
 
@@ -68,9 +69,21 @@ export default function Home() {
         <div>
           {" "}
           {/*can add animation later*/}
-          <Container sx={{ py: 8 }} maxWidth="lg">
+          <Container sx={{ py: 8, }} maxWidth="lg">
             {/*城市卡片*/}
-            <Grid container spacing={4}>
+            <Grid container spacing={8} sx={{}}>
+              <Grid item><TicketSZ /></Grid>
+              <Grid item>
+                <TicketGZ />
+              </Grid>
+              <Grid item>
+                <TicketCQ />
+              </Grid>
+              <Grid item>
+                <TicketSH />
+              </Grid>
+            </Grid>
+            {/* <Grid container spacing={4}>
               {cities.map((item) => (
                 <Grid item key={item} xs={12} sm={6} md={4}>
                   <Card
@@ -98,11 +111,11 @@ export default function Home() {
                   </Card>
                 </Grid>
               ))}
-            </Grid>
+            </Grid> */}
           </Container>
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </ThemeProvider>
   );
 }
