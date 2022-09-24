@@ -3,24 +3,22 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
+import Link from 'next/link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
+            <Link color="inherit" href="https://github.com/wanteatfruit/hotel-frontend">
+                SUSTech-Hotel
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -32,20 +30,22 @@ const theme = createTheme();
 
 export default function ConfirmSignIn() {
     const router = useRouter();
-    console.log(router.query);
-    const [succeed, setSucceed] = useState(true);
+    const [succeed, setSucceed] = useState(false);
     const handleSubmit = (event) => {
-        if (succeed) {
-            // query.setTopUpAmount(query.amount);
-            router.push("/account-center/top-up");
-        }
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            email: data.get('email'),
+            username: data.get('username'),
             password: data.get('password'),
         });
+        setSucceed(true);
     };
+
+    useEffect(() => {
+        if (succeed) {
+            router.push("/account-center/top-up")
+        }
+    })
 
     return (
         <ThemeProvider theme={theme}>
@@ -78,25 +78,18 @@ export default function ConfirmSignIn() {
                         <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                             <LockOutlinedIcon/>
                         </Avatar>
-                        <Typography component="h3"
-                                    variant="h4"
-                                    align="center"
-                                    color="text.primary"
-                                    gutterBottom>
-                            Sign in
-                        </Typography>
                         <Typography variant="h5" align="center" color="text.secondary" component="p">
-                            Confirm to pay
+                            支付确认
                         </Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <TextField
                                 margin="normal"
                                 required
                                 fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
+                                id="username"
+                                label="用户名"
+                                name="username"
+                                autoComplete="用户名"
                                 autoFocus
                             />
                             <TextField
@@ -104,10 +97,10 @@ export default function ConfirmSignIn() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="密码"
                                 type="password"
                                 id="password"
-                                autoComplete="current-password"
+                                autoComplete="密码"
                             />
                             <Button
                                 type="submit"
@@ -115,18 +108,14 @@ export default function ConfirmSignIn() {
                                 variant="contained"
                                 sx={{mt: 3, mb: 2}}
                             >
-                                Confirm
+                                确认
                             </Button>
                             <Grid container>
-                                <Grid item xs>
-                                    <Link href="#" variant="body2">
-                                        Forgot password?
-                                    </Link>
-                                </Grid>
                                 <Grid item>
-                                    <Link href="#" variant="body2">
-                                        {"Don't have an account? Sign Up"}
-                                    </Link>
+                                    <Link variant="body2" href={{
+                                        pathname: "/sign-up",
+                                        query: {href: '/account-center/confirm-sign-in', original_href: ""}
+                                    }}><Typography>注册新账号</Typography></Link>
                                 </Grid>
                             </Grid>
                             <Copyright sx={{mt: 5}}/>

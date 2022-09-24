@@ -19,7 +19,7 @@ import {useRouter} from "next/router";
 
 const tiers = [
     {
-        title: 'Silver',
+        title: '',
         price: '1000',
         description: [
             'Extra 100$ as gift',
@@ -60,19 +60,22 @@ export default function TopUp() {
     const query = router.query;
     const setTopUpAmount = query.setTopUpAmount;
     const [validInput, setValidInput] = useState(true);
-    const [textFieldInput, setTextFieldInput] = useState('');
     const validInputRegex = new RegExp(
         "^\\d+$"
     );
 
-    function buttonOnClick() {
-        if (validInputRegex.test(textFieldInput)) {
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const amount = data.get('amount');
+        console.log(amount);
+        if (validInputRegex.test(amount)) {
             setValidInput(true);
             router.push({
                 pathname: "/account-center/confirm-sign-in",
                 query: {
                     setTopUpAmount: {setTopUpAmount},
-                    amount: {textFieldInput}
+                    amount: amount
                 }
             })
         } else {
@@ -84,8 +87,7 @@ export default function TopUp() {
         if (validInput) {
             return (
                 <>
-                    <TextField value={textFieldInput} id="normal" variant="outlined"
-                               onChange={(e) => setTextFieldInput(e.target.value)}/>
+                    <TextField id="amount" required name="amount" variant="outlined"/>
                 </>
             )
         } else {
@@ -93,12 +95,12 @@ export default function TopUp() {
                 <>
                     <TextField
                         error
-                        value={textFieldInput}
-                        id="filled-error-helper-text"
+                        required
+                        id="amount"
+                        name="amount"
                         label="Error"
-                        helperText="Invalid Number"
+                        helperText="请输入数字"
                         variant="filled"
-                        onChange={(e) => setTextFieldInput(e.target.value)}
                     />
                 </>
             )
@@ -119,10 +121,7 @@ export default function TopUp() {
                         color="text.primary"
                         gutterBottom
                     >
-                        Promotions !!!
-                    </Typography>
-                    <Typography variant="h5" align="center" color="text.secondary" component="p">
-                        Check the following about the details
+                        充值活动
                     </Typography>
                 </Container>
                 {/* End hero unit */}
@@ -190,16 +189,17 @@ export default function TopUp() {
                     </Grid>
                 </Container>
                 <Container maxWidth="md" component="main" sx={{pt: 20, pb: 6}}>
-                    <Grid container spacing={5} justifyContent="flex-end">
+                    <Grid component="form" onSubmit={handleSubmit} justifyContent="flex-end">
                         <Grid xs={2} sm={2} md={4}>
-                            <Typography sx={{fontWeight: 'bold', fontSize: 30}}> Normal Top
-                                Up </Typography>
+                            <Typography sx={{fontWeight: 'bold', fontSize: 30}}>普通充值</Typography>
                         </Grid>
+                        <br/>
                         <Grid xs={5} sm={5} md={4}>
                             {getTextField()}
                         </Grid>
+                        <br/>
                         <Grid xs={2} sm={2} md={2}>
-                            <Button variant="contained" onClick={buttonOnClick}>Confirm</Button>
+                            <Button type="submit" variant="contained"><Typography>确认</Typography></Button>
                         </Grid>
                     </Grid>
                 </Container>
