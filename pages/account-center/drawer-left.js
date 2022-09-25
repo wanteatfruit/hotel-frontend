@@ -49,28 +49,32 @@ function getIcon(index) {
 
 export default function DrawerLeft({setDrawerItem}) {
     return (
-        <>
-            <Box sx={{display: 'flex'}}>
-                <CssBaseline/>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        width: drawerWidth,
-                        flexShrink: 0,
-                        alignItems: "center",
-                        [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: 'border-box'}
-                    }}
-                >
-                    <Toolbar/>
-                    <Box sx={{overflow: 'auto'}}>
-                        <List>
-                            {['账户', '订单', '收藏', '积分商城'].map((text, index) => (
-                                drawerItemChoose(index, text, setDrawerItem)
-                            ))}
-                        </List>
-                    </Box>
-                </Drawer>
+      <>
+        <Box sx={{ display: "flex", position: "relative" }}>
+          <CssBaseline />
+          <Drawer
+            variant="permanent"
+            sx={{
+              position: "relative",
+              width: drawerWidth,
+              flexShrink: 0,
+              alignItems: "center",
+              [`& .MuiDrawer-paper`]: {
+                width: drawerWidth,
+                boxSizing: "border-box",
+              },
+            }}
+          >
+            <Toolbar />
+            <Box sx={{ overflow: "auto" }}>
+              <List>
+                {["账户", "订单", "收藏", "积分商城"].map((text, index) =>
+                  drawerItemChoose(index, text, setDrawerItem)
+                )}
+              </List>
             </Box>
-        </>
+          </Drawer>
+        </Box>
+      </>
     );
 }

@@ -11,3 +11,9 @@ export const cities = [
   { name: "上海", id: 3 },
   { name: "重庆", id: 4},
 ];
+
+export const branchHotels = [
+  { id: 1, city: "sz", name: "深圳文华东方酒店" },
+  { id: 2, city: "sz", name: "深圳丽思卡尔顿" },
+  { id: 3, city: "gz", name: "广州文华东方酒店" },
+];
