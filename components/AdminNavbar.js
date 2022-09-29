@@ -1,6 +1,7 @@
 import {
   AppBar,
   Box,
+  Button,
   CssBaseline,
   Divider,
   Drawer,
@@ -17,13 +18,25 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { useRouter } from "next/router";
 
-export default function AdminNavBar({setDrawerItem}) {
+export default function AdminNavBar({}) {
   const drawerWidth = 200;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  function handleJump(index){
+    switch(index){
+      case 0:
+        return "/admin/dashboard";
+      case 1:
+        return "/admin/orders";
+      case 2:
+        return "/admin/rooms";
+    }
+  }
 
   const drawer = (
     <div>
@@ -32,7 +45,7 @@ export default function AdminNavBar({setDrawerItem}) {
       <List>
         {["数据面板", "订单","房间信息"].map((text, index) => (
           <ListItem key={text}>
-            <ListItemButton onClick={()=>{setDrawerItem(index)}}>
+            <ListItemButton href={handleJump(index)}>
               {text=="数据面板"? <DashboardIcon />:<LocalOfferIcon />}
               <ListItemText primary={text} />
             </ListItemButton>
@@ -45,7 +58,7 @@ export default function AdminNavBar({setDrawerItem}) {
     <>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="fixed" sx={{}}>
+        <AppBar position="fixed" sx={{}} color='transparent'>
           <Toolbar>
             <IconButton color="inherit" onClick={handleDrawerToggle}>
               <MenuIcon />
