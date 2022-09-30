@@ -1,86 +1,65 @@
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
-import {Dialog, DialogContent, Divider} from "@mui/material";
-import Paper from "@mui/material/Paper";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import SmokingRoomsIcon from "@mui/icons-material/SmokingRooms";
-import SmokeFreeIcon from "@mui/icons-material/SmokeFree";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Layout from "../../components/Layout";
 import {useState} from "react";
+import {Dialog, DialogContent, TextField} from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import Paper from "@mui/material/Paper";
+
+
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+function getMerchandiseInfo() {
+    let merchandise_list = [];
+    let merchandise_a = ['大床房一晚', '免费住一晚！', '2000'];
+    let merchandise_b = ['喜来登大白兔', '我们的酒店公仔！', '500'];
+    merchandise_list.push(merchandise_a);
+    merchandise_list.push(merchandise_b);
+    return merchandise_list;
+}
+
 
 export default function Store() {
-    const [infoDialogOpen, setInfoDialogOpen] = useState(false);
-    const [roomOnDialog, setRoomOnDialog] = useState("");
+    let merchandiseList = getMerchandiseInfo();
+    const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false)
+    const [merchandiseOnDialog, setMerchandiseOnDialog] = useState("")
 
-    function getFinishedInfo() {
-        let room_list = [];
-        let room_a = ['上海黄埔W酒店', '花园房'];
-        room_list.push(room_a);
-        return room_list;
+    const purchaseOnClick = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const telephone = data.get('telephone');
+        console.log(telephone)
     }
 
-    function getAlbumImage(roomName) {
-        return "https://source.unsplash.com/random"
-    }
-
-    function getRoomInfo() {
-        let name = "大床房!!!";
-        let area = 30;
-        let window = true;
-        let smoking = false;
-        return {name, area, window, smoking};
-    }
-
-    function getListItemContent(attribute, value) {
-        let content = ''
-        switch (attribute) {
-            case "name":
-                content = value;
-                break;
-            case "area":
-                content = value + " 平方"
-                break;
-            case "window":
-                if (value) {
-                    content = "有窗"
-                } else {
-                    content = "无窗"
-                }
-                break;
-            case "smoking":
-                if (value) {
-                    content = <SmokingRoomsIcon/>
-                } else {
-                    content = <SmokeFreeIcon/>
-                }
-                break;
-        }
-        return content
-    }
-
-    function roomInfoDialog() {
-        const gapHeight = 2;
-        let roomInfo = getRoomInfo()
+    function purchaseDialog() {
         return (
             <>
-                <Dialog
-                    open={infoDialogOpen}
-                    onClose={() => {
-                        setInfoDialogOpen(false)
-                    }}
-                    PaperProps={{sx: {position: "fixed", right: 10, width: "100%", height: "100%", maxWidth: "md"}}}
-                >
+                <Dialog open={purchaseDialogOpen} onClose={() => setPurchaseDialogOpen(false)}
+                        PaperProps={{
+                            sx: {
+                                position: "fixed",
+                                width: "100%",
+                                height: "100%",
+                                maxWidth: "sm",
+                                maxHeight: "sm"
+                            }
+                        }}>
                     <DialogContent>
-                        <Grid container component="main" sx={{height: '100vh'}}>
+                        <Grid container component="main" sx={{height: '100%', width: '100%'}}>
+                            <CssBaseline/>
                             <Grid
-                                xs={false}
-                                sm={4}
-                                md={7}
+                                item
+                                width={"100%"}
+                                height={"100%"}
+                                // marginBottom={"10px"}
                                 sx={{
                                     backgroundImage: 'url(/images/sign-in.jpg)',
                                     backgroundRepeat: 'no-repeat',
@@ -90,40 +69,61 @@ export default function Store() {
                                     backgroundPosition: 'center',
                                 }}
                             />
-                            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                                <Grid container marginBottom={10}>
-                                    <List>
-                                        {/*{name, area, window, smoking};*/}
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("name", roomInfo.name)}
-                                            </Grid>
-                                        </ListItem>
-                                        <Divider sx={{my: gapHeight}}/>
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("area", roomInfo.area)}
-                                            </Grid>
-                                        </ListItem>
-                                        <Divider sx={{my: gapHeight}}/>
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("window", roomInfo.window)}
-                                            </Grid>
-                                        </ListItem>
-                                        <Divider sx={{my: gapHeight}}/>
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("smoking", roomInfo.smoking)}
-                                            </Grid>
-                                        </ListItem>
-                                    </List>
-                                </Grid>
-                                <Grid container justifyContent="flex-end">
-                                    <Button onClick={() => {
-                                        setInfoDialogOpen(false)
-                                    }}>关闭</Button>
-                                </Grid>
+                            <Grid width={"100%"} component={Paper} elevation={6} square>
+                                <Box container width={"100%"} justifyContent={"center"} my={8}>
+                                    <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "center"}}>
+                                        <typography>您拥有xxx积分</typography>
+                                    </Box>
+                                    <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "center"}}>
+                                        <typography>本次兑换消耗yyy积分</typography>
+                                    </Box>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        my: 8,
+                                        mx: 4,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Box component="form" noValidate onSubmit={purchaseOnClick} sx={{mt: 3}}>
+                                        <TextField
+                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            id="username"
+                                            label="姓名"
+                                            name="username"
+                                            autoFocus
+                                        />
+                                        <TextField
+                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            name="address"
+                                            label="地址"
+                                            id="address"
+                                        />
+                                        <TextField
+                                            margin="normal"
+                                            required
+                                            fullWidth
+                                            name="telephone"
+                                            label="电话"
+                                            id="telephone"
+                                        />
+                                        {/*<Button onClick={() => {setPurchaseDialogOpen(false)}}>取消</Button>*/}
+                                        <Button
+                                            type="submit"
+                                            fullWidth
+                                            variant=" contained"
+                                            sx={{mt: 3, mb: 2}}
+                                        >
+                                            兑换
+                                        </Button>
+                                    </Box>
+                                </Box>
                             </Grid>
                         </Grid>
                     </DialogContent>
@@ -132,43 +132,69 @@ export default function Store() {
         )
     }
 
-    let rooms = getFinishedInfo();
     return (
-        <>
-            {roomInfoDialog()}
-            <Grid container spacing={4}>
-                {rooms.map((room) => (
-                    <Grid item key={room} xs={12} sm={6} md={4}>
-                        <Card
-                            sx={{maxWidth: 300, display: 'flex', flexDirection: 'column'}}
+        <Layout>
+            <main>
+                {purchaseDialog()}
+                <Box
+                    sx={{
+                        bgcolor: ' background.paper',
+                        pt: 8,
+                        pb: 6,
+                    }}
+                >
+                    <Container maxWidth="sm">
+                        <Typography
+                            component="h1"
+                            variant="h2"
+                            align="center"
+                            color="text.primary"
+                            gutterBottom
                         >
-                            <CardMedia
-                                component="img"
-                                sx={{
-                                    width: 300,
-                                    height: 275
-                                }}
-                                image={getAlbumImage(room)}
-                                alt="random"
-                            />
-                            <CardContent sx={{flexGrow: 1}}>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    {room[0]}
-                                </Typography>
-                                <Typography>
-                                    {room[1]}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="medium" onClick={() => {
-                                    setInfoDialogOpen(true)
-                                    setRoomOnDialog(room)
-                                }}>详情</Button>
-                            </CardActions>
-                        </Card>
+                            商城
+                        </Typography>
+                        <Typography variant="h5" align="center" color="text.secondary" paragraph>
+                            您可以用积分换购商品
+                        </Typography>
+                    </Container>
+                </Box>
+                <Container sx={{py: 2}} maxWidth="md">
+                    {/* End hero unit */}
+                    <Grid container spacing={4}>
+                        {merchandiseList.map((merchandise) => (
+                            <Grid item key={merchandise} xs={12} sm={6} md={4}>
+                                <Card
+                                    sx={{height: "100%", display: ' flex', flexDirection: ' column'}}
+                                >
+                                    <CardMedia
+                                        component="img"
+                                        sx={{
+                                            // 16:9
+                                            height: "250px"
+                                        }}
+                                        image="https://source.unsplash.com/random"
+                                        alt="random"
+                                    />
+                                    <CardContent sx={{flexGrow: 1}}>
+                                        <Typography gutterBottom variant="h5" component="h2">
+                                            {merchandise[0]}
+                                        </Typography>
+                                        <Typography>
+                                            {merchandise[1]}
+                                        </Typography>
+                                        <Typography>
+                                            {merchandise[2]}积分
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button size="small" onClick={() => setPurchaseDialogOpen(true)}>购买</Button>
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                        ))}
                     </Grid>
-                ))}
-            </Grid>
-        </>
-    )
+                </Container>
+            </main>
+        </Layout>
+    );
 }

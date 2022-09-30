@@ -25,32 +25,34 @@ const tiers = [
             'Extra 100$ as gift',
             'One-on-one support',
         ],
-        buttonText: 'Choose',
+        buttonText: '购买',
         buttonVariant: 'outlined',
     },
     {
         title: 'Platinum',
         price: '20000',
+        amount: 20000,
         description: [
             'Extra 3000$ as gift',
             '40000 rewards points in total',
             'Enjoy free room for a whole week',
             'Priority one-on-one support',
         ],
-        buttonText: 'Choose',
+        buttonText: '购买',
         buttonVariant: 'contained',
     },
     {
         title: 'Golden',
         subheader: 'Most popular',
         price: '7000',
+        amount: 7000,
         description: [
             'Extra 900$ as gift',
             '10000 rewards points in total',
             'Enjoy free room for 3 nights',
             'Priority one-on-one support',
         ],
-        buttonText: 'Choose',
+        buttonText: '购买',
         buttonVariant: 'contained',
     },
 ];
@@ -58,11 +60,19 @@ const tiers = [
 export default function TopUp() {
     const router = useRouter();
     const query = router.query;
-    const setTopUpAmount = query.setTopUpAmount;
     const [validInput, setValidInput] = useState(true);
     const validInputRegex = new RegExp(
         "^\\d+$"
     );
+
+    function purchaseOnClick(amount) {
+        router.push({
+            pathname: "/account-center/confirm-sign-in",
+            query: {
+                amount: amount
+            }
+        })
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -74,7 +84,6 @@ export default function TopUp() {
             router.push({
                 pathname: "/account-center/confirm-sign-in",
                 query: {
-                    setTopUpAmount: {setTopUpAmount},
                     amount: amount
                 }
             })
@@ -179,7 +188,7 @@ export default function TopUp() {
                                         </ul>
                                     </CardContent>
                                     <CardActions>
-                                        <Button fullWidth variant={tier.buttonVariant}>
+                                        <Button fullWidth variant={tier.buttonVariant} onClick={() => purchaseOnClick(tier.amount)}>
                                             {tier.buttonText}
                                         </Button>
                                     </CardActions>

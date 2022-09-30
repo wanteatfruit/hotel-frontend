@@ -91,6 +91,7 @@ export default function Orders() {
                                 sm={4}
                                 md={7}
                                 sx={{
+                                    height: "100%",
                                     backgroundImage: 'url(/images/sign-in.jpg)',
                                     backgroundRepeat: 'no-repeat',
                                     backgroundColor: (t) =>
