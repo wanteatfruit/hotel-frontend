@@ -64,7 +64,7 @@ export default function AdminRooms({}) {
           <Grid container>
             {roomPageItem.length > 0 ? (
               roomPageItem.map((item) => (
-                <Grid item xs={12} md={6} lg={4} xl={3}></Grid>
+                <Grid key={item} item xs={12} md={6} lg={4} xl={3}></Grid>
               ))
             ) : (
               <Grid container justifyContent="center" padding={3}>
