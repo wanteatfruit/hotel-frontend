@@ -175,16 +175,16 @@ export default function Orders() {
         )
     }
 
-    function getBookedInfo() {
+    function getMarkedRooms() {
         let room_list = [];
-        let room_a = ['广州白云希尔顿', '山景房', '2022-11-5'];
-        let room_b = ['深圳福田喜来登', '海景房', '2022-9-29'];
+        let room_a = ['广州白云希尔顿', '山景房'];
+        let room_b = ['深圳福田喜来登', '海景房'];
         room_list.push(room_a);
         room_list.push(room_b);
         return room_list;
     }
 
-    function getFinishedInfo() {
+    function getMarkedHotels() {
         let room_list = [];
         let room_a = ['上海黄埔W酒店', '花园房', '2021-12-9'];
         room_list.push(room_a);
@@ -221,22 +221,10 @@ export default function Orders() {
                                     <Typography gutterBottom variant="h5" component="h2">
                                         {room[0]}
                                     </Typography>
-                                    <Typography>
-                                        {room[1]}
-                                    </Typography>
-                                    <Typography>
-                                        {room[2]}
-                                    </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="medium" onClick={() => {
-                                        setInfoDialogOpen(true)
-                                        setRoomOnDialog(room)
+                                    <Button onClick={() => {
                                     }}>详情</Button>
-                                    <Button size="medium" onClick={() => {
-                                        setCommentDialogOpen(true)
-                                        setRoomOnDialog(room)
-                                    }}>评价</Button>
                                 </CardActions>
                             </Card>
                         </Grid>
@@ -275,14 +263,9 @@ export default function Orders() {
                                         setRoomOnDialog(room);
                                     }}>详情</Button>
                                     <div>
-                                        <Button
-                                            id="basic-button"
-                                            aria-controls={modifyMenuOpen ? 'basic-menu' : undefined}
-                                            aria-haspopup="true"
-                                            aria-expanded={modifyMenuOpen ? 'true' : undefined}
-                                            onClick={handleClick}
-                                        >
-                                            修改订单
+                                        <Button onClick={() => {
+                                        }}>
+                                            预定房间
                                         </Button>
                                         <Menu
                                             id="basic-menu"
@@ -308,9 +291,9 @@ export default function Orders() {
 
         let rooms;
         if (mode) {
-            rooms = getFinishedInfo();
+            rooms = getMarkedHotels();
         } else {
-            rooms = getBookedInfo();
+            rooms = getMarkedRooms();
         }
         return (
             <>
@@ -329,18 +312,18 @@ export default function Orders() {
         <Container maxWidth="md">
             <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
-                    <typography>订单信息</typography>
+                    <typography>收藏</typography>
                 </FormLabel>
                 <RadioGroup
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
-                    defaultValue={'已预定'}
+                    defaultValue={'房间'}
                 >
-                    <FormControlLabel value="已预定" control={<Radio/>} label="已预定" onClick={() => {
+                    <FormControlLabel value="房间" control={<Radio/>} label="房间" onClick={() => {
                         setMode(0)
                     }}/>
-                    <FormControlLabel value="已完成" control={<Radio/>} label="已完成" onClick={() => {
+                    <FormControlLabel value="酒店" control={<Radio/>} label="酒店" onClick={() => {
                         setMode(1)
                     }}/>
                 </RadioGroup>

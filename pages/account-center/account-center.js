@@ -6,6 +6,7 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Account from "./account";
 import Orders from "./orders";
+import Marks from "./marks";
 
 export default function AccountCenter() {
     const [drawerItem, setDrawerItem] = useState(0);
@@ -20,7 +21,7 @@ export default function AccountCenter() {
     }
 
     function marksContent() {
-        return <h1>Marks</h1>
+        return <Marks/>;
     }
 
     function storeContent() {
