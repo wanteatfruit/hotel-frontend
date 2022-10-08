@@ -22,7 +22,7 @@ export default function HotelCard({hotelName, imageSrc}) {
 
             <Typography sx={{ zIndex:2, position: 'absolute', bottom: 50,  color: 'white' }}
                 variant="h3">{hotelName}</Typography>
-            <Button variant="contained" sx={{ color: 'black', backgroundColor: 'antiquewhite', position: 'absolute', bottom: -10, zIndex: 2, borderRadius:8 }}>查看更多</Button>
+            <Button href={`/hotels/${hotelName}`} variant="contained" sx={{ color: 'black', backgroundColor: 'antiquewhite', position: 'absolute', bottom: -10, zIndex: 2, borderRadius:8 }}>查看更多</Button>
         </div>
     )
 }
