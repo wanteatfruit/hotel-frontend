@@ -6,7 +6,7 @@ import Layout from "../../components/Layout"
 import RoomCard from "../../components/RoomCard";
 import styles_index from "../../styles/HotelPage.module.css";
 
-export default function eachHotel() {
+export default function HotelDetail() {
     const router = useRouter()
     const id = router.query.id
     //id为酒店名，动态路径
