@@ -27,7 +27,9 @@ export default function HotelPage() {
         }}
       >
         <div className={styles.picWrapper}>
-          <div className={styles.pic}></div>
+          {/* <div className={styles.pic}></div> */}
+          <Image src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+            layout="fill" objectFit="cover" ></Image>
           <div className={styles.picContent}>
             <p className={styles.stay}>入住</p>
           </div>

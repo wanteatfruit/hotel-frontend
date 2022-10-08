@@ -9,6 +9,7 @@
     height: 30rem;
     /* border-radius: 8px; */
     overflow: visible;
+    transition: all ease 0.2s;
 }
 
 .info{
@@ -28,6 +29,9 @@
     transform: translateX(-10%);
     width: 100%;
     z-index: 1;
+}
+.card:hover{
+    transform: scale(1.1);
 }
 
 

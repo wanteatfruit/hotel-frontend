@@ -11,7 +11,7 @@
 }
 .picWrapper{
     position: relative;
-
+    height: 92vh;
 }
 .pic{
     background-size: cover;
