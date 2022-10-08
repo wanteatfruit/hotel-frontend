@@ -1,7 +1,9 @@
 import Layout from "../components/Layout";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import Image from "next/image";
 import styles from "../styles/HotelPage.module.css";
+import { Stack } from "@mui/system";
+import HotelCard from "../components/HotelCard";
 export default function HotelPage() {
   return (
     <Layout>
@@ -33,7 +35,13 @@ export default function HotelPage() {
           </div>
         </Box>
         <div className={styles.pickWrapper}>
-          
+          <Box sx={{backgroundColor:'rebeccapurple'}}>
+            <Stack sx={{padding:2}} spacing={2} direction='row'>
+              <HotelCard hotelName={'分店1'} imageSrc={"https://images.pexels.com/photos/70441/pexels-photo-70441.jpeg?auto=compress&cs=tinysrgb&w=800"} />
+              <HotelCard hotelName={'分店2'} imageSrc={"https://images.pexels.com/photos/13794096/pexels-photo-13794096.jpeg?auto=compress&cs=tinysrgb&w=800"}/>
+                <HotelCard hotelName={'分店3'} />
+            </Stack>
+          </Box>
         </div>
       </Box>
     </Layout>

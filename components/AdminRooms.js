@@ -75,7 +75,6 @@ export default function AdminRooms({}) {
         </Grid>
         <Grid item sm={0} md={4} sx={{}}>
           <Stack padding="8px" sx={{display:'flex',justifyContent:'center'}}>
-            
             <FormLabel>选择城市</FormLabel>
             <FormGroup row>
               <FormControlLabel
