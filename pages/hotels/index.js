@@ -61,7 +61,6 @@ export default function HotelPage() {
                   <div><HotelCard hotelName={'分店3'} imageSrc={'https://images.pexels.com/photos/5066935/pexels-photo-5066935.jpeg?auto=compress&cs=tinysrgb&w=800'} /></div>
                   <div><HotelCard hotelName={'分店3'} imageSrc={'https://images.pexels.com/photos/5066935/pexels-photo-5066935.jpeg?auto=compress&cs=tinysrgb&w=800'} /></div>
                   <div><HotelCard hotelName={'分店3'} imageSrc={'https://images.pexels.com/photos/5066935/pexels-photo-5066935.jpeg?auto=compress&cs=tinysrgb&w=800'} /></div>
-
                 </Stack>
               </TabPanel>
               <TabPanel value="1">

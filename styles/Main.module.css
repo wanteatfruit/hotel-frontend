@@ -1,0 +1,13 @@
+.picOne{
+    background-image: url("https://images.pexels.com/photos/842948/pexels-photo-842948.jpeg?cs=srgb&dl=pexels-vinta-supply-co-%7C-nyc-842948.jpg&fm=jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+    background-size: cover;
+    width: 100vw;
+    
+    margin: 0;
+    padding: 0;
+    display: flex;
+
+}
