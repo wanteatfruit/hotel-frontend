@@ -204,7 +204,7 @@ export default function Orders() {
             if (mode) {
                 return (
                     <>
-                        <Grid item key={room} xs={12} sm={6} md={4}>
+                        <Grid item key={room[0]} xs={12} sm={6} md={4}>
                             <Card
                                 sx={{maxWidth: 300, display: 'flex', flexDirection: 'column'}}
                             >
@@ -233,7 +233,7 @@ export default function Orders() {
             } else {
                 return (
                     <>
-                        <Grid item key={room} xs={12} sm={6} md={4}>
+                        <Grid item key={room[0]} xs={12} sm={6} md={4}>
                             <Card
                                 sx={{maxWidth: 300, display: 'flex', flexDirection: 'column'}}
                             >

@@ -58,7 +58,6 @@ export default function DrawerLeft({setDrawerItem}) {
                         position: "relative",
                         width: drawerWidth,
                         flexShrink: 0,
-                        alignItems: "center",
                         [`& .MuiDrawer-paper`]: {
                             width: drawerWidth,
                             boxSizing: "border-box",
@@ -66,7 +65,7 @@ export default function DrawerLeft({setDrawerItem}) {
                     }}
                 >
                     <Toolbar />
-                    <Box sx={{ overflow: "auto", position: "relative" }}>
+                    <Box sx={{ overflow: "auto", position: "relative",  display: "flex", alignItems: "flex-start"}}>
                         <List>
                             {["账户", "订单", "收藏"].map((text, index) =>
                                 drawerItemChoose(index, text, setDrawerItem)
