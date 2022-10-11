@@ -64,7 +64,7 @@ export default function AdminRooms({}) {
           <Grid container>
             {roomPageItem.length > 0 ? (
               roomPageItem.map((item) => (
-                <Grid item xs={12} md={6} lg={4} xl={3}></Grid>
+                <Grid key={item} item xs={12} md={6} lg={4} xl={3}></Grid>
               ))
             ) : (
               <Grid container justifyContent="center" padding={3}>
@@ -75,7 +75,6 @@ export default function AdminRooms({}) {
         </Grid>
         <Grid item sm={0} md={4} sx={{}}>
           <Stack padding="8px" sx={{display:'flex',justifyContent:'center'}}>
-            
             <FormLabel>选择城市</FormLabel>
             <FormGroup row>
               <FormControlLabel

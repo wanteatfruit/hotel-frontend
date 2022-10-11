@@ -36,7 +36,10 @@ export default function NavBar({isLoggedIn}) {
   }
 
   return (
-      <AppBar position="relative" sx={{background: '#2E3B55', zIndex: (theme) => theme.zIndex.drawer + 1}}>
+    <AppBar
+      position="relative"
+      sx={{ background: "#2E3B55", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
       {/* <Container maxWidth="xl"> */}
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/*设置小屏菜单显示*/}
@@ -77,9 +80,12 @@ export default function NavBar({isLoggedIn}) {
 
         {/*大屏显示完整跳转名称*/}
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <HotelIcon
-            sx={{ display: { xs: "none", md: "flex" }, mr: 2, mt: 1 }}
-          />
+          <IconButton color="inherit" href="/">
+            <HotelIcon
+              sx={{ display: { xs: "none", md: "flex" } }}
+            />
+          </IconButton>
+
           {/* 大屏显示酒店logo和名称*/}
           <Typography
             variant="h6"
@@ -91,7 +97,12 @@ export default function NavBar({isLoggedIn}) {
             一家连锁酒店
           </Typography>
           {pages.map((item) => (
-            <Button key={item.name} color="inherit" size="large">
+            <Button
+              key={item.name}
+              color="inherit"
+              size="large"
+              href={item.link}
+            >
               {item.name}
             </Button>
           ))}

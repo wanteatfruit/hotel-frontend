@@ -1,0 +1,37 @@
+.card {
+    /* background-image: url('https://photos.mandarinoriental.com/is/image/MandarinOriental/guangzhou-exterior-dusk?wid=1024&hei=576&fmt=jpeg&op_usm=1,1,5,0&resMode=sharp2&fit=crop&qlt=75,0'); */
+    position: relative;
+    width: 360px;
+    padding: 40px;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 30rem;
+    /* border-radius: 8px; */
+    overflow: visible;
+    transition: all ease 0.2s;
+}
+
+.info{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.card::before {
+    top: 70%;
+    background-image: linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,2));
+    height: 30%;
+}
+.card::after, .card::before{
+    content: "";
+    position: absolute;
+    transform: translateX(-10%);
+    width: 100%;
+    z-index: 1;
+}
+.card:hover{
+    transform: scale(1.1);
+}
+
+

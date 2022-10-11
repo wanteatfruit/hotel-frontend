@@ -2,16 +2,8 @@ import React from "react";
 import AdminNavBar from "./AdminNavbar";
 import { Box, Container } from "@mui/material";
 export default function AdminLayout({children}) {
-//   const [drawerItem, setDrawerItem] = React.useState(0);
   const appBarHeight = "64px";
-//   function showItem() {
-//     switch (drawerItem) {
-//       case 0:
-//         return <AdminDashboard />;
-//       case 1:
-//         return <AdminCheckOrder />;
-//     }
-//   }
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
