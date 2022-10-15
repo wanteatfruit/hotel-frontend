@@ -7,18 +7,23 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Link from 'next/link';
-import {createTheme, ThemeProvider} from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Layout from "../components/Layout";
-import {cities} from "../data";
-import Ticket, {TicketCQ, TicketGZ, TicketSH, TicketSZ} from "../components/CityTicket";
+import { cities } from "../data";
+import Ticket, { TicketCQ, TicketGZ, TicketSH, TicketSZ } from "../components/CityTicket";
+import Head from "next/head";
 
 const theme = createTheme();
 
 export default function Home() {
-    const link_path = "/sign-in";
-    return (
+  const link_path = "/sign-in";
+  return (
+    <>
+      <Head>
+        <script src="//code.tidio.co/c8br3phbbn5owe5rxjvlzwo6q6bviulc.js" async></script>
+      </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div>
@@ -131,7 +136,8 @@ export default function Home() {
         </main>
         <Footer />
       </ThemeProvider>
-    );
+    </>
+  );
 }
 
 
