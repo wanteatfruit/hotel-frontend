@@ -11,7 +11,9 @@ export default function Booking(){
         <Button color="error" size="large" variant="contained" onClick={handleDrawerToggle}>
           Book
         </Button>
-        <Drawer open={drawerOpen} onClose={handleDrawerToggle}></Drawer>
+        <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerToggle} sx={{zIndex:200}}>
+          askak
+        </Drawer>
       </>
     );
 }
