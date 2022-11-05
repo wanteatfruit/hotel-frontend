@@ -17,6 +17,13 @@ export const branchHotels = [
   { id: 2, city: "sz", name: "深圳丽思卡尔顿" },
   { id: 3, city: "gz", name: "广州文华东方酒店" },
 ];
+
+export const roomTypes =[
+  { id: 1, name: "山景房" },
+  { id: 2,  name: "海景房" },
+  { id: 3,  name: "总统套房" },
+]
+
 export const orderColumns=[
   {field:'id', headerName:'ID', width:90},
   {field: 'branch', headerName:'分店', width:150}

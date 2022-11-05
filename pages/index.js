@@ -29,12 +29,29 @@ import { IconButton } from "@mui/material";
 import axios from "axios";
 const theme = createTheme();
 
-export default function Home() {
+// 获取酒店和房间列表，传给navbar
+export async function getStaticProps(){
+  const hotel_response = await axios.get('http://10.26.133.163:8888/hotel/getAll');
+  const hotel_list = hotel_response.data
+  const room_respose = await axios.get('http://10.26.133.163:8888/roomtype/getAll');
+  const room_list = room_respose.data
+  // console.log(orders)
+  return{
+    props:{
+      hotel_list, room_list
+    },
+  }
+}
+
+
+
+export default function Home({hotel_list, room_list}) {
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div>
-        <NavBar />
+        <NavBar hotel_list={hotel_list} room_list={room_list} />
       </div>
       <main>
         <Link href={"/account-center/account-center"}>
