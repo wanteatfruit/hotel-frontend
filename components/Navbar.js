@@ -9,11 +9,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in user
 import { login, pages, settings } from "../data";
-import Booking from "./BookingMenu";
 import { Stack, width } from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
+import { ChevronLeftOutlined } from "@mui/icons-material";
 //传入是否已登录，决定用户处显示内容
-export default function NavBar({ isLoggedIn }) {
+export default function NavBar({ isLoggedIn, hotel_list, room_list }) {
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -38,9 +38,15 @@ export default function NavBar({ isLoggedIn }) {
     setDrawerOpen(!drawerOpen);
   }
 
+  // React.useEffect(()=>console.log(hotel_list))
+
   return (
     <>
-      <BookingDrawer  open={bookingOpen}/>
+      <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list} >
+        <IconButton onClick={()=>setBookingOpen(false)}>
+          <ChevronLeftOutlined />
+        </IconButton>
+      </BookingDrawer>
       <AppBar
         position="relative"
         sx={{ background: "#2E3B55", zIndex: 1 }}
@@ -151,7 +157,6 @@ export default function NavBar({ isLoggedIn }) {
             Book
           </Button> */}
             <Button color="error" variant="contained" onClick={() => { setBookingOpen(!bookingOpen) }}>预定</Button>
-            {/* <Booking sx={{zIndex:2}} /> */}
           </Box>
         </Toolbar>
         {/* </Container> */}
