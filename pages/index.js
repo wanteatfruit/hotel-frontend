@@ -82,7 +82,7 @@ export default function Home({hotel_list, room_list}) {
           }}
         >
           <Container
-            maxWidth="xl"
+            maxWidth={false}
             disableGutters
             sx={{
               display: "flex",
@@ -158,7 +158,7 @@ export default function Home({hotel_list, room_list}) {
           </Container>
 
           <Container
-            maxWidth="xl"
+            maxWidth="false"
             sx={{
               padding: 0,
               display: "flex",

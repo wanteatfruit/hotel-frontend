@@ -5,19 +5,20 @@ import React from "react";
 import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { branchHotels, roomTypes } from "../data";
-export default function BookingDrawer({ open ,hotel_list, room_list, children  }) {
+export default function BookingDrawer({ open, hotel_list, room_list, children }) {
     const [selectDateOpen, setSelectDateOpen] = React.useState(false);
     const [bookingCity, setBookingCity] = React.useState(0);
-    
+
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
         endDate: dayjs().startOf("day").add(7, 'day'),
         roomType: '',
-        hotelID: '',
-        guestsNumber:2
+        hotelName: '',
+        guestsNumber: 2,
+        cost:0
     })
 
-    const city_list = ['深圳','广州','上海','重庆'];
+    const city_list = ['深圳', '广州', '上海', '重庆'];
 
 
     function TabPanel(props) {
@@ -35,18 +36,18 @@ export default function BookingDrawer({ open ,hotel_list, room_list, children  }
                     <Box sx={{ p: 3 }}>
                         <List>
                             {
-                            hotel_list.filter((item)=>{
-                                console.log(item);
-                                return (item.cityname===city_list[index]) 
-                            }).map((item)=>(
-                                <ListItem key={item.id} disablePadding>
-                                    <ListItemButton onClick={()=>{setSelectDateOpen(true); setBookingInfo({...bookingInfo, hotelID:item.hotelname})}}>
-                                    <ListItemText>
-                                        {item.hotelname}
-                                    </ListItemText>
-                                    </ListItemButton>
-                                </ListItem>
-                            ))}
+                                hotel_list.filter((item) => {
+                                    console.log(item);
+                                    return (item.cityname === city_list[index])
+                                }).map((item) => (
+                                    <ListItem key={item.id} disablePadding>
+                                        <ListItemButton onClick={() => { setSelectDateOpen(true); setBookingInfo({ ...bookingInfo, hotelName: item.hotelname }) }}>
+                                            <ListItemText>
+                                                {item.hotelname}
+                                            </ListItemText>
+                                        </ListItemButton>
+                                    </ListItem>
+                                ))}
                         </List>
                     </Box>
                 )}
@@ -61,8 +62,8 @@ export default function BookingDrawer({ open ,hotel_list, room_list, children  }
         };
     }
 
-    const guestsNumberMarks=[
-        {value:1, label:'1'},
+    const guestsNumberMarks = [
+        { value: 1, label: '1' },
         { value: 2, label: '2' },
         { value: 3, label: '3' },
         { value: 4, label: '4' },
@@ -113,10 +114,10 @@ export default function BookingDrawer({ open ,hotel_list, room_list, children  }
                             <IconButton onClick={() => setSelectDateOpen(false)}>
                                 <ChevronLeftOutlined />
                             </IconButton>
-                            <Typography variant="h3">{bookingInfo.hotelID}</Typography>
+                            <Typography variant="h3">{bookingInfo.hotelName}</Typography>
 
                         </div>
-                        <Stack component='form' gap={5} sx={{paddingX:'10px', display:'flex',justifyContent:'center',alignItems:'center'}}>
+                        <Stack component='form' gap={5} sx={{ paddingX: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs} >
                                 <Stack direction='row' gap={5}>
 
@@ -139,7 +140,7 @@ export default function BookingDrawer({ open ,hotel_list, room_list, children  }
                                         )}
                                     >
                                     </DatePicker>
-                                    <ChevronRightRounded fontSize='large'  />
+                                    <ChevronRightRounded fontSize='large' />
                                     <DatePicker
                                         label="离开日期"
                                         value={bookingInfo.endDate}
@@ -160,12 +161,12 @@ export default function BookingDrawer({ open ,hotel_list, room_list, children  }
                                     </DatePicker>
                                 </Stack>
                             </LocalizationProvider>
-                            <Stack sx={{width:'50%'}}>
+                            <Stack sx={{ width: '50%' }}>
                                 <Typography gutterBottom>入住人数</Typography>
-                                <Slider sx={{ }} value={bookingInfo.guestsNumber} onChange={(event, newNumber) => setBookingInfo({ ...bookingInfo, guestsNumber: newNumber })} valueLabelDisplay='auto' step={1} marks={guestsNumberMarks} min={1} max={5} />
+                                <Slider sx={{}} value={bookingInfo.guestsNumber} onChange={(event, newNumber) => setBookingInfo({ ...bookingInfo, guestsNumber: newNumber })} valueLabelDisplay='auto' step={1} marks={guestsNumberMarks} min={1} max={5} />
                             </Stack>
                             <List>
-                                {roomTypes.map((item)=>(
+                                {roomTypes.map((item) => (
                                     <ListItem key={item.id} disablePadding>
                                         <ListItemButton>
                                             <ListItemText>
@@ -176,8 +177,8 @@ export default function BookingDrawer({ open ,hotel_list, room_list, children  }
                                 ))}
                             </List>
 
-                                            
-                            
+
+
                             <Button type='submit'>确认入住信息</Button>
                         </Stack>
                     </Stack>
