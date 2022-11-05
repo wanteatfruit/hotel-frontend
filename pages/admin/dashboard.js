@@ -40,6 +40,7 @@ export async function getStaticProps() {
       ordered_cnt,
       sales_stat,
     },
+    revalidate:10
   };
 }
 
