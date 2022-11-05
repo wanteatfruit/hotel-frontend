@@ -1,5 +1,5 @@
 import { ChevronLeftOutlined, ChevronRightRounded, IcecreamOutlined } from "@mui/icons-material";
-import { Drawer, Box, Stack, TextField, Tabs, Button, Tab, Typography, List, ListItem, ListItemButton, ListItemText, IconButton, Slider } from "@mui/material";
+import { Drawer, Box, Stack, TextField, Tabs, Button, Tab, Typography, List, ListItem, ListItemButton, ListItemText, IconButton, Slider, createTheme, ThemeProvider, Autocomplete } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import React from "react";
 import dayjs from "dayjs";
@@ -8,6 +8,7 @@ import { branchHotels, roomTypes } from "../data";
 export default function BookingDrawer({ open, hotel_list, room_list, children }) {
     const [selectDateOpen, setSelectDateOpen] = React.useState(false);
     const [bookingCity, setBookingCity] = React.useState(0);
+    console.log(hotel_list)
 
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
@@ -15,7 +16,18 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
         roomType: '',
         hotelName: '',
         guestsNumber: 2,
-        cost:0
+        cost: 0
+    })
+
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: '#2E3B55'
+            },
+            secondary:{
+                main: '#fff'
+            }
+        }
     })
 
     const city_list = ['深圳', '广州', '上海', '重庆'];
@@ -35,7 +47,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                 {value === index && (
                     <Box sx={{ p: 3 }}>
                         <List>
-                            {
+                            { hotel_list!==undefined &&
                                 hotel_list.filter((item) => {
                                     console.log(item);
                                     return (item.cityname === city_list[index])
@@ -74,14 +86,16 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
 
 
     return (
-        <React.Fragment>
+        <ThemeProvider theme={theme}>
             <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '70vw' }}>
                 {/* <Button onClick={()=>open=false}>asdad</Button> */}
                 <Box sx={{ width: '70vw' }}>
                     <Stack>
-                        <div style={{ backgroundColor: 'chocolate', height: '20vh', display: 'flex', alignItems: 'flex-end' }}>
+                        <div style={{ backgroundColor: '#2E3B55', height: '20vh', display: 'flex', alignItems: 'flex-end' }}>
                             {children}
-                            <TextField variant="standard" label="搜索目的地" sx={{ marginX: '100px', paddingBottom: '10px', width: '100%' }}></TextField>
+                            <Autocomplete options={hotel_list.hotelname} renderInput={(params) => <TextField {...params} label="搜索目的地" />}>
+                                
+                            </Autocomplete>
                         </div>
                         <Tabs value={bookingCity} onChange={(event, newValue) => setBookingCity(newValue)}>
                             <Tab label="深圳"{...allyProps(0)} ></Tab>
@@ -184,7 +198,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                     </Stack>
                 </Box>
             </Drawer>
-        </React.Fragment>
+        </ThemeProvider>
 
     )
 }

@@ -102,6 +102,7 @@ export default function AdminNavBar({}) {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                backgroundColor:'#2E3B55'
               },
             }}
           >
@@ -118,7 +119,7 @@ export default function AdminNavBar({}) {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
-                backgroundColor:'rgb(42, 19, 46)'
+                backgroundColor:'#2E3B55'
               },
             }}
           >
