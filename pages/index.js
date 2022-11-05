@@ -40,6 +40,7 @@ export async function getStaticProps(){
     props:{
       hotel_list, room_list
     },
+    revalidate:10
   }
 }
 
