@@ -48,7 +48,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                     <Box sx={{ p: 3 }}>
                         <List>
                             { hotel_list!==undefined &&
-                                hotel_list.filter((item) => {
+                                (hotel_list.filter((item) => {
                                     console.log(item);
                                     return (item.cityname === city_list[index])
                                 }).map((item) => (
@@ -58,7 +58,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                                                 {item.hotelname}
                                             </ListItemText>
                                         </ListItemButton>
-                                    </ListItem>
+                                    </ListItem>)
                                 ))}
                         </List>
                     </Box>
@@ -93,7 +93,8 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                     <Stack>
                         <div style={{ backgroundColor: '#2E3B55', height: '20vh', display: 'flex', alignItems: 'flex-end' }}>
                             {children}
-                            <Autocomplete options={hotel_list.hotelname} renderInput={(params) => <TextField {...params} label="搜索目的地" />}>
+                            <Autocomplete options={hotel_list===undefined?[]:hotel_list.hotelname} 
+                                            renderInput={(params) => <TextField {...params} label="搜索目的地" />}>
                                 
                             </Autocomplete>
                         </div>

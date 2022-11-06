@@ -35,7 +35,6 @@ export async function getStaticProps(){
   const hotel_list = hotel_response.data
   const room_respose = await axios.get('http://10.26.133.163:8888/roomtype/getAll');
   const room_list = room_respose.data
-  // console.log(orders)
   return{
     props:{
       hotel_list, room_list
@@ -69,7 +68,7 @@ export default function Home({hotel_list, room_list}) {
         </Link>
         <Link
           href={{
-            pathname: "/admin",
+            pathname: "/admin/dashboard",
           }}
         >
           temporary admin
