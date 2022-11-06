@@ -46,7 +46,10 @@ export default function SignIn() {
 
     useEffect(() => {
         if (succeed) {
-            router.push(href);
+            router.push({
+                pathname: href,
+                query: {sessionKey: 666},
+            }, href)
         }
     })
 
