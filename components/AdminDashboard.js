@@ -1,13 +1,46 @@
 import { HotelOutlined, IcecreamOutlined, PersonOutlineOutlined } from "@mui/icons-material";
 import { Card, CardContent, CardHeader, CardMedia, createTheme, Grid, IconButton, Paper, styled, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
+import React from "react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import AdiminDashTimeline from "./admindashboard/Timeline";
+import axios from "axios";
 
 export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt, ordered_cnt, sales }) {
   const StyledCard = styled(Card)(({ theme }) => ({
     borderRadius: '20px'
   }))
+
+  const [adminData,setAdminData] = React.useState({
+    hot_room:null,
+     hot_hotel:null, 
+     hot_city:null,
+      cust_cnt:0, 
+      ordered_cnt:0, 
+      sales:null
+  })
+
+  React.useEffect(()=>{
+    axios.get(
+      "http://10.26.133.163:8888/manager/hotCity"
+    ).then((resp)=>setAdminData({...adminData,hot_city:resp.data}));
+    axios.get(
+      "http://10.26.133.163:8888/manager/hotHotel"
+    ).then((resp) => setAdminData({ ...adminData, hot_hotel: resp.data }));
+    axios.get(
+      "http://10.26.133.163:8888/manager/hotRoomType"
+    ).then((resp) => setAdminData({ ...adminData, hot_room: resp.data }));
+    axios.get(
+      "http://10.26.133.163:8888/manager/orderedRoomNums"
+    ).then((resp) => setAdminData({ ...adminData, ordered_cnt: resp.data }));
+     axios.get(
+      "http://10.26.133.163:8888/manager/currentCustomer"
+    ).then((resp) => setAdminData({ ...adminData, cust_cnt: resp.data }));
+    axios.get(
+      "http://10.26.133.163:8888/manager/sales"
+    ).then((resp) => setAdminData({ ...adminData, sales: resp.data }));
+
+  })
 
   return (
     <>
@@ -31,7 +64,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
             </CardHeader>
             <CardContent>
               {/* <Typography variant="h4">订房数量</Typography> */}
-              <Typography variant="h4">{ordered_cnt}</Typography>
+              <Typography variant="h4">{adminData.ordered_cnt}</Typography>
             </CardContent>
           </StyledCard>
         </Grid>
@@ -39,7 +72,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
           <StyledCard>
             <CardHeader title="入住人数" avatar={<PersonOutlineOutlined fontSize="large" />} titleTypographyProps={{ variant: 'h5' }} />
             <CardContent>
-              <Typography variant="h4">{cust_cnt}</Typography>
+              <Typography variant="h4">{adminData.cust_cnt}</Typography>
             </CardContent>
           </StyledCard>
         </Grid>
@@ -48,7 +81,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
             <div style={{ backdropFilter: 'blur(2px)', height: '100%', transform: 'scaleX(-1)' }}>
               <CardHeader title="热门房型" />
               <CardContent>
-                <Typography variant="h4">{hot_room}</Typography>
+                <Typography variant="h4">{adminData.hot_room}</Typography>
               </CardContent>
             </div>
           </StyledCard>
@@ -59,7 +92,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
             <div style={{ backdropFilter: 'blur(2px)', height: '100%', transform: 'scaleX(-1)', }}>
               <CardHeader title="热门分店"></CardHeader>
               <CardContent>
-                <Typography variant="h4">{hot_hotel}</Typography>
+                <Typography variant="h4">{adminData.hot_hotel}</Typography>
               </CardContent>
             </div>
           </StyledCard>
@@ -70,7 +103,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
               <CardHeader title="热门城市" sx={{ color: 'white' }}></CardHeader>
               <CardContent>
                 <Typography variant="h4" color="white">
-                  {hot_city}
+                  {adminData.hot_city}
                 </Typography>
               </CardContent>
             </div>
@@ -92,7 +125,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
                 </ToggleButton>
               </ToggleButtonGroup> */}
               <ResponsiveContainer >
-                <LineChart data={sales} title="销售数据">
+                <LineChart data={adminData.sales} title="销售数据">
                   <XAxis dataKey="time" minTickGap={10} />
                   <YAxis />
                   <Line dot={false} type="monotone" dataKey="y"></Line>
