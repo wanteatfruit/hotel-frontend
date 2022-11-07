@@ -21,27 +21,63 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
   })
 
   React.useEffect(()=>{
-    axios.get(
-      "http://10.26.133.163:8888/manager/hotCity"
-    ).then((resp)=>setAdminData({...adminData,hot_city:resp.data}));
-    axios.get(
-      "http://10.26.133.163:8888/manager/hotHotel"
-    ).then((resp) => setAdminData({ ...adminData, hot_hotel: resp.data }));
-    axios.get(
-      "http://10.26.133.163:8888/manager/hotRoomType"
-    ).then((resp) => setAdminData({ ...adminData, hot_room: resp.data }));
-    axios.get(
-      "http://10.26.133.163:8888/manager/orderedRoomNums"
-    ).then((resp) => setAdminData({ ...adminData, ordered_cnt: resp.data }));
-     axios.get(
-      "http://10.26.133.163:8888/manager/currentCustomer"
-    ).then((resp) => setAdminData({ ...adminData, cust_cnt: resp.data }));
-    axios.get(
-      "http://10.26.133.163:8888/manager/sales"
-    ).then((resp) => setAdminData({ ...adminData, sales: resp.data }));
+    // const fetchRoom = async ()=>{
+    //   await axios.get(
+    //     "http://10.26.133.163:8888/manager/hotCity"
+    //   )
+    // }
+    // const fetchHotel = async () => {
+    //   await axios.get(
+    //     "http://10.26.133.163:8888/manager/hotHotel"
+    //   )
+    // }
+    // const fetchCity = async () => {
+    //   await axios.get(
+    //     "http://10.26.133.163:8888/manager/hotCity"
+    //   )
+    // }
+    // const fetchCus = async () => {
+    //   await axios.get(
+    //     "http://10.26.133.163:8888/manager/hotCity"
+    //   )
+    // }
+    // const fetchOrder = async () => {
+    //   await axios.get(
+    //     "http://10.26.133.163:8888/manager/hotCity"
+    //   )
+    // }
+    // const fetchSales = async () => {
+    //   await axios.get(
+    //     "http://10.26.133.163:8888/manager/hotCity"
+    //   )
+    // }
 
-  })
+    const fetchData = async()=>{
+      await axios.get(
+        "http://10.26.133.163:8888/manager/hotCity"
+      ).then((resp) => setAdminData({ ...adminData, hot_city: resp.data }));
+      console.log(adminData)
+      await axios.get(
+        "http://10.26.133.163:8888/manager/hotHotel"
+      ).then((resp) => setAdminData({ ...adminData, hot_hotel: resp.data }));
+      await axios.get(
+        "http://10.26.133.163:8888/manager/hotRoomType"
+      ).then((resp) => setAdminData({ ...adminData, hot_room: resp.data }));
+      await axios.get(
+        "http://10.26.133.163:8888/manager/orderedRoomNums"
+      ).then((resp) => setAdminData({ ...adminData, ordered_cnt: resp.data }));
+      await axios.get(
+        "http://10.26.133.163:8888/manager/currentCustomer"
+      ).then((resp) => setAdminData({ ...adminData, cust_cnt: resp.data }));
+      await axios.get(
+        "http://10.26.133.163:8888/manager/sales"
+      ).then((resp) => setAdminData({ ...adminData, sales: resp.data }));
+    }
+    
+    fetchData()
 
+  },[])
+  console.log(adminData)
   return (
     <>
       {/* <Stack sx={{ pb: 4 }}>

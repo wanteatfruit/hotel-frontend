@@ -35,7 +35,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
 
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
-
+        console.log(hotel_list)
         return (
             <div
                 role="tabpanel"
@@ -53,7 +53,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                                     return (item.cityname === city_list[index])
                                 }).map((item) => (
                                     <ListItem key={item.id} disablePadding>
-                                        <ListItemButton onClick={() => { setSelectDateOpen(true); setBookingInfo({ ...bookingInfo, hotelName: item.hotelname }) }}>
+                                        <ListItemButton href={`/book/${item.hotelname}`}>
                                             <ListItemText>
                                                 {item.hotelname}
                                             </ListItemText>
@@ -91,12 +91,8 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                 {/* <Button onClick={()=>open=false}>asdad</Button> */}
                 <Box sx={{ width: '70vw' }}>
                     <Stack>
-                        <div style={{ backgroundColor: '#2E3B55', height: '20vh', display: 'flex', alignItems: 'flex-end' }}>
+                        <div style={{ backgroundImage:'url("https://images.pexels.com/photos/887723/pexels-photo-887723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',backgroundSize:'cover', height: '40vh', display: 'flex', alignItems: 'flex-end' }}>
                             {children}
-                            <Autocomplete options={hotel_list===undefined?[]:hotel_list.hotelname} 
-                                            renderInput={(params) => <TextField {...params} label="搜索目的地" />}>
-                                
-                            </Autocomplete>
                         </div>
                         <Tabs value={bookingCity} onChange={(event, newValue) => setBookingCity(newValue)}>
                             <Tab label="深圳"{...allyProps(0)} ></Tab>

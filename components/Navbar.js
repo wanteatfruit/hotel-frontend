@@ -43,8 +43,8 @@ export default function NavBar({ isLoggedIn, hotel_list, room_list }) {
   return (
     <>
       <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list} >
-        <IconButton onClick={()=>setBookingOpen(false)}>
-          <ChevronLeftOutlined />
+        <IconButton onClick={()=>setBookingOpen(false)} color="secondary">
+          <ChevronLeftOutlined fontSize="large"/>
         </IconButton>
       </BookingDrawer>
       <AppBar
@@ -156,8 +156,8 @@ export default function NavBar({ isLoggedIn, hotel_list, room_list }) {
             {/* <Button color="error" size="large" variant="contained">
             Book
           </Button> */}
-            {/* <Button color="error" variant="contained" onClick={() => { setBookingOpen(!bookingOpen) }}>预定</Button> */}
-            <Button color="error" variant="contained" href="/book" >预定</Button>
+            <Button color="error" variant="contained" onClick={() => { setBookingOpen(!bookingOpen) }}>预定</Button>
+            {/* <Button color="error" variant="contained" href="/book" >预定</Button> */}
           </Box>
         </Toolbar>
         {/* </Container> */}

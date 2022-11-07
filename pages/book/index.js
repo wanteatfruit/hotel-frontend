@@ -95,7 +95,7 @@ export default function BookingPage({ hotel_list, room_list }) {
         <Layout>
             <Box sx={{}}>
                 <Stack>
-                    <div style={{ backgroundColor: 'rebeccapurple', height: '20vh', display: 'flex', alignItems: 'flex-end' }}>
+                    <div style={{ backgroundImage:'url("https://images.pexels.com/photos/887723/pexels-photo-887723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")', height: '20vh', display: 'flex', alignItems: 'flex-end' }}>
 
                     </div>
                     <Tabs value={bookingCity} onChange={(event, newValue) => setBookingCity(newValue)}>
