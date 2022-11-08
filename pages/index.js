@@ -33,19 +33,19 @@ import {useEffect} from "react";
 const theme = createTheme();
 
 // 获取酒店和房间列表，传给navbar
-export async function getStaticProps() {
-    // const hotel_response = await axios.get('http://10.26.133.163:8888/hotel/getAll');
-    // const hotel_list = hotel_response.data
-    // const room_respose = await axios.get('http://10.26.133.163:8888/roomtype/getAll');
-    // const room_list = room_respose.data
-    // console.log(orders)
-    const room_list = null
-    const hotel_list = null
-    return {
-        props: {
-            hotel_list, room_list
-        },
-    }
+
+export async function getStaticProps(){
+  const hotel_response = await axios.get('http://10.26.133.163:8888/hotel/getAll');
+  const hotel_list = hotel_response.data
+  const room_respose = await axios.get('http://10.26.133.163:8888/roomtype/getAll');
+  const room_list = room_respose.data
+  return{
+    props:{
+      hotel_list, room_list
+    },
+    revalidate:10
+  }
+
 }
 
 
@@ -53,25 +53,91 @@ export default function Home({hotel_list, room_list}) {
     const router = useRouter()
     const sessionKey = router.query['sessionKey'];
 
+
     useEffect(() => {
         console.log("session-key: " + sessionKey)
     }, [sessionKey])
 
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <div>
-                <NavBar hotel_list={hotel_list} room_list={room_list}/>
-            </div>
-            <main>
-                <Link href={"/account-center/account-center"}>
-                    temporary account center
-                </Link>
-                <br/>
-                <Link
-                    href={{
-                        pathname: "/admin",
-                    }}
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div>
+        <NavBar hotel_list={hotel_list} room_list={room_list} />
+      </div>
+      <main>
+        <Link href={"/account-center/account-center"}>
+          temporary account center
+        </Link>
+        <br />
+        <Link
+          href={{
+            pathname: "/sign-in",
+            query: { href: "/account-center/account-center" },
+          }}
+        >
+          temporary sign in
+        </Link>
+        <Link
+          href={{
+            pathname: "/admin/dashboard",
+          }}
+        >
+          temporary admin
+        </Link>
+
+        {/* Hero unit */}
+        <Box
+          sx={{
+            bgcolor: "background.paper",
+          }}
+        >
+          <Container
+            maxWidth={false}
+            disableGutters
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              height: "100vh",
+              // width:'100vw',
+              backgroundColor: "gray",
+              justifyContent: "space-around",
+            }}
+          >
+            {/** 小屏幕不显示动画 */}
+            <Stack
+              sx={{
+                alignItems: "center",
+                justifyContent: "center",
+                display: { xs: "flex", sm: "none" },
+              }}
+            >
+              <Diversity1Icon sx={{ fontSize: "15rem" }} />
+              <Typography variant="h2">梦剧场</Typography>
+            </Stack>
+            {/**大屏部分 */}
+            <motion.div className={styles.picOne}>
+              <motion.div
+                style={{
+                  backgroundColor: "white",
+                  mixBlendMode: "darken",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Typography
+                  variant="h1"
+                  sx={{
+                    position: "absolute",
+                    // mixBlendMode: "screen",
+                    top: 200,
+                    fontWeight: "bold",
+                    fontSize: "20rem",
+                    // background: "#fff",
+                    color: "#000",
+                    // lineHeight:'100vh'
+                  }}
                 >
                     temporary admin
                 </Link>
@@ -158,39 +224,41 @@ export default function Home({hotel_list, room_list}) {
                         </motion.div>
                     </Container>
 
-                    <Container
-                        maxWidth="xl"
-                        sx={{
-                            padding: 0,
-                            display: "flex",
-                            flexDirection: "row",
-                            height: "100vh",
-                            backgroundColor: "antiquewhite",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <Stack sx={{justifyContent: "center", paddingLeft: "5%"}}>
-                            <Typography
-                                // variant="h2"
-                                sx={{
-                                    background:
-                                        "linear-gradient(90deg, rgba(8,200,255,1) 0%, rgba(232,53,255,1) 47%, rgba(255,165,92,1) 100%)",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                    fontSize: "5rem",
-                                    fontWeight: "1002",
-                                }}
-                            >
-                                盛夏酒店
-                            </Typography>
-                            <Typography variant="h2">梦开始的地方</Typography>
-                            <Typography variant="h6">“生动诠释了宾至如归” ———</Typography>
-                            <Button href="/hotels">现在入住！</Button>
-                        </Stack>
-                        <Stack>
-                            <SendIcon sx={{fontSize: "20rem"}}/>
-                        </Stack>
-                        {/* <Grid container columns={12} sx={{justifyContent:'center',alignItems:'center'}}>
+
+          <Container
+            maxWidth="false"
+            sx={{
+              padding: 0,
+              display: "flex",
+              flexDirection: "row",
+              height: "100vh",
+              backgroundColor: "antiquewhite",
+              justifyContent: "space-between",
+            }}
+          >
+            <Stack sx={{ justifyContent: "center", paddingLeft: "5%" }}>
+              <Typography
+                // variant="h2"
+                sx={{
+                  background:
+                    "linear-gradient(90deg, rgba(8,200,255,1) 0%, rgba(232,53,255,1) 47%, rgba(255,165,92,1) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  fontSize: "5rem",
+                  fontWeight: "1002",
+                }}
+              >
+                盛夏酒店
+              </Typography>
+              <Typography variant="h2">梦开始的地方</Typography>
+              <Typography variant="h6">“生动诠释了宾至如归” ———</Typography>
+              <Button href="/hotels">现在入住！</Button>
+            </Stack>
+            <Stack>
+              <SendIcon sx={{ fontSize: "20rem" }} />
+            </Stack>
+            {/* <Grid container columns={12} sx={{justifyContent:'center',alignItems:'center'}}>
+
               <Grid item>
               </Grid>
             </Grid> */}

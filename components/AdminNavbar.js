@@ -2,6 +2,7 @@ import {
   AppBar,
   Box,
   Button,
+  createTheme,
   CssBaseline,
   Divider,
   Drawer,
@@ -10,6 +11,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ThemeProvider,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -19,9 +21,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { useRouter } from "next/router";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import { grey,blue } from "@mui/material/colors";
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import { HotelOutlined } from "@mui/icons-material";
 
 export default function AdminNavBar({}) {
-  const drawerWidth = 200;
+  const drawerWidth = 210;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -40,25 +46,43 @@ export default function AdminNavBar({}) {
 
   const drawer = (
     <div>
-      <Toolbar />
+      <Toolbar >
+        <Button href="/" fullWidth size="large" variant="outlined" color="secondary" startIcon={<HotelOutlined fontSize="24px" />}>
+          首页
+        </Button>
+      </Toolbar>
       <Divider />
       <List>
-        {["数据面板", "订单","房间信息"].map((text, index) => (
-          <ListItem key={text}>
+        {["数据面板", "订单信息","房间信息","促销活动"].map((text, index) => (
+          <ListItem key={text} sx={{}} disablePadding  alignItems="center" >
             <ListItemButton href={handleJump(index)}>
-              {text=="数据面板"? <DashboardIcon />:<LocalOfferIcon />}
-              <ListItemText primary={text} />
+              {index==0 &&  <DashboardIcon color="secondary"  />}
+              {index == 1 && <FormatListBulletedIcon color="secondary"  />}
+              {index == 2 && <MeetingRoomIcon color="secondary" />}
+              {index == 3 && <LocalOfferIcon color="secondary" />}
+              <ListItemText sx={{paddingLeft:'10px', color:'whitesmoke'}} primary={text} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
     </div>
   );
+
+  const theme = createTheme({
+    palette:{
+      primary:{
+        main: blue['A400']
+      },
+      secondary:{
+        main: '#fff'
+      }
+    }
+  })
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="fixed" sx={{}} color='transparent'>
+        <AppBar position="fixed" sx={{}} color='secondary'>
           <Toolbar>
             <IconButton color="inherit" onClick={handleDrawerToggle}>
               <MenuIcon />
@@ -71,11 +95,14 @@ export default function AdminNavBar({}) {
             open={mobileOpen}
             onClose={handleDrawerToggle}
             ModalProps={{ keepMounted: true }}
+            color='primary'
             sx={{
+      
               display: { xs: "block", sm: "none" },
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                backgroundColor:'#2E3B55'
               },
             }}
           >
@@ -85,11 +112,14 @@ export default function AdminNavBar({}) {
             width={drawerWidth}
             variant="permanent"
             open
+            
             sx={{
+              backgroundColor: 'cyan',
               display: { xs: "none", sm: "block" },
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                backgroundColor:'#2E3B55'
               },
             }}
           >
@@ -97,6 +127,6 @@ export default function AdminNavBar({}) {
           </Drawer>
         </Box>
       </Box>
-    </>
+    </ThemeProvider>
   );
 }
