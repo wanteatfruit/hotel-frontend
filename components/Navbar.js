@@ -28,7 +28,7 @@ import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in 
 import { login, pages, settings } from "../data";
 import { Stack, width } from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
-import { ChevronLeftOutlined } from "@mui/icons-material";
+import { ChevronLeftOutlined,HotelOutlined } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 //传入是否已登录，决定用户处显示内容
@@ -105,26 +105,26 @@ export default function NavBar({ isLoggedIn, hotel_list, room_list, setSessionKe
                                 ))}
                             </List>
                         </Drawer>
-                        <HotelIcon
-                            sx={{
-                                display: { xs: "flex", md: "none" },
-                                alignItems: "center",
-                                ml: 1,
-                            }}
-                        />
+                        <Typography>
+                            盛夏小酒
+                        </Typography>
                     </Box>
                     {/* 小屏只显示logo，在屏幕中心*/}
 
                     {/*大屏显示完整跳转名称*/}
                     <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                        <Button sx={{paddingRight:2,marginRight:2}} href="/" fullWidth size="large" variant="outlined" color="secondary" startIcon={<HotelOutlined fontSize="24px" />}>
+                            盛夏小酒
+                        </Button>
+{/* 
                         <IconButton color="inherit" href="/">
                             <HotelIcon
                                 sx={{ display: { xs: "none", md: "flex" } }}
                             />
-                        </IconButton>
+                        </IconButton> */}
 
                         {/* 大屏显示酒店logo和名称*/}
-                        <Typography
+                        {/* <Typography
                             variant="h6"
                             color="inherit"
                             noWrap
@@ -132,7 +132,7 @@ export default function NavBar({ isLoggedIn, hotel_list, room_list, setSessionKe
                             sx={{ display: { xs: "none", md: "flex" }, mt: 1, mr: 1 }}
                         >
                             一家连锁酒店
-                        </Typography>
+                        </Typography> */}
                         {pages.map((item) => (
                             <Button
                                 key={item.name}

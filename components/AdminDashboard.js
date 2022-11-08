@@ -19,54 +19,6 @@ export default function AdminDashboard({}) {
 
 
   React.useEffect(()=>{
-//     const fetchRoom = async ()=>{
-//       await axios.get(
-//         "http://10.26.133.163:8888/manager/hotCity"
-//       ).then((resp) => { return resp.data })
-//     }
-//     const fetchHotel = async () => {
-//      axios.get(
-//         "http://10.26.133.163:8888/manager/hotHotel"
-//       ).then((resp) => { return resp.data })
-//     }
-//     const fetchCity = async () => {
-//       await axios.get(
-//         "http://10.26.133.163:8888/manager/hotCity"
-//       ).then((resp)=>{return resp.data})
-//     }
-//     const fetchCus = async () => {
-//       await axios.get(
-//         "http://10.26.133.163:8888/manager/hotCity"
-//       ).then((resp) => { return resp.data })
-//     }
-//     const fetchOrder = async () => {
-//       await axios.get(
-//         "http://10.26.133.163:8888/manager/hotCity"
-//       ).then((resp) => { return resp.data })
-//     }
-//     const fetchSales = async () => {
-//       const promise = await axios.get(
-//         "http://10.26.133.163:8888/manager/hotCity"
-//       )
-//       return promise.data
-//     }
-
-//     const sales = Promise.
-//     console.log(sales)
-//     const order = fetchOrder()
-//     const hotel = fetchHotel()
-//     const city =fetchCity()
-//     const room = fetchRoom()
-//     const cust = fetchCus()
-//     const data = {
-//       hot_room: room,
-//       hot_hotel: hotel,
-//       hot_city: city,
-//       cust_cnt: cust,
-//       ordered_cnt: order,
-//       sales: sales
-// }
-//     set({data})
 
     const fetchData = async()=>{
       await axios.get(
@@ -104,7 +56,7 @@ export default function AdminDashboard({}) {
         <Grid item xs={24} sm={24} md={24} lg={24} xl={24}>
           <Paper sx={{borderRadius:'20px'}}>
             <Stack sx={{ p: 4 }}>
-              <Typography variant="h2">欢迎回来</Typography>
+              <Typography variant="h2" component='h2'>欢迎回来</Typography>
               <Typography variant="h6">请查看最新数据</Typography>
             </Stack>
           </Paper>

@@ -32,6 +32,7 @@ export default function AdminNavBar({}) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  
 
   function handleJump(index){
     switch(index){
@@ -76,7 +77,14 @@ export default function AdminNavBar({}) {
       secondary:{
         main: '#fff'
       }
-    }
+    },
+    typography: {
+      fontFamily: "'Noto Sans SC', sans-serif",
+      fontSize:14,
+      h2: {
+        fontWeight: 500
+      }
+    },
   })
   return (
     <ThemeProvider theme={theme}>

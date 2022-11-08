@@ -1,6 +1,8 @@
 import AdminDashboard from "../../components/AdminDashboard";
 import AdminLayout from "../../components/AdminLayout";
 import axios from "axios";
+import { createTheme } from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
 
 // export async function getStaticProps() {
 //   const hot_city_resp = await axios.get(
@@ -44,9 +46,7 @@ import axios from "axios";
 //   };
 // }
 
-export default function AdDashboard({
-
-}) {
+export default function AdDashboard({}) {
   return (
     <>
       <AdminLayout>

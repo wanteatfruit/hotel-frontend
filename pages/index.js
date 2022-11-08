@@ -49,9 +49,21 @@ export async function getStaticProps() {
 }
 
 
+
 export default function Home({ hotel_list, room_list }) {
   const router = useRouter()
   const sessionKey = router.query['sessionKey'];
+  const theme = createTheme({
+    typography:{
+      fontFamily: "'Noto Serif SC', serif",
+      fontSize:15
+    },
+    palette:{
+      secondary:{
+        main:'#fff'
+      }
+    }
+  })
 
 
   useEffect(() => {
