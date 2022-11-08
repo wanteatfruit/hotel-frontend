@@ -10,6 +10,8 @@ import Paper from '@mui/material/Paper';
 import {ListItem} from "@mui/material";
 import Link from "next/link";
 import Button from "@mui/material/Button";
+import axios from "axios"
+import {useEffect} from "react";
 
 const drawerWidth = 240;
 
@@ -137,9 +139,17 @@ function Credits() {
 
 function DashboardContent() {
     const [open, setOpen] = React.useState(true);
+    // const [msg, setMsg]
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    // useEffect(() => {
+    //     axios.get("http://10.26.133.163:8888/hotel/findAll").then((response) => {
+    //         console.log(response.data);
+    //     });
+    // }, []);
+
     return (
         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
             <Grid container spacing={3}>

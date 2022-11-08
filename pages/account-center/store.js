@@ -162,7 +162,7 @@ export default function Store() {
                     {/* End hero unit */}
                     <Grid container spacing={4}>
                         {merchandiseList.map((merchandise) => (
-                            <Grid item key={merchandise} xs={12} sm={6} md={4}>
+                            <Grid item key={merchandise[0]} xs={12} sm={6} md={4}>
                                 <Card
                                     sx={{height: "100%", display: ' flex', flexDirection: ' column'}}
                                 >
