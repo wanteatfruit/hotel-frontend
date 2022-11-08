@@ -45,12 +45,7 @@ import axios from "axios";
 // }
 
 export default function AdDashboard({
-  hot_city,
-  hot_hotel,
-  hot_room,
-  cur_customer,
-  ordered_cnt,
-  sales_stat,
+
 }) {
   return (
     <>

@@ -56,8 +56,13 @@ export default function BookingPage({ }) {
             secondary: {
                 main: '#fff'
             }
+        },
+        typography: {
+            fontFamily: "'Noto Serif SC', serif",
+            
         }
     })
+
 
     const city_list = ['深圳', '广州', '上海', '重庆'];
 
@@ -81,7 +86,9 @@ export default function BookingPage({ }) {
     }
 
     return (
+        
         <Layout>
+            <ThemeProvider theme={theme}>
             <Box>
                 <div style={{ backgroundImage:'url("https://images.pexels.com/photos/827528/pexels-photo-827528.jpeg?auto=compress&cs=tinysrgb&w=1600")',backgroundSize:'cover', height: '30vh', display: 'flex', alignItems: 'flex-end' }}>
                     
@@ -215,7 +222,8 @@ export default function BookingPage({ }) {
                 )}
 
             </Box>
-
+            </ThemeProvider>
         </Layout>
+        
     )
 }

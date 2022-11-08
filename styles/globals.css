@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap');
 :root{
   --ticket-height:220px;
   --ticket-width:500px;
   --ticket-pic-width:400px;
   --ticket-bg-primary : ghostwhite;
+  --font-secondary: 'Noto Serif SC', serif;
 }
 
 html,
