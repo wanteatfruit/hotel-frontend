@@ -30,7 +30,6 @@ import axios from "axios";
 import {useState} from "react";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
-
 const theme = createTheme();
 
 // 获取酒店和房间列表，传给navbar
@@ -218,6 +217,15 @@ export default function Home({hotel_list, room_list}) {
                         </Grid>
                     </Container>
                 </div>
+                <Grid container sx={{
+                    marginTop: 10,
+                    marginBottom: 10,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                }}>
+                    <iframe src={"map.html"} height="500" width="600"></iframe>
+                </Grid>
             </main>
             <Footer/>
         </ThemeProvider>
