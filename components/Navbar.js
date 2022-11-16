@@ -57,26 +57,33 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, setSessionKey
         setDrawerOpen(!drawerOpen);
     }
 
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  }
     const handleLogin = () => {
         router.push({
             pathname: "/sign-in",
             query: {href: "/"},
         })
     }
-    return (
-        <>
-            <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list}>
-                <IconButton onClick={() => setBookingOpen(false)}>
-                    <ChevronLeftOutlined/>
-                </IconButton>
-            </BookingDrawer>
-            <AppBar
-                position="relative"
-                sx={{background: "#2E3B55", zIndex: 1}}
-            >
-                {/* <Container maxWidth="xl"> */}
-                <Toolbar sx={{justifyContent: "space-between"}}>
-                    {/*设置小屏菜单显示*/}
+  // React.useEffect(()=>console.log(hotel_list))
+
+  return (
+    <>
+      <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list} >
+        <IconButton onClick={()=>setBookingOpen(false)} color="secondary">
+          <ChevronLeftOutlined fontSize="large"/>
+        </IconButton>
+      </BookingDrawer>
+      <AppBar
+        position="relative"
+        sx={{ background: "#2E3B55", zIndex: 1 }}
+      >
+        {/* <Container maxWidth="xl"> */}
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          {/*设置小屏菜单显示*/}
+
 
                     <Box sx={{display: {xs: "flex", md: "none"}, alignItems: "center"}}>
                         <IconButton onClick={handleDrawerToggle} color="inherit">
@@ -184,14 +191,15 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, setSessionKey
                         {/* <Button color="error" size="large" variant="contained">
             Book
           </Button> */}
-                        <Button color="error" variant="contained" onClick={() => {
-                            setBookingOpen(!bookingOpen)
-                        }}>预定</Button>
-                    </Box>
-                </Toolbar>
-                {/* </Container> */}
-            </AppBar>
-        </>
+
+            <Button color="error" variant="contained" onClick={() => { setBookingOpen(!bookingOpen) }}>预定</Button>
+            {/* <Button color="error" variant="contained" href="/book" >预定</Button> */}
+          </Box>
+        </Toolbar>
+        {/* </Container> */}
+      </AppBar>
+    </>
+
 
     );
 }

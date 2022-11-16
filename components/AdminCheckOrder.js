@@ -16,7 +16,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { branchHotels, orderColumns,orderRows } from "../data";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, zhCN } from "@mui/x-data-grid";
 
 export default function AdminCheckOrder() {
 
@@ -91,7 +91,7 @@ export default function AdminCheckOrder() {
           <Card>
             <CardHeader title="订单" />
             <CardContent sx={{}}>
-              <DataGrid rows={orderRows} columns={orderColumns} autoHeight />
+              <DataGrid rows={orderRows} columns={orderColumns} autoHeight localeText={zhCN.components.MuiDataGrid.defaultProps.localeText} />
             </CardContent>
           </Card>
         </Grid>
