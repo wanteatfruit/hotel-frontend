@@ -15,23 +15,37 @@ import { Box } from "@mui/system";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
-import { branchHotels, orderColumns,orderRows } from "../data";
+import { branchHotels, orderColumns, orderRows } from "../data";
 import { DataGrid, zhCN } from "@mui/x-data-grid";
+import axios from "axios";
 
 export default function AdminCheckOrder() {
 
+  const [dataRows, setDataRows] = React.useState([])
+  const orderColumns = [
+    {field:'customerName',headerName:'顾客',width:90},
+    { field: 'telephone', headerName: '电话', width: 120 },
+    { field: 'roomTypeName', headerName: '房型', width: 90 },
+    { field: 'hotelName', headerName: '分店', width: 120 },
+    { field: 'checkInTime', headerName: '入住时间', width: 150 },
+    { field: 'checkOutTime', headerName: '退房时间', width: 150 },
+]
   // 表格状态，用于搜索
   const [form, setForm] = React.useState({
-    id:'',
-    branch:''
+    id: '',
+    branch: ''
   });
 
+  React.useEffect(() => {
+    axios.get("http://10.26.133.163:8888/orders/findAll").then((resp) => setDataRows(resp.data))
+  },[])
+
   //自动补全状态
-  const [autoValue,setAutoValue]=React.useState(branchHotels[0]);
+  const [autoValue, setAutoValue] = React.useState(branchHotels[0]);
 
   const router = useRouter();
 
-  function handleSubmit(event){
+  function handleSubmit(event) {
     event.preventDefault();
     // alert(form.id);
     router.push({
@@ -54,7 +68,7 @@ export default function AdminCheckOrder() {
               <Stack
                 component="form"
                 gap={2}
-                sx={{ display: "flex", flexDirection: "column",  }}
+                sx={{ display: "flex", flexDirection: "column", }}
                 onSubmit={handleSubmit}
               >
                 <TextField
@@ -67,7 +81,7 @@ export default function AdminCheckOrder() {
                 ></TextField>
 
                 <Autocomplete
-                sx={{}}
+                  sx={{}}
                   value={autoValue}
                   onChange={(event, newvalue) => {
                     setAutoValue(newvalue);
@@ -91,7 +105,7 @@ export default function AdminCheckOrder() {
           <Card>
             <CardHeader title="订单" />
             <CardContent sx={{}}>
-              <DataGrid rows={orderRows} columns={orderColumns} autoHeight localeText={zhCN.components.MuiDataGrid.defaultProps.localeText} />
+              <DataGrid getRowId={(row)=>row.customerName+row.orderTime} rows={dataRows} columns={orderColumns} autoHeight localeText={zhCN.components.MuiDataGrid.defaultProps.localeText} />
             </CardContent>
           </Card>
         </Grid>
