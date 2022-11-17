@@ -7,7 +7,7 @@ import { CheckBox, ColorLensSharp } from "@mui/icons-material";
 export default function RoomCard({ roomname, imageUrl, description, hotelName, admin, roomInfo }) {
 
     const [changeInfo, setchangeInfo] = React.useState(false)
-    const [roomName, setRoomName] = React.useState(roomInfo.roomname)
+    const [roomName, setRoomName] = React.useState(roomInfo.roomname===undefined?"":roomInfo.roomname)
     const [roomPrice, setRoomPrice] = React.useState(roomInfo.price)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
     function handleIntroduction() {
@@ -69,7 +69,7 @@ export default function RoomCard({ roomname, imageUrl, description, hotelName, a
             <Backdrop open={changeInfo} sx={{ zIndex: 10000 }}>
                 <Paper onSubmit={handleSubmit} sx={{ width: 'max-content', padding: 2 }} component='form'>
                     <Typography variant="h4" sx={{marginBottom:3}}>修改信息</Typography>
-                    <Stack gap={2}>
+                    <Stack gap={2} >
                         <TextField value={roomName} onChange={(event) => {
                             setRoomName(event.target.value);
                         }} label="房间名" required>
