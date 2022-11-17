@@ -37,7 +37,7 @@ export default function AdminCheckOrder() {
   });
 
   React.useEffect(() => {
-    axios.get("http://10.26.133.163:8888/orders/findAll").then((resp) => setDataRows(resp.data))
+    axios.get("http://120.25.216.186:8888/orders/findAll").then((resp) => setDataRows(resp.data))
   },[])
 
   //自动补全状态

@@ -2,6 +2,7 @@ import { Box, Grid } from "@mui/material"
 import { Stack } from "@mui/system";
 import Image from "next/image";
 import { useRouter } from "next/router"
+import React from "react";
 import BranchIntro from "../../components/BranchIntroduction";
 import Layout from "../../components/Layout"
 import RoomCard from "../../components/RoomCard";
@@ -11,6 +12,10 @@ export default function HotelDetail() {
     const router = useRouter()
     const id = router.query.id
     //id为酒店名，动态路径
+    const [roomList, setRoomList] = React.useState([]);
+    React.useEffect(()=>{
+        
+    })
     return (
         <Layout>
             <Box
@@ -39,9 +44,9 @@ export default function HotelDetail() {
                 <Box sx={{ backgroundColor: 'antiquewhite', paddingY: '40px', paddingX:'30px' }}>
                     <Grid container spacing={4} columns={24}>
                         <Grid item xs={24} md={12}>
-                            {/* <RoomCard hotelName={id} roomName={'豪华大床房'}
+                            <RoomCard hotelName={id} roomName={'豪华大床房'}
                                 imageUrl={'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'}
-                                description={'xxx大酒店的豪华单人间采用明清建筑的豪宅风格，配置1.8米豪华大床，选用顶级舒适的床上用品、拥有最豪华的布艺、家具和设施，以浓重而不失活泼的色调、奔放且大气的布局、近似自然优美的线条，营造豪华舒适、至尊至贵的假日体验。'} /> */}
+                                description={'xxx大酒店的豪华单人间采用明清建筑的豪宅风格，配置1.8米豪华大床，选用顶级舒适的床上用品、拥有最豪华的布艺、家具和设施，以浓重而不失活泼的色调、奔放且大气的布局、近似自然优美的线条，营造豪华舒适、至尊至贵的假日体验。'} />
                         </Grid>
                         <Grid item xs={24} md={12} >
                             {/* <RoomCard roomName={'总统套房'} description={'介绍'} /> */}

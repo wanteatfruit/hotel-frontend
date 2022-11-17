@@ -1,15 +1,32 @@
 import Layout from "../../components/Layout";
-import { Box, Grid, Paper, Tab } from "@mui/material";
+import { Box, Grid, Paper, Tab, Typography } from "@mui/material";
 import Image from "next/image";
 import styles from "../../styles/HotelPage.module.css";
 import { Stack } from "@mui/system";
 import HotelCard from "../../components/HotelCard";
 import Slider from "react-slick";
 import React from "react";
+import axios from "axios";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-export default function HotelPage() {
+import { hotelImageUrl } from "../../data";
+export async function getStaticProps() {
+  const hotel_response = await axios.get('http://120.25.216.186:8888/hotel/getAll');
+  const hotel_list = hotel_response.data
+  const room_respose = await axios.get('http://120.25.216.186:8888/roomtype/getAll');
+  const room_list = room_respose.data
+  console.log(hotel_list)
+  return {
+    props: {
+      hotel_list, room_list
+    },
+    revalidate: 10
+  }
+}
+
+
+export default function HotelPage({ hotel_list, room_list }) {
   const [tabValue, setTabValue] = React.useState('0');
-  const handleTabChange =(event, newValue)=>{
+  const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   }
   return (
@@ -24,6 +41,7 @@ export default function HotelPage() {
           flexGrow: 1,
           height: "max-content",
           overflow: "auto",
+          paddingBottom: 2
         }}
       >
         <div className={styles.picWrapper}>
@@ -34,7 +52,7 @@ export default function HotelPage() {
             <p className={styles.stay}>入住</p>
           </div>
         </div>
-        <Box sx={{backgroundColor:'aqua'}}>
+        <Box sx={{ backgroundColor: 'aqua' }}>
           <div className={styles.introWrapper}>
             <p className={styles.introContent}>
               Beyond our legendary hotels, we offer our unique brand of
@@ -44,33 +62,46 @@ export default function HotelPage() {
           </div>
         </Box>
         <div className={styles.pickWrapper}>
-          <Box sx={{backgroundColor:'grey'}}>
-            <TabContext value={tabValue} >
-              <Box sx={{borderBottom:1,borderColor:'divider',paddingLeft:'20px'}}>
-                <TabList variant="fullWidth" sx={{fontSize:'xx-large'}} onChange={handleTabChange}>
-                  <Tab label="深圳" value="0"></Tab>
-                  <Tab label="广州" value="1"></Tab>
-                  <Tab label="重庆" value="2"></Tab>
-                  <Tab label="上海" value="3"></Tab>
-                </TabList>
-              </Box>
-              <TabPanel value="0">
-                <Stack sx={{ padding: 2,overflow:'scroll',justifyContent:{sm:'center',md:'flex-start'},alignItems:'center' }} spacing={2} direction={{ sm: 'column', md: 'row' }}>
-                  <div><HotelCard hotelName={'分店1'} imageSrc={"https://images.pexels.com/photos/70441/pexels-photo-70441.jpeg?auto=compress&cs=tinysrgb&w=800"} /></div>
-                  <div><HotelCard hotelName={'分店2'} imageSrc={"https://images.pexels.com/photos/13794096/pexels-photo-13794096.jpeg?auto=compress&cs=tinysrgb&w=800"} /></div>
-                  <div><HotelCard hotelName={'分店3'} imageSrc={'https://images.pexels.com/photos/5066935/pexels-photo-5066935.jpeg?auto=compress&cs=tinysrgb&w=800'} /></div>
-                  <div><HotelCard hotelName={'分店3'} imageSrc={'https://images.pexels.com/photos/5066935/pexels-photo-5066935.jpeg?auto=compress&cs=tinysrgb&w=800'} /></div>
-                  <div><HotelCard hotelName={'分店3'} imageSrc={'https://images.pexels.com/photos/5066935/pexels-photo-5066935.jpeg?auto=compress&cs=tinysrgb&w=800'} /></div>
+          <Box sx={{ backgroundColor: 'grey' }}>
+            <TabContext value={tabValue} sx={{ height: '100vh' }} >
+              <TabList variant="fullWidth" sx={{ fontSize: 'xx-large' }} onChange={handleTabChange}>
+                <Tab label="深圳" value="0"></Tab>
+                <Tab label="广州" value="1"></Tab>
+                <Tab label="重庆" value="2"></Tab>
+                <Tab label="上海" value="3"></Tab>
+              </TabList>
+
+              <TabPanel value="0" >
+                <Stack sx={{ padding: 2, overflow: 'scroll', justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
+                  {hotel_list.map((item, index) => (item.cityname == "深圳" && <div>
+                    <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                  </div>
+                  ))}
                 </Stack>
               </TabPanel>
               <TabPanel value="1">
-                <HotelCard hotelName={'广州分店1'}></HotelCard>
+                <Stack sx={{ padding: 2, justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
+                  {hotel_list.map((item, index) => (item.cityname == "广州" && <div>
+                    <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                  </div>
+                  ))}
+                </Stack>
               </TabPanel>
               <TabPanel value="2">
-                <HotelCard hotelName={'广州分店1'}></HotelCard>
+                <Stack sx={{ padding: 2,  justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
+                  {hotel_list.map((item, index) => (item.cityname == "重庆" && <div>
+                    <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                  </div>
+                  ))}
+                </Stack>
               </TabPanel>
               <TabPanel value="3">
-                <HotelCard hotelName={'广州分店1'}></HotelCard>
+                <Stack sx={{ padding: 2,  justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
+                  {hotel_list.map((item, index) => (item.cityname == "上海" && <div>
+                    <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                  </div>
+                  ))}
+                </Stack>
               </TabPanel>
             </TabContext>
           </Box>

@@ -25,7 +25,7 @@ export default function AdminRooms({}) {
   const [roomList, setRoomList] = React.useState(null)
   //get roomtype by hotel
   React.useEffect(() => {
-    axios.get("http://10.26.133.163:8888/roomtype/getAll").then((resp) => {
+    axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
       setRoomList(resp.data)
     })
     console.log(roomList)

@@ -22,23 +22,23 @@ export default function AdminDashboard({}) {
 
     const fetchData = async()=>{
       await axios.get(
-        "http://10.26.133.163:8888/manager/hotCity"
+        "http://120.25.216.186:8888/manager/hotCity"
       ).then((resp) => setHotCity(resp.data) );
       console.log()
       await axios.get(
-        "http://10.26.133.163:8888/manager/hotHotel"
+        "http://120.25.216.186:8888/manager/hotHotel"
       ).then((resp) => setHotHotel(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/hotRoomType"
+        "http://120.25.216.186:8888/manager/hotRoomType"
       ).then((resp) => setHotRoom(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/orderedRoomNums"
+        "http://120.25.216.186:8888/manager/orderedRoomNums"
       ).then((resp) => setOrderCnt(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/currentCustomer"
+        "http://120.25.216.186:8888/manager/currentCustomer"
       ).then((resp) => setCustCnt(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/sales"
+        "http://120.25.216.186:8888/manager/sales"
       ).then((resp) => setSales(resp.data));
     }
     
