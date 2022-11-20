@@ -7,8 +7,8 @@ import { CheckBox, ColorLensSharp } from "@mui/icons-material";
 export default function RoomCard({ roomname, imageUrl, description, hotelName, admin, roomInfo }) {
 
     const [changeInfo, setchangeInfo] = React.useState(false)
-    const [roomName, setRoomName] = React.useState(roomInfo.roomname===undefined?"":roomInfo.roomname)
-    const [roomPrice, setRoomPrice] = React.useState(roomInfo.price)
+    const [roomName, setRoomName] = React.useState(roomInfo===undefined?"":roomInfo.roomname)
+    const [roomPrice, setRoomPrice] = React.useState(roomInfo===undefined?"":roomInfo.price)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
     function handleIntroduction() {
         let intro = roomInfo.introduction
