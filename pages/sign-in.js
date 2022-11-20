@@ -35,33 +35,28 @@ export default function SignIn() {
     const router = useRouter();
     const href = router.query['href'];
     const [succeed, setSucceed] = useState(false);
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const userInfo = {
-            name: data.get('username'),
-            loginpassword: data.get('password'),
-        };
-        console.log("userInfo:", userInfo)
-
-        axios
-            .post("http://120.25.216.186:8888/login", {
-                body: userInfo
-            })
-            .then((response) => {
-                console.log(response)
-            });
-        // setSucceed(true);
-    };
-
-    useEffect(() => {
-        if (succeed) {
-            router.push({
-                pathname: href,
-                query: {sessionKey: 666, username: "wcvanvan"},
-            }, href)
+            "name": data.get("username"),
+            "loginpassword": data.get("password")
         }
-    })
+        const options = {
+            method: "POST",
+            body: JSON.stringify(userInfo),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        let sessionKey = ''
+        await fetch("http://120.25.216.186:8888/login", options)
+            .then((response) => sessionKey = response.text()).then(data => sessionKey = data)
+        router.push({
+            pathname: href,
+            query: {sessionKey: sessionKey, username: data.get("username"), isLoggedIn: true},
+        }, href)
+    };
 
     return (
         <ThemeProvider theme={theme}>
