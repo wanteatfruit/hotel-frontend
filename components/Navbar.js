@@ -25,14 +25,14 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in user
-import {login, pages, settings} from "../data";
-import {Stack, width} from "@mui/system";
+import { login, pages, settings } from "../data";
+import { Stack, width } from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
-import {ChevronLeftOutlined} from "@mui/icons-material";
+import { ChevronLeftOutlined,HotelOutlined } from "@mui/icons-material";
 import Link from "next/link";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 //传入是否已登录，决定用户处显示内容
-export default function NavBar({isLoggedIn, hotel_list, room_list, setSessionKey}) {
+export default function NavBar({ isLoggedIn, hotel_list, room_list, setSessionKey }) {
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -53,54 +53,50 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, setSessionKey
         setAnchorElUser(null);
     };
 
+
     const handleDrawerToggle = () => {
         setDrawerOpen(!drawerOpen);
     }
-
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  }
     const handleLogin = () => {
         router.push({
             pathname: "/sign-in",
-            query: {href: "/"},
+            query: { href: "/" },
         })
     }
-  // React.useEffect(()=>console.log(hotel_list))
+    // React.useEffect(()=>console.log(hotel_list))
 
-  return (
-    <>
-      <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list} >
-        <IconButton onClick={()=>setBookingOpen(false)} color="secondary">
-          <ChevronLeftOutlined fontSize="large"/>
-        </IconButton>
-      </BookingDrawer>
-      <AppBar
-        position="relative"
-        sx={{ background: "#2E3B55", zIndex: 1 }}
-      >
-        {/* <Container maxWidth="xl"> */}
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/*设置小屏菜单显示*/}
+    return (
+        <>
+            <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list} >
+                <IconButton onClick={() => setBookingOpen(false)} color="secondary">
+                    <ChevronLeftOutlined fontSize="large" />
+                </IconButton>
+            </BookingDrawer>
+            <AppBar
+                position="relative"
+                sx={{ background: "#2E3B55", zIndex: 1 }}
+            >
+                {/* <Container maxWidth="xl"> */}
+                <Toolbar sx={{ justifyContent: "space-between" }}>
+                    {/*设置小屏菜单显示*/}
 
 
-                    <Box sx={{display: {xs: "flex", md: "none"}, alignItems: "center"}}>
+                    <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}>
                         <IconButton onClick={handleDrawerToggle} color="inherit">
-                            <MenuIcon/>
+                            <MenuIcon />
                         </IconButton>
                         <Drawer open={drawerOpen} onClose={handleDrawerToggle}>
                             <List>
-                                <ListItem sx={{width: "fit-content"}}>
+                                <ListItem sx={{ width: "fit-content" }}>
                                     <ListItemButton onClick={handleDrawerToggle}>
-                                        <CloseIcon/>
+                                        <CloseIcon />
                                     </ListItemButton>
                                 </ListItem>
                                 {pages.map((item) => (
                                     <ListItem
                                         key={item.name}
                                         disablePadding
-                                        sx={{width: "100vw"}}
+                                        sx={{ width: "100vw" }}
                                     >
                                         <ListItemButton onClick={handleDrawerToggle}>
                                             <ListItemText primary={item.name}></ListItemText>
@@ -109,34 +105,34 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, setSessionKey
                                 ))}
                             </List>
                         </Drawer>
-                        <HotelIcon
-                            sx={{
-                                display: {xs: "flex", md: "none"},
-                                alignItems: "center",
-                                ml: 1,
-                            }}
-                        />
+                        <Typography>
+                            盛夏小酒
+                        </Typography>
                     </Box>
                     {/* 小屏只显示logo，在屏幕中心*/}
 
                     {/*大屏显示完整跳转名称*/}
-                    <Box sx={{display: {xs: "none", md: "flex"}}}>
+                    <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                        <Button sx={{paddingRight:2,marginRight:2}} href="/" fullWidth size="large" variant="outlined" color="secondary" startIcon={<HotelOutlined fontSize="24px" />}>
+                            盛夏小酒
+                        </Button>
+{/* 
                         <IconButton color="inherit" href="/">
                             <HotelIcon
-                                sx={{display: {xs: "none", md: "flex"}}}
+                                sx={{ display: { xs: "none", md: "flex" } }}
                             />
-                        </IconButton>
+                        </IconButton> */}
 
                         {/* 大屏显示酒店logo和名称*/}
-                        <Typography
+                        {/* <Typography
                             variant="h6"
                             color="inherit"
                             noWrap
                             gutterBottom
-                            sx={{display: {xs: "none", md: "flex"}, mt: 1, mr: 1}}
+                            sx={{ display: { xs: "none", md: "flex" }, mt: 1, mr: 1 }}
                         >
                             一家连锁酒店
-                        </Typography>
+                        </Typography> */}
                         {pages.map((item) => (
                             <Button
                                 key={item.name}
@@ -149,17 +145,17 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, setSessionKey
                         ))}
                     </Box>
                     {/*用户图标大小屏都在最右边*/}
-                    <Box sx={{display: "flex"}}>
+                    <Box sx={{ display: "flex" }}>
                         {/*avatar，后续可改成avatar组件*/}
                         <Tooltip title={"Login"}>
                             <IconButton onClick={handleLogin} color="inherit">
-                                <LoginIcon/>
+                                <LoginIcon />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Account center">
                             <IconButton onClick={handleOpenUserMenu} color="inherit">
-                                {!isLoggedIn && <AccountCircleIcon/>}
-                                {isLoggedIn && <FaceIcon/>}
+                                {!isLoggedIn && <AccountCircleIcon />}
+                                {isLoggedIn && <FaceIcon />}
                             </IconButton>
                         </Tooltip>
                         {/*drop down menu*/}
@@ -186,19 +182,19 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, setSessionKey
                             orientation="vertical"
                             color="success"
                             flexItem
-                            sx={{mx: 2}}
+                            sx={{ mx: 2 }}
                         />
                         {/* <Button color="error" size="large" variant="contained">
             Book
           </Button> */}
 
-            <Button color="error" variant="contained" onClick={() => { setBookingOpen(!bookingOpen) }}>预定</Button>
-            {/* <Button color="error" variant="contained" href="/book" >预定</Button> */}
-          </Box>
-        </Toolbar>
-        {/* </Container> */}
-      </AppBar>
-    </>
+                        <Button color="error" variant="contained" onClick={() => { setBookingOpen(!bookingOpen) }}>预定</Button>
+                        {/* <Button color="error" variant="contained" href="/book" >预定</Button> */}
+                    </Box>
+                </Toolbar>
+                {/* </Container> */}
+            </AppBar>
+        </>
 
 
     );

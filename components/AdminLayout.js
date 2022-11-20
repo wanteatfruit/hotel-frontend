@@ -1,11 +1,19 @@
 import React from "react";
 import AdminNavBar from "./AdminNavbar";
-import { Box, Container } from "@mui/material";
+import { Box, Container, createTheme } from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
 export default function AdminLayout({children}) {
   const appBarHeight = "64px";
-
+  const theme = createTheme({
+    typography: {
+      fontFamily: "'Noto Sans SC', serif",
+      h2: {
+        fontWeight: 500
+      }
+    },
+  })
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <AdminNavBar/>
         <Box
@@ -21,11 +29,11 @@ export default function AdminLayout({children}) {
             mt: appBarHeight,
           }}
         >
-          <Container maxWidth="xl" sx={{ mt: 4, }}>
+          <Container maxWidth="xl" sx={{ mt: 4,pb:4 }}>
             {children}
           </Container>
         </Box>
       </Box>
-    </>
+    </ThemeProvider>
   );
 }

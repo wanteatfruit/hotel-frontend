@@ -8,9 +8,9 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export async function getStaticProps() {
-    const hotel_response = await axios.get('http://10.26.133.163:8888/hotel/getAll');
+    const hotel_response = await axios.get('http://120.25.216.186:8888/hotel/getAll');
     const hotel_list = hotel_response.data
-    const room_respose = await axios.get('http://10.26.133.163:8888/roomtype/getAll');
+    const room_respose = await axios.get('http://120.25.216.186:8888/roomtype/getAll');
     const room_list = room_respose.data
     return {
         props: {

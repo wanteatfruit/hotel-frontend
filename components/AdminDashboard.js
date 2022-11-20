@@ -6,78 +6,46 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
 import AdiminDashTimeline from "./admindashboard/Timeline";
 import axios from "axios";
 
-export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt, ordered_cnt, sales }) {
+export default function AdminDashboard({}) {
   const StyledCard = styled(Card)(({ theme }) => ({
     borderRadius: '20px'
   }))
+  const [hotRoom, setHotRoom] = React.useState(null);
+  const [hotCity, setHotCity] = React.useState(null);
+  const [hotHotel, setHotHotel] = React.useState(null);
+  const [orderCnt,setOrderCnt] = React.useState(null);
+  const [custCnt,setCustCnt] = React.useState(null);
+  const [sales,setSales] = React.useState(null);
 
-  const [adminData,setAdminData] = React.useState({
-    hot_room:null,
-     hot_hotel:null, 
-     hot_city:null,
-      cust_cnt:0, 
-      ordered_cnt:0, 
-      sales:null
-  })
 
   React.useEffect(()=>{
-    // const fetchRoom = async ()=>{
-    //   await axios.get(
-    //     "http://10.26.133.163:8888/manager/hotCity"
-    //   )
-    // }
-    // const fetchHotel = async () => {
-    //   await axios.get(
-    //     "http://10.26.133.163:8888/manager/hotHotel"
-    //   )
-    // }
-    // const fetchCity = async () => {
-    //   await axios.get(
-    //     "http://10.26.133.163:8888/manager/hotCity"
-    //   )
-    // }
-    // const fetchCus = async () => {
-    //   await axios.get(
-    //     "http://10.26.133.163:8888/manager/hotCity"
-    //   )
-    // }
-    // const fetchOrder = async () => {
-    //   await axios.get(
-    //     "http://10.26.133.163:8888/manager/hotCity"
-    //   )
-    // }
-    // const fetchSales = async () => {
-    //   await axios.get(
-    //     "http://10.26.133.163:8888/manager/hotCity"
-    //   )
-    // }
 
     const fetchData = async()=>{
       await axios.get(
-        "http://10.26.133.163:8888/manager/hotCity"
-      ).then((resp) => setAdminData({ ...adminData, hot_city: resp.data }));
-      console.log(adminData)
+        "http://120.25.216.186:8888/manager/hotCity"
+      ).then((resp) => setHotCity(resp.data) );
+      console.log()
       await axios.get(
-        "http://10.26.133.163:8888/manager/hotHotel"
-      ).then((resp) => setAdminData({ ...adminData, hot_hotel: resp.data }));
+        "http://120.25.216.186:8888/manager/hotHotel"
+      ).then((resp) => setHotHotel(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/hotRoomType"
-      ).then((resp) => setAdminData({ ...adminData, hot_room: resp.data }));
+        "http://120.25.216.186:8888/manager/hotRoomType"
+      ).then((resp) => setHotRoom(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/orderedRoomNums"
-      ).then((resp) => setAdminData({ ...adminData, ordered_cnt: resp.data }));
+        "http://120.25.216.186:8888/manager/orderedRoomNums"
+      ).then((resp) => setOrderCnt(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/currentCustomer"
-      ).then((resp) => setAdminData({ ...adminData, cust_cnt: resp.data }));
+        "http://120.25.216.186:8888/manager/currentCustomer"
+      ).then((resp) => setCustCnt(resp.data));
       await axios.get(
-        "http://10.26.133.163:8888/manager/sales"
-      ).then((resp) => setAdminData({ ...adminData, sales: resp.data }));
+        "http://120.25.216.186:8888/manager/sales"
+      ).then((resp) => setSales(resp.data));
     }
     
     fetchData()
 
   },[])
-  console.log(adminData)
+
   return (
     <>
       {/* <Stack sx={{ pb: 4 }}>
@@ -88,7 +56,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
         <Grid item xs={24} sm={24} md={24} lg={24} xl={24}>
           <Paper sx={{borderRadius:'20px'}}>
             <Stack sx={{ p: 4 }}>
-              <Typography variant="h2">欢迎回来</Typography>
+              <Typography variant="h2" component='h2'>欢迎回来</Typography>
               <Typography variant="h6">请查看最新数据</Typography>
             </Stack>
           </Paper>
@@ -100,7 +68,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
             </CardHeader>
             <CardContent>
               {/* <Typography variant="h4">订房数量</Typography> */}
-              <Typography variant="h4">{adminData.ordered_cnt}</Typography>
+              <Typography variant="h4">{orderCnt}</Typography>
             </CardContent>
           </StyledCard>
         </Grid>
@@ -108,7 +76,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
           <StyledCard>
             <CardHeader title="入住人数" avatar={<PersonOutlineOutlined fontSize="large" />} titleTypographyProps={{ variant: 'h5' }} />
             <CardContent>
-              <Typography variant="h4">{adminData.cust_cnt}</Typography>
+              <Typography variant="h4">{custCnt}</Typography>
             </CardContent>
           </StyledCard>
         </Grid>
@@ -117,7 +85,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
             <div style={{ backdropFilter: 'blur(2px)', height: '100%', transform: 'scaleX(-1)' }}>
               <CardHeader title="热门房型" />
               <CardContent>
-                <Typography variant="h4">{adminData.hot_room}</Typography>
+                <Typography variant="h4" sx={{fontFamily:'var(--font-secondary)'}}>{hotRoom}</Typography>
               </CardContent>
             </div>
           </StyledCard>
@@ -128,7 +96,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
             <div style={{ backdropFilter: 'blur(2px)', height: '100%', transform: 'scaleX(-1)', }}>
               <CardHeader title="热门分店"></CardHeader>
               <CardContent>
-                <Typography variant="h4">{adminData.hot_hotel}</Typography>
+                <Typography variant="h4">{hotHotel}</Typography>
               </CardContent>
             </div>
           </StyledCard>
@@ -139,7 +107,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
               <CardHeader title="热门城市" sx={{ color: 'white' }}></CardHeader>
               <CardContent>
                 <Typography variant="h4" color="white">
-                  {adminData.hot_city}
+                  {hotCity}
                 </Typography>
               </CardContent>
             </div>
@@ -161,7 +129,7 @@ export default function AdminDashboard({ hot_room, hot_hotel, hot_city, cust_cnt
                 </ToggleButton>
               </ToggleButtonGroup> */}
               <ResponsiveContainer >
-                <LineChart data={adminData.sales} title="销售数据">
+                <LineChart data={sales} title="销售数据">
                   <XAxis dataKey="time" minTickGap={10} />
                   <YAxis />
                   <Line dot={false} type="monotone" dataKey="y"></Line>

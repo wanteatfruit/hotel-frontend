@@ -15,12 +15,30 @@ import {
   FormLabel,
 } from "@mui/material";
 import { Stack } from "@mui/system";
-import { roomPageItem } from "../data";
 import SearchIcon from "@mui/icons-material/Search";
-
+import axios from "axios";
 import React from "react";
+import RoomCard from "./RoomCard";
+import { AddCircleOutline } from "@mui/icons-material";
 
 export default function AdminRooms({}) {
+  const [roomList, setRoomList] = React.useState(null)
+  //get roomtype by hotel
+
+
+  React.useEffect(() => {
+    axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
+      setRoomList(resp.data)
+    })
+    console.log(roomList)
+  }, [])
+
+
+
+  React.useEffect(()=>{
+    
+  })
+
   const [citySelect, setCitySelect] = React.useState({
     sz: false,
     gz: false,
@@ -45,11 +63,16 @@ export default function AdminRooms({}) {
             gap={2}
             padding={1}
           >
+            <div>
             <Typography variant="h5">房间信息</Typography>
+            <IconButton>
+              <AddCircleOutline />
+            </IconButton>
+            </div>
             <FormControl>
               <InputLabel>搜索房型</InputLabel>
               <OutlinedInput 
-                sx={{width:400}}
+                sx={{width:'100%'}}
                 label="搜索房型"
                 endAdornment={
                   <InputAdornment position="end">
@@ -61,10 +84,12 @@ export default function AdminRooms({}) {
               ></OutlinedInput>
             </FormControl>
           </Stack>
-          <Grid container>
-            {roomPageItem.length > 0 ? (
-              roomPageItem.map((item) => (
-                <Grid key={item} item xs={12} md={6} lg={4} xl={3}></Grid>
+          <Grid container columns={12}>
+            {roomList !=null ? (
+              roomList.map((item) => (
+                <Grid key={item.roomtypeid} item xs={12} md={6} lg={6} xl={4} padding={2}>
+                  <RoomCard admin roomName={item.roomname} roomInfo={item}></RoomCard>
+                </Grid>
               ))
             ) : (
               <Grid container justifyContent="center" padding={3}>

@@ -27,6 +27,10 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
             secondary:{
                 main: '#fff'
             }
+        },
+        typography:{
+            fontFamily: "'Noto Serif SC', serif",
+            fontSize:18
         }
     })
 
@@ -91,7 +95,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
                 {/* <Button onClick={()=>open=false}>asdad</Button> */}
                 <Box sx={{ width: '70vw' }}>
                     <Stack>
-                        <div style={{ backgroundImage:'url("https://images.pexels.com/photos/887723/pexels-photo-887723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',backgroundSize:'cover', height: '40vh', display: 'flex', alignItems: 'flex-end' }}>
+                        <div style={{ backgroundImage:'url("https://images.pexels.com/photos/887723/pexels-photo-887723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',backgroundSize:'cover', height: '30vh', display: 'flex', alignItems: 'flex-end' }}>
                             {children}
                         </div>
                         <Tabs value={bookingCity} onChange={(event, newValue) => setBookingCity(newValue)}>

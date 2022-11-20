@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import axios from "axios";
 
 function Copyright(props) {
     return (
@@ -36,19 +37,28 @@ export default function SignIn() {
     const [succeed, setSucceed] = useState(false);
     const handleSubmit = (event) => {
         event.preventDefault();
-        // const data = new FormData(event.currentTarget);
-        // console.log({
-        //     username: data.get('username'),
-        //     password: data.get('password'),
-        // });
-        setSucceed(true);
+        const data = new FormData(event.currentTarget);
+        const userInfo = {
+            name: data.get('username'),
+            loginpassword: data.get('password'),
+        };
+        console.log("userInfo:", userInfo)
+
+        axios
+            .post("http://120.25.216.186:8888/login", {
+                body: userInfo
+            })
+            .then((response) => {
+                console.log(response)
+            });
+        // setSucceed(true);
     };
 
     useEffect(() => {
         if (succeed) {
             router.push({
                 pathname: href,
-                query: {sessionKey: 666},
+                query: {sessionKey: 666, username: "wcvanvan"},
             }, href)
         }
     })
