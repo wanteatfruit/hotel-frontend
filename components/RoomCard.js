@@ -52,7 +52,7 @@ export default function RoomCard({ roomname, imageUrl, description, hotelName, a
                         <FavoriteIcon />
                     </IconButton>
                     <div>
-                        <Button href={`/hotels/rooms/${roomName}`}>更多</Button>
+                        <Button href={`/hotels/rooms/${roomInfo.roomtypeid}`}>更多</Button>
                         <Button variant="contained">订房</Button>
                     </div>
                 </CardActions>}

@@ -34,11 +34,10 @@ export default function BranchIntro({name,explanation,city,address,email,telepho
     //     handleIntroduction(hotelInfo)
     // },[])
     const pic_url = fullScreenHotelImageUrl[x]
-    console.log(hotelInfo)
     return(
         <Card sx={{display:'flex', width:'95%'}}>
-            <Box sx={{display:'flex',flexDirection:'row',width:'max-content'}}>
-                <CardMedia component='img' src={pic_url} sx={{width:'60%'}} />
+            <Box sx={{display:'flex',flexDirection:{xs:'column',sm:'column', md:'row'},width:'max-content'}}>
+                <CardMedia component='img' src={pic_url} sx={{width:{md:'60%', sm:'100%'}}} />
                 <CardContent>
                     <Typography variant="h4">{hotelInfo.hotelname}</Typography>
                     <hr />
