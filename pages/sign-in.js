@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
+import axios from "axios";
 
 function Copyright(props) {
     return (
@@ -34,24 +35,28 @@ export default function SignIn() {
     const router = useRouter();
     const href = router.query['href'];
     const [succeed, setSucceed] = useState(false);
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // const data = new FormData(event.currentTarget);
-        // console.log({
-        //     username: data.get('username'),
-        //     password: data.get('password'),
-        // });
-        setSucceed(true);
-    };
-
-    useEffect(() => {
-        if (succeed) {
-            router.push({
-                pathname: href,
-                query: {sessionKey: 666},
-            }, href)
+        const data = new FormData(event.currentTarget);
+        const userInfo = {
+            "name": data.get("username"),
+            "loginpassword": data.get("password")
         }
-    })
+        const options = {
+            method: "POST",
+            body: JSON.stringify(userInfo),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        let sessionKey = ''
+        await fetch("http://120.25.216.186:8888/login", options)
+            .then((response) => sessionKey = response.text()).then(data => sessionKey = data)
+        router.push({
+            pathname: href,
+            query: {sessionKey: sessionKey, username: data.get("username"), isLoggedIn: true},
+        }, href)
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -85,7 +90,7 @@ export default function SignIn() {
                             <LockOutlinedIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign in
+                            登录
                         </Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <TextField
@@ -93,7 +98,7 @@ export default function SignIn() {
                                 required
                                 fullWidth
                                 id="username"
-                                label="Username Address"
+                                label="用户名"
                                 name="username"
                                 autoComplete="用户名"
                                 autoFocus
@@ -103,14 +108,10 @@ export default function SignIn() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="密码"
                                 type="password"
                                 id="password"
                                 autoComplete="密码"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary"/>}
-                                label="Remember me"
                             />
                             <Button
                                 type="submit"
@@ -118,14 +119,14 @@ export default function SignIn() {
                                 variant="contained"
                                 sx={{mt: 3, mb: 2}}
                             >
-                                Sign In
+                                登录
                             </Button>
                             <Grid container>
                                 <Grid item>
                                     <Link variant="body2" href={{
                                         pathname: "/sign-up",
                                         query: {href: '/sign-in', original_href: href}
-                                    }}>{"Don't have an account? Sign Up"}</Link>
+                                    }}>{"注册新账号"}</Link>
                                 </Grid>
                             </Grid>
                             <Copyright sx={{mt: 5}}/>

@@ -47,6 +47,7 @@ export default function AdminCheckOrder({hotel_list}) {
     axios.get("http://120.25.216.186:8888/orders/findAll").then((resp) => setDataRows(resp.data))
   }, [])
 
+
   React.useEffect(()=>{
     setDataRows({...dataRows})
   },[submit])

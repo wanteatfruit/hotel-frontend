@@ -1,8 +1,10 @@
 import Layout from "../../components/Layout";
+
 import { Box, Grid, Paper, Tab, Typography } from "@mui/material";
+
 import Image from "next/image";
 import styles from "../../styles/HotelPage.module.css";
-import { Stack } from "@mui/system";
+import {Stack} from "@mui/system";
 import HotelCard from "../../components/HotelCard";
 import Slider from "react-slick";
 import React from "react";

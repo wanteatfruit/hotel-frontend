@@ -145,7 +145,7 @@ function DashboardContent() {
     };
 
     // useEffect(() => {
-    //     axios.get("http://10.26.133.163:8888/hotel/findAll").then((response) => {
+    //     axios.get("http://120.25.216.186:8888/hotel/findAll").then((response) => {
     //         console.log(response.data);
     //     });
     // }, []);
