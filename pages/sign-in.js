@@ -90,7 +90,7 @@ export default function SignIn() {
                             <LockOutlinedIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            Sign in
+                            登录
                         </Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <TextField
@@ -98,7 +98,7 @@ export default function SignIn() {
                                 required
                                 fullWidth
                                 id="username"
-                                label="Username Address"
+                                label="用户名"
                                 name="username"
                                 autoComplete="用户名"
                                 autoFocus
@@ -108,14 +108,10 @@ export default function SignIn() {
                                 required
                                 fullWidth
                                 name="password"
-                                label="Password"
+                                label="密码"
                                 type="password"
                                 id="password"
                                 autoComplete="密码"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox value="remember" color="primary"/>}
-                                label="Remember me"
                             />
                             <Button
                                 type="submit"
@@ -123,14 +119,14 @@ export default function SignIn() {
                                 variant="contained"
                                 sx={{mt: 3, mb: 2}}
                             >
-                                Sign In
+                                登录
                             </Button>
                             <Grid container>
                                 <Grid item>
                                     <Link variant="body2" href={{
                                         pathname: "/sign-up",
                                         query: {href: '/sign-in', original_href: href}
-                                    }}>{"Don't have an account? Sign Up"}</Link>
+                                    }}>{"注册新账号"}</Link>
                                 </Grid>
                             </Grid>
                             <Copyright sx={{mt: 5}}/>

@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Paper from "@mui/material/Paper";
 import {useRouter} from "next/router";
+import {Alert} from "@mui/lab";
+import {useState} from "react";
 
 function Copyright(props) {
     return (
@@ -28,19 +30,37 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+    const [alertShown, setAlertShown] = useState(false)
+
     const router = useRouter();
     const query = router.query;
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        router.push({
-            pathname: query['href'],
-            query: {href: query['original_href']}
-        })
+        const userInfo = {
+            "name": data.get("username"),
+            "loginpassword": data.get("password"),
+            "telephone": data.get("telephone"),
+        }
+        const options = {
+            method: "POST",
+            body: JSON.stringify(userInfo),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        let response = ''
+        await fetch("http://120.25.216.186:8888/customer/createcustomer", options)
+            .then((response) => response.text()).then(data => response = data)
+        if (response === "true") {
+            await router.push({
+                pathname: query['href'],
+                query: {href: query['original_href']}
+            })
+        } else {
+            setAlertShown(true)
+        }
+
     };
 
     return (
@@ -81,12 +101,12 @@ export default function SignUp() {
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        autoComplete="given-name"
-                                        name="firstName"
+                                        autoComplete="姓名"
+                                        name="username"
                                         required
                                         fullWidth
-                                        id="firstName"
-                                        label="姓名"
+                                        id="username"
+                                        label="用户名"
                                         autoFocus
                                     />
                                 </Grid>
@@ -94,10 +114,10 @@ export default function SignUp() {
                                     <TextField
                                         required
                                         fullWidth
-                                        id="email"
-                                        label="邮箱地址"
-                                        name="email"
-                                        autoComplete="email"
+                                        id="telephone"
+                                        label="电话"
+                                        name="telephone"
+                                        autoComplete="电话"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -108,10 +128,16 @@ export default function SignUp() {
                                         label="密码"
                                         type="password"
                                         id="password"
-                                        autoComplete="new-password"
+                                        autoComplete="密码"
                                     />
                                 </Grid>
                             </Grid>
+                            {alertShown && <Grid sx={{marginTop: "1em"}}>
+                                <Alert variant="outlined" severity="error">
+                                    注册新账户失败，用户名已被使用
+                                </Alert>
+                            </Grid>}
+
                             <Button
                                 type="submit"
                                 fullWidth
