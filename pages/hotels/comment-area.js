@@ -74,7 +74,7 @@ export default function CommentArea() {
         <>
             <main>
                 <Grid sx={{
-                    width: "80%",
+                    width: "85%",
                     height: "100%",
                     justifyContent: "center",
                     display: "flex",

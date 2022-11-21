@@ -38,11 +38,6 @@ import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {useRouter} from "next/router";
 import {fontSize} from "@mui/system";
 import handleIntroduction from "../../utils/utils";
-import FloorPlan from "../hotels/floor-plan-a";
-import FloorPlanA from "../hotels/floor-plan-a";
-import FloorPlanB from "../hotels/floor-plan-b";
-import FloorPlanC from "../hotels/floor-plan-c";
-
 
 const steps = ['选择房间', '入住信息', '确认订单'];
 
@@ -156,13 +151,13 @@ export default function BookingPage({}) {
                                                                 hotelName: hotelName
                                                             });
                                                         }}>
-                                            <Card variant="outlined" sx={{display: 'flex', width: '100%'}}>
+                                            <Card variant="outlined" sx={{display: 'flex', justifyContent:'space-between', width: '100%'}}>
                                                 {/* <CardHeader title={item.roomname} /> */}
                                                 <CardContent>
                                                     <Typography variant="h4">{item.roomname}</Typography>
-                                                    <Typography>{`每晚 ${item.price}RMB`}</Typography>
+                                                    <Typography variant="h6">{`${item.price}元 / 晚`}</Typography>
                                                 </CardContent>
-                                                <CardContent>
+                                                <CardContent sx={{justifyContent:'flex-end'}}>
                                                     <FormGroup sx={{display: 'flex', flexDirection: 'row'}}>
                                                         <FormControlLabel control={<Checkbox readOnly
                                                                                              checked={handleIntroduction(item, 0)}></Checkbox>}
@@ -174,21 +169,15 @@ export default function BookingPage({}) {
                                                                                              checked={handleIntroduction(item, 2)}></Checkbox>}
                                                                           label="洗衣房"/>
                                                     </FormGroup>
-                                                    <Rating value={5} readOnly></Rating>
+                                                    <Typography textAlign="end" paddingRight={2} variant="h6">{`剩余: ${item.remain}间`}</Typography>
+
                                                 </CardContent>
                                             </Card>
-                                            {/* <ListItemText>
-                                                {item.roomname}
-                                                <br></br>
-                                                {item.price}RMB
-                                                <br></br>
-                                                {item.remain}
-                                            </ListItemText> */}
                                         </ListItemButton>
                                     </ListItem>
                                 ))}
                             </List>
-                            <div style={{display: 'flex', justifyContent: 'center', padding: 4, marginTop: "3em"}}>
+                            {/* <div style={{display: 'flex', justifyContent: 'center', padding: 4, marginTop: "3em"}}>
                                 <FloorPlanA href1={"https://wcvanvan.github.io"}
                                            href2={"https://jessean-j35ux8sgw-wanteatfruit.vercel.app/"}/>
                             </div>
@@ -199,7 +188,7 @@ export default function BookingPage({}) {
                             <div style={{display: 'flex', justifyContent: 'center', padding: 4, marginTop: "3em"}}>
                                 <FloorPlanC href1={"https://wcvanvan.github.io"}
                                             href2={"https://jessean-j35ux8sgw-wanteatfruit.vercel.app/"}/>
-                            </div>
+                            </div> */}
                             <div style={{display: 'flex', justifyContent: 'flex-end', padding: 4}}>
                                 <Button size="large" style={{marginRight: 2}} href="/hotels">返回主页</Button>
                                 <Button variant="contained" onClick={() => {
