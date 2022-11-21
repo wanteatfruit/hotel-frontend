@@ -58,3 +58,11 @@ export const hotelImageUrl = [
   "https://images.pexels.com/photos/4023389/pexels-photo-4023389.jpeg?cs=srgb&dl=pexels-zachary-debottis-4023389.jpg&fm=jpg",
   "https://images.pexels.com/photos/4004305/pexels-photo-4004305.jpeg?cs=srgb&dl=pexels-jeffrey-czum-4004305.jpg&fm=jpg",
 ]
+
+export const fullScreenHotelImageUrl = [
+  "https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/594077/pexels-photo-594077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+  "https://images.pexels.com/photos/2290753/pexels-photo-2290753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+]
