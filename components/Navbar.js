@@ -151,8 +151,6 @@ export default function NavBar({
                 {/* <Container maxWidth="xl"> */}
                 <Toolbar sx={{justifyContent: "space-between"}}>
                     {/*设置小屏菜单显示*/}
-
-
                     <Box sx={{display: {xs: "flex", md: "none"}, alignItems: "center"}}>
                         <IconButton onClick={handleDrawerToggle} color="inherit">
                             <MenuIcon/>

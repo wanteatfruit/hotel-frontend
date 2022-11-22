@@ -157,21 +157,6 @@ export default function Home({hotel_list, room_list}) {
                 {LogoutDialog()}
             </div>
             <main>
-                <Link href={"/hotels/comment-area"}>
-                    temporary comment area
-                </Link>
-                <Link href={"/account-center/account-center"}>
-                    temporary account center
-                </Link>
-                <br/>
-                <Link
-                    href={{
-                        pathname: "/sign-in",
-                        query: {href: "/account-center/account-center"},
-                    }}
-                >
-                    temporary sign in
-                </Link>
                 <Link
                     href={{
                         pathname: "/admin/dashboard",
@@ -179,7 +164,6 @@ export default function Home({hotel_list, room_list}) {
                 >
                     temporary admin
                 </Link>
-
                 {/* Hero unit */}
                 <Box
                     sx={{
