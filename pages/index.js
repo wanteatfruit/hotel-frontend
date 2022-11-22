@@ -38,16 +38,16 @@ const theme = createTheme();
 
 export async function getStaticProps() {
 
-  const hotel_response = await axios.get('http://120.25.216.186:8888/hotel/getAll');
-  const hotel_list = hotel_response.data
-  const room_respose = await axios.get('http://120.25.216.186:8888/roomtype/getAll');
-  const room_list = room_respose.data
-  return {
-    props: {
-      hotel_list, room_list
-    },
-    revalidate: 10
-  }
+    const hotel_response = await axios.get('http://120.25.216.186:8888/hotel/getAll');
+    const hotel_list = hotel_response.data
+    const room_respose = await axios.get('http://120.25.216.186:8888/roomtype/getAll');
+    const room_list = room_respose.data
+    return {
+        props: {
+            hotel_list, room_list
+        },
+        revalidate: 10
+    }
 
 
 }
@@ -65,6 +65,7 @@ export default function Home({hotel_list, room_list}) {
     const [sessionKey, setSessionKey] = useState('')
     const [id, setID] = useState(-1)
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+    const [chatDialogOpen, setChatDialogOpen] = useState(false)
     const theme = createTheme({
         typography: {
             fontFamily: "'Noto Serif SC', serif",
@@ -76,6 +77,32 @@ export default function Home({hotel_list, room_list}) {
             }
         }
     })
+
+    function ChatDialog() {
+        return (
+            <>
+                <Dialog
+                    open={chatDialogOpen}
+                    onClose={() => {
+                        setChatDialogOpen(false)
+                    }}
+                    PaperProps={{
+                        sx: {
+                            position: "fixed",
+                            width: "100%",
+                            height: "100%",
+                            maxWidth: "md",
+                            backgroundColor: "#f1cec2"
+                        }
+                    }}
+                >
+                    <DialogContent>
+                        <iframe src={"/chat-app.html"} height="95%" width="100%" frameBorder="0"></iframe>
+                    </DialogContent>
+                </Dialog>
+            </>
+        )
+    }
 
     function LogoutDialog() {
         return (
@@ -121,9 +148,12 @@ export default function Home({hotel_list, room_list}) {
             <CssBaseline/>
             <div>
                 <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
-                        openLoggedOutDialog={() => setIsLogoutDialogOpen(true)}/>
+                        openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
+                    setChatDialogOpen(true)
+                }}/>
             </div>
             <div>
+                {ChatDialog()}
                 {LogoutDialog()}
             </div>
             <main>
