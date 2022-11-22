@@ -12,7 +12,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
     Dialog, DialogActions,
     DialogContent, DialogContentText,
@@ -23,58 +23,175 @@ import List from "@mui/material/List";
 import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
 import SmokeFreeIcon from '@mui/icons-material/SmokeFree';
 import Paper from "@mui/material/Paper";
+import axios from "axios";
 
 
-export default function Orders() {
+export default function Orders({id}) {
     const [mode, setMode] = useState(0)
     const [infoDialogOpen, setInfoDialogOpen] = useState(false)
     const [modifyDialogOpen, setModifyDialogOpen] = useState(false)
     const [commentDialogOpen, setCommentDialogOpen] = useState(false)
     const [roomOnDialog, setRoomOnDialog] = useState("");
+    const [roomInfo, setRoomInfo] = useState({})
     const [modifyMenuAnchorEl, setModifyMenuAnchorEl] = useState(null);
+    const [rooms, setRooms] = useState([])
 
-    function getListItemContent(attribute, value) {
-        let content = ''
-        switch (attribute) {
-            case "name":
-                content = value;
-                break;
-            case "area":
-                content = value + " 平方"
-                break;
-            case "window":
-                if (value) {
-                    content = "有窗"
-                } else {
-                    content = "无窗"
+    useEffect(() => {
+        let rooms = []
+        if (mode) {
+            // axios.get("http://120.25.216.186:8888/orders/finished-orders", {params: {"id": id}}).then((response) => {
+            //     console.log(response.data);
+            // });
+            rooms = [
+                {
+                    "pay": 40,
+                    "roomID": 37,
+                    "roomTypeName": "位程半单",
+                    "roomTypeID": 56,
+                    "time": "2021-01-12 20:00:23",
+                    "hotelName": "交头严族但深面",
+                    "orderID": 29
+                },
+                {
+                    "pay": 72,
+                    "roomID": 72,
+                    "roomTypeName": "员马外",
+                    "roomTypeID": 12,
+                    "time": "1994-04-04 14:45:40",
+                    "hotelName": "温体究建军收大",
+                    "orderID": 65
+                },
+                {
+                    "pay": 66,
+                    "roomID": 59,
+                    "roomTypeName": "变安增只",
+                    "roomTypeID": 31,
+                    "time": "2015-10-01 22:06:18",
+                    "hotelName": "节被里",
+                    "orderID": 63
+                },
+                {
+                    "pay": 30,
+                    "roomID": 5,
+                    "roomTypeName": "人按江办全处明",
+                    "roomTypeID": 78,
+                    "time": "1972-10-04 16:55:55",
+                    "hotelName": "风平形位",
+                    "orderID": 20
+                },
+                {
+                    "pay": 82,
+                    "roomID": 53,
+                    "roomTypeName": "六造因决级",
+                    "roomTypeID": 69,
+                    "time": "1981-09-03 00:46:02",
+                    "hotelName": "素一边节心",
+                    "orderID": 52
                 }
-                break;
-            case "smoking":
-                if (value) {
-                    content = <SmokingRoomsIcon/>
-                } else {
-                    content = <SmokeFreeIcon/>
+            ];
+            setRooms(rooms);
+        } else {
+            // axios.get("http://120.25.216.186:8888/orders/ongoing-orders", {params: {"id": id}}).then((response) => {
+            //     console.log(response.data);
+            // });
+            rooms = [
+                {
+                    "hotelName": "府整民",
+                    "roomTypeID": 62,
+                    "roomTypeName": "族备无文长",
+                    "roomID": 84,
+                    "time": "1993-06-16 11:30:46",
+                    "pay": 17,
+                    "orderID": 60
+                },
+                {
+                    "hotelName": "子产总性",
+                    "roomTypeID": 89,
+                    "roomTypeName": "况受说东",
+                    "roomID": 99,
+                    "time": "1994-05-10 07:22:29",
+                    "pay": 10,
+                    "orderID": 56
                 }
-                break;
+            ];
+            setRooms(rooms);
         }
-        return content
+        let roomInfoDict = {}
+        for (const room in rooms) {
+            if (!room.roomTypeID in roomInfoDict) {
+                let roomInfo = {
+                    "name": "两往者使改设交",
+                    "area": 67,
+                    "breakfast": true,
+                    "window": false,
+                    "smoking": false,
+                    "price": 45
+                };
+                // axios.get("http://120.25.216.186:8888/roomtype", {params: {"id": room.roomTypeID}}).then((response) => {
+                //     console.log(response.data);
+                // });
+                roomInfoDict[room.roomTypeID] = roomInfo;
+            }
+        }
+        setRoomInfo(roomInfoDict)
+    }, [id, mode, roomOnDialog])
+
+    function getListItemContent() {
+        if (!roomOnDialog.roomTypeID in roomInfo || roomInfo[roomOnDialog.roomTypeID] === undefined) {
+            return <></>
+        }
+        let nameItem = roomInfo[roomOnDialog.roomTypeID].name
+        let areaItem = roomInfo[roomOnDialog.roomTypeID].area + "平方米"
+        let windowItem = ''
+        if (roomInfo[roomOnDialog.roomTypeID].window) {
+            windowItem = "有窗"
+        } else {
+            windowItem = "无窗"
+        }
+        let smokingItem = ''
+        if (roomInfo[roomOnDialog.roomTypeID].smoking) {
+            smokingItem = <SmokingRoomsIcon/>
+        } else {
+            smokingItem = <SmokeFreeIcon/>
+        }
+        return (
+            <>
+                <List>
+                    {/*{name, area, window, smoking};*/}
+                    <ListItem>
+                        <Grid container>
+                            <Typography>{nameItem}</Typography>
+                        </Grid>
+                    </ListItem>
+                    <Divider sx={{my: gapHeight}}/>
+                    <ListItem>
+                        <Grid container>
+                            <Typography>{areaItem}</Typography>
+                        </Grid>
+                    </ListItem>
+                    <Divider sx={{my: gapHeight}}/>
+                    <ListItem>
+                        <Grid container>
+                            <Typography>{windowItem}</Typography>
+                        </Grid>
+                    </ListItem>
+                    <Divider sx={{my: gapHeight}}/>
+                    <ListItem>
+                        <Grid container>
+                            <Typography>{smokingItem}</Typography>
+                        </Grid>
+                    </ListItem>
+                </List>
+            </>
+        )
     }
 
     function getAlbumImage(roomName) {
         return "https://source.unsplash.com/random"
     }
 
-    function getRoomInfo() {
-        let name = "大床房!!!";
-        let area = 30;
-        let window = true;
-        let smoking = false;
-        return {name, area, window, smoking};
-    }
-
     function roomInfoDialog() {
         const gapHeight = 2;
-        let roomInfo = getRoomInfo()
         return (
             <>
                 <Dialog
@@ -85,7 +202,7 @@ export default function Orders() {
                     PaperProps={{sx: {position: "fixed", width: "100%", height: "100%", maxWidth: "md"}}}
                 >
                     <DialogContent>
-                        <Grid container component="main" sx={{height: '100vh'}}>
+                        <Grid container component="main" sx={{height: '100%'}}>
                             <Grid
                                 xs={false}
                                 sm={4}
@@ -102,32 +219,7 @@ export default function Orders() {
                             />
                             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                                 <Grid container marginBottom={10}>
-                                    <List>
-                                        {/*{name, area, window, smoking};*/}
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("name", roomInfo.name)}
-                                            </Grid>
-                                        </ListItem>
-                                        <Divider sx={{my: gapHeight}}/>
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("area", roomInfo.area)}
-                                            </Grid>
-                                        </ListItem>
-                                        <Divider sx={{my: gapHeight}}/>
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("window", roomInfo.window)}
-                                            </Grid>
-                                        </ListItem>
-                                        <Divider sx={{my: gapHeight}}/>
-                                        <ListItem>
-                                            <Grid container>
-                                                {getListItemContent("smoking", roomInfo.smoking)}
-                                            </Grid>
-                                        </ListItem>
-                                    </List>
+                                    {getListItemContent()}
                                 </Grid>
                                 <Grid container justifyContent="flex-end">
                                     <Button onClick={() => {
@@ -175,21 +267,6 @@ export default function Orders() {
         )
     }
 
-    function getBookedInfo() {
-        let room_list = [];
-        let room_a = ['广州白云希尔顿', '山景房', '2022-11-5'];
-        let room_b = ['深圳福田喜来登', '海景房', '2022-9-29'];
-        room_list.push(room_a);
-        room_list.push(room_b);
-        return room_list;
-    }
-
-    function getFinishedInfo() {
-        let room_list = [];
-        let room_a = ['上海黄埔W酒店', '花园房', '2021-12-9'];
-        room_list.push(room_a);
-        return room_list;
-    }
 
     function getAlbum() {
         const modifyMenuOpen = Boolean(modifyMenuAnchorEl);
@@ -204,7 +281,7 @@ export default function Orders() {
             if (mode) {
                 return (
                     <>
-                        <Grid item key={room[0]} xs={12} sm={6} md={4}>
+                        <Grid item key={room.hotelName} xs={12} sm={6} md={4}>
                             <Card
                                 sx={{maxWidth: 300, display: 'flex', flexDirection: 'column'}}
                             >
@@ -219,19 +296,19 @@ export default function Orders() {
                                 />
                                 <CardContent sx={{flexGrow: 1}}>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                        {room[0]}
+                                        {room.hotelName}
                                     </Typography>
                                     <Typography>
-                                        {room[1]}
+                                        {room.roomTypeName}
                                     </Typography>
                                     <Typography>
-                                        {room[2]}
+                                        {room.time}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
                                     <Button size="medium" onClick={() => {
-                                        setInfoDialogOpen(true)
-                                        setRoomOnDialog(room)
+                                        setInfoDialogOpen(true);
+                                        setRoomOnDialog(room);
                                     }}>详情</Button>
                                     <Button size="medium" onClick={() => {
                                         setCommentDialogOpen(true)
@@ -245,7 +322,7 @@ export default function Orders() {
             } else {
                 return (
                     <>
-                        <Grid item key={room[0]} xs={12} sm={6} md={4}>
+                        <Grid item key={room.hotelName} xs={12} sm={6} md={4}>
                             <Card
                                 sx={{maxWidth: 300, display: 'flex', flexDirection: 'column'}}
                             >
@@ -260,13 +337,13 @@ export default function Orders() {
                                 />
                                 <CardContent sx={{flexGrow: 1}}>
                                     <Typography gutterBottom variant="h5" component="h2">
-                                        {room[0]}
+                                        {room.hotelName}
                                     </Typography>
                                     <Typography>
-                                        {room[1]}
+                                        {room.roomTypeName}
                                     </Typography>
                                     <Typography>
-                                        {room[2]}
+                                        {room.time}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
@@ -293,8 +370,16 @@ export default function Orders() {
                                                 'aria-labelledby': 'basic-button',
                                             }}
                                         >
-                                            <MenuItem onClick={modifyMenuHandleClose}>修改入住时间</MenuItem>
-                                            <MenuItem onClick={modifyMenuHandleClose}>取消订单</MenuItem>
+                                            <MenuItem onClick={() => {
+
+                                            }}>修改入住时间</MenuItem>
+                                            <MenuItem onClick={() => {
+                                                const body = {"id": room.orderID};
+                                                axios.post('http://120.25.216.186:8888/orders/delete', body)
+                                                    .then(response => response);
+                                                console.log("取消")
+                                            }
+                                            }>取消订单</MenuItem>
                                         </Menu>
                                     </div>
                                 </CardActions>
@@ -306,12 +391,6 @@ export default function Orders() {
 
         }
 
-        let rooms;
-        if (mode) {
-            rooms = getFinishedInfo();
-        } else {
-            rooms = getBookedInfo();
-        }
         return (
             <>
                 {roomInfoDialog()}

@@ -7,21 +7,28 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Account from "./account";
 import Orders from "./orders";
 import Marks from "./marks";
+import {useRouter} from "next/router";
 
 export default function AccountCenter() {
+    const router = useRouter()
     const [drawerItem, setDrawerItem] = useState(0);
+    let _id = router.query['id'];
+    const [id, setID] = useState(-1)
 
+    useEffect(() => {
+        setID(_id)
+    }, [_id])
 
     function accountContent() {
-        return <Account/>;
+        return <Account id={id}/>;
     }
 
     function ordersContent() {
-        return <Orders/>;
+        return <Orders id={id}/>;
     }
 
     function marksContent() {
-        return <Marks/>;
+        return <Marks id={id}/>;
     }
 
     function storeContent() {

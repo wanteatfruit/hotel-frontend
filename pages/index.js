@@ -56,10 +56,12 @@ export default function Home({hotel_list, room_list}) {
     let _sessionKey = router.query['sessionKey'];
     let _username = router.query['username'];
     let _isLoggedIn = router.query['isLoggedIn'];
+    let _id = router.query['id'];
     // don't use the three above, the three below instead
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState('')
     const [sessionKey, setSessionKey] = useState('')
+    const [id, setID] = useState(-1)
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
     const theme = createTheme({
         typography: {
@@ -74,9 +76,6 @@ export default function Home({hotel_list, room_list}) {
     })
 
     function LogoutDialog() {
-        // const Transition = React.forwardRef(function Transition(props, ref) {
-        //     return <Slide direction="up" ref={ref} {...props} />;
-        // });
         return (
             <>
                 <Dialog
@@ -98,6 +97,7 @@ export default function Home({hotel_list, room_list}) {
                             setIsLoggedIn(false)
                             setUsername("")
                             setSessionKey("")
+                            setID(-1)
                             setIsLogoutDialogOpen(false);
                         }}>Log out</Button>
                     </DialogActions>
@@ -110,14 +110,15 @@ export default function Home({hotel_list, room_list}) {
         setIsLoggedIn(_isLoggedIn)
         setUsername(_username)
         setSessionKey(_sessionKey)
-    }, [_isLoggedIn, _username, _sessionKey])
+        setID(_id)
+    }, [_isLoggedIn, _username, _sessionKey, _id])
 
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <div>
-                <NavBar hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
+                <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
                         openLoggedOutDialog={() => setIsLogoutDialogOpen(true)}/>
             </div>
             <div>

@@ -40,7 +40,7 @@ export default function SignIn() {
         const data = new FormData(event.currentTarget);
         const userInfo = {
             "name": data.get("username"),
-            "loginpassword": data.get("password")
+            "loginpassword": data.get("password"),
         }
         const options = {
             method: "POST",
@@ -54,7 +54,7 @@ export default function SignIn() {
             .then((response) => sessionKey = response.text()).then(data => sessionKey = data)
         router.push({
             pathname: href,
-            query: {sessionKey: sessionKey, username: data.get("username"), isLoggedIn: true},
+            query: {sessionKey: sessionKey, username: data.get("username"), id: 1, isLoggedIn: true},
         }, href)
     };
 

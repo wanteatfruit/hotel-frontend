@@ -34,7 +34,7 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 //传入是否已登录，决定用户处显示内容
-export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOutDialog}) {
+export default function NavBar({id, isLoggedIn, hotel_list, room_list, openLoggedOutDialog}) {
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -170,8 +170,13 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                             </IconButton>
                         </Tooltip>}
                         <Tooltip title="Account center">
-                            <IconButton onClick={handleOpenUserMenu} color="inherit">
-                                {!isLoggedIn && <AccountCircleIcon/>}
+                            <IconButton onClick={() => {
+                                let path = "/account-center/account-center"
+                                router.push({
+                                    pathname: path,
+                                    query: {"id": id},
+                                }, path)
+                            }} color="inherit">
                                 {isLoggedIn && <FaceIcon/>}
                             </IconButton>
                         </Tooltip>
