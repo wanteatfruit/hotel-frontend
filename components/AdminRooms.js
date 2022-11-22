@@ -16,7 +16,8 @@ import {
   Button,
   Backdrop,
   Select,
-  MenuItem
+  MenuItem,
+
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
@@ -25,177 +26,173 @@ import React from "react";
 import RoomCard from "./RoomCard";
 import { AddCircleOutline } from "@mui/icons-material";
 import { roomImageUrl } from "../data";
+import RefreshIcon from '@mui/icons-material/Refresh';
 
-
-export default function AdminRooms({hotel_list}) {
+export default function AdminRooms({ hotel_list }) {
   const [roomList, setRoomList] = React.useState(null)
-  const [openAdd,setOpenAdd] = React.useState(false);
+  const [openAdd, setOpenAdd] = React.useState(false);
+  const [guestNum, setGuestNum] = React.useState()
+  const [remain, setRemain] = React.useState()
   const [roomName, setRoomName] = React.useState('')
   const [roomPrice, setRoomPrice] = React.useState()
   const [roomIntro, setRoomIntro] = React.useState([false, false, false])  //get roomtype by hotel
+  const [hotel, setHotel] = React.useState('');
+  const [addToHotel, setAddTo] = React.useState('');
+  React.useEffect(() => {
+    if (hotel === '') {
+      axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
+        setRoomList(resp.data)
+      })
+      console.log(roomList)
+    }
+  }, [openAdd])
 
   React.useEffect(() => {
-    axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
-      setRoomList(resp.data)
+    if (hotel !== '') {
+      axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
+        setRoomList(resp.data)
+      })
+    }
+  }, [hotel,openAdd])
+
+  function convertYesNo(bool) {
+    if (bool === false) {
+      return "无"
+    }
+    else return "有"
+  }
+
+  function timeout(delay) {
+    return new Promise( res => setTimeout(res, delay) );
+  }
+
+  async function handleRefresh(){
+    await timeout(1)
+    if (hotel === '') {
+      axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
+        setRoomList(resp.data)
+      })
+    }
+    else{
+      axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
+        setRoomList(resp.data)
+      })
+    }
+
+    console.log("refreshed")
+
+  }
+
+
+  async function handleAdd () {
+    const intro = `窗户|${convertYesNo(roomIntro[0])},阳台|${convertYesNo(roomIntro[1])},洗衣房|${convertYesNo(roomIntro[2])}`
+
+    const newRoom = { roomName: roomName, price: roomPrice, introduction: intro, number: guestNum, remain: remain, hotelName: addToHotel }
+    // console.log(newRoom)
+    const resp= await fetch('http://120.25.216.186:8888/roomtype/addRoom',{
+      method:'POST',
+      body:JSON.stringify(newRoom),
+      headers:{
+        'Content-type': 'application/json'
+      }
     })
-    console.log(roomList)
-  }, [])
+    console.log(resp.status)
+  }
 
 
 
-  React.useEffect(()=>{
-    
-  })
 
-  const [hotel,setHotel] = React.useState('');
-
-  const [citySelect, setCitySelect] = React.useState({
-    sz: false,
-    gz: false,
-    cq: false,
-    sh: false,
-  });
-  const handleCityChange = (event) => {
-    setCitySelect({
-      ...citySelect,
-      [event.target.name]: event.target.checked,
-    });
-  };
   return (
     <>
-    <Paper >
-      <Grid container columns={16} sx={{padding:1}}>
-        <Grid item xs={16} md={12}>
-          <Stack
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            direction="row"
-            gap={2}
-            padding={1}
-          >
-            <div>
-            <Typography variant="h5">房间信息</Typography>
-            {/* <IconButton>
-              <AddCircleOutline />
-            </IconButton> */}
-            <Button sx={{marginTop:1}} onClick={()=>{setOpenAdd(!openAdd)}} endIcon={<AddCircleOutline />}>
-                添加房间
-            </Button>
-            </div>
-            <FormControl variant="standard" sx={{width:'30%'}}>
-                  <InputLabel >分店</InputLabel>
-                  <Select value={hotel} label="分店" onChange={(e) => {
-                    setHotel(e.target.value)
-                  }}>
-                    {hotel_list!==undefined && hotel_list.map((item)=>(
-                      <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-            {/* <FormControl>
-              <InputLabel>搜索房型</InputLabel>
-              <OutlinedInput 
-                sx={{width:'100%'}}
-                label="搜索房型"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              ></OutlinedInput>
-            </FormControl> */}
-          </Stack>
-          <Grid container columns={12} >
-            {roomList !=null ? (
-              roomList.map((item) => (
-                <Grid  key={item.roomtypeid} item xs={12} md={6} lg={6} xl={4} padding={2}>
-                  <RoomCard admin roomName={item.roomname} roomInfo={item} imageUrl={roomImageUrl[item.roomtypeid]}></RoomCard>
+      <Paper >
+        <Grid container columns={16} sx={{ padding: 1 }}>
+          <Grid item xs={16}>
+            <Stack
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              direction="row"
+              gap={2}
+              padding={1}
+            >
+              <div>
+                <Typography variant="h5">房间信息</Typography>
+                <Button  sx={{ marginTop: 1 }} onClick={() => { setOpenAdd(!openAdd) }} endIcon={<AddCircleOutline />}>
+                  添加房间
+                </Button>
+                <IconButton  sx={{marginLeft:1,marginTop:1}} color="primary" onClick={handleRefresh}>
+                  <RefreshIcon />
+                </IconButton>
+              </div>
+              <FormControl variant="standard" sx={{ width: '30%' }}>
+                <InputLabel >分店</InputLabel>
+                <Select value={hotel} label="分店" onChange={(e) => {
+                  setHotel(e.target.value)
+                }}>
+                  {hotel_list !== undefined && hotel_list.map((item) => (
+                    <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Stack>
+            <Grid container columns={12} >
+              {roomList != null ? (
+                roomList.map((item) => (
+                  <Grid key={item.roomtypeid} item xs={12} md={6} lg={6} xl={4} padding={2}>
+                    <RoomCard refresh={handleRefresh} admin roomName={item.roomname} roomInfo={item} imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}></RoomCard>
+                  </Grid>
+                ))
+              ) : (
+                <Grid container justifyContent="center" padding={3}>
+                  <Typography variant="body2">没有房间</Typography>
                 </Grid>
-              ))
-            ) : (
-              <Grid container justifyContent="center" padding={3}>
-                <Typography variant="body2">No Rooms</Typography>
-              </Grid>
-            )}
+              )}
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item sm={0} md={4} sx={{}}>
-          <Stack padding="8px" sx={{display:'flex',justifyContent:'center'}}>
-            <FormLabel>选择城市</FormLabel>
-            <FormGroup row>
-              <FormControlLabel
-                label="深圳"
-                control={
-                  <Checkbox
-                    checked={citySelect.sz}
-                    onChange={handleCityChange}
-                    name="sz"
-                  />
-                }
-              />
-              <FormControlLabel
-                label="广州"
-                control={
-                  <Checkbox
-                    checked={citySelect.gz}
-                    onChange={handleCityChange}
-                    name="gz"
-                  />
-                }
-              />
-              <FormControlLabel
-                label="重庆"
-                control={
-                  <Checkbox
-                    checked={citySelect.cq}
-                    onChange={handleCityChange}
-                    name="cq"
-                  />
-                }
-              />
-              <FormControlLabel
-                label="上海"
-                control={
-                  <Checkbox
-                    checked={citySelect.sh}
-                    onChange={handleCityChange}
-                    name="sh"
-                  />
-                }
-              />
+      </Paper>
+      <Backdrop open={openAdd} sx={{ zIndex: 1 }}>
+        <Paper sx={{ width: 'max-content', padding: 2 }} >
+          <Typography variant="h4" sx={{ marginBottom: 3 }}>添加房间</Typography>
+          <Stack gap={2}>
+          <FormControl  sx={{ width: '100%' }}>
+                <InputLabel >添加到分店</InputLabel>
+                <Select MenuProps={{PaperProps:{sx:{zIndex:100002}}}} value={addToHotel} label="添加到分店" onChange={(e) => {
+                  setAddTo(e.target.value)
+                }}>
+                  {hotel_list !== undefined && hotel_list.map((item) => (
+                    <MenuItem sx={{}} key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            <TextField value={roomName} onChange={(event) => {
+              setRoomName(event.target.value);
+            }} label="房间名" required>
+            </TextField>
+            <TextField value={roomPrice} onChange={(event) => {
+              setRoomPrice(event.target.value)
+            }} inputProps={{ type: 'numeric', pattern: "^([0-9]*[.])?[0-9]+$" }} label="价格" required>
+            </TextField>
+            <TextField value={guestNum} onChange={(event) => {
+              setGuestNum(event.target.value)
+            }} inputProps={{ type: 'numeric', pattern: "^([0-9]*[.])?[0-9]+$" }} label="预期入住人数" required>
+            </TextField>
+            <TextField value={remain} onChange={(event) => {
+              setRemain(event.target.value)
+            }} inputProps={{ type: 'numeric', pattern: "^([0-9]*[.])?[0-9]+$" }} label="剩余数量" required>
+            </TextField>
+            <Typography variant="h6" >杂项</Typography>
+            <FormGroup sx={{ padding: 0 }}>
+              <FormControlLabel control={<Checkbox checked={roomIntro[0]} onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])} />} label="窗户" />
+              <FormControlLabel control={<Checkbox checked={roomIntro[1]} onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])} />} label="阳台" />
+              <FormControlLabel control={<Checkbox checked={roomIntro[2]} onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])} />} label="洗衣房" />
             </FormGroup>
           </Stack>
-        </Grid>
-      </Grid>
-    </Paper>
-    <Backdrop open={openAdd} sx={{zIndex:100000}}>
-      <Paper sx={{ width: 'max-content', padding: 2 }} >
-      <Typography variant="h4" sx={{marginBottom:3}}>添加房间</Typography>
-                    <Stack gap={2}>
-                        <TextField value={roomName} onChange={(event) => {
-                            setRoomName(event.target.value);
-                        }} label="房间名" required>
-                        </TextField>
-                        <TextField value={roomPrice} onChange={(event)=>{
-                            setRoomPrice(event.target.value)
-                        }} inputProps={{ type: 'numeric', pattern:"^([0-9]*[.])?[0-9]+$"}}  label="价格" required>
-                        </TextField>
-                        <Typography variant="h6">杂项</Typography>
-                        <FormGroup>
-                            <FormControlLabel control={<Checkbox checked={roomIntro[0]} onChange={(event)=>setRoomIntro([event.target.checked,roomIntro[1],roomIntro[2]])}/>} label="窗户" />
-                            <FormControlLabel control={<Checkbox checked={roomIntro[1]} onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked,roomIntro[2]])} />} label="阳台" />
-                            <FormControlLabel control={<Checkbox checked={roomIntro[2]} onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])} />} label="洗衣房" /> 
-                        </FormGroup>
-                    </Stack>
-                    <Button onClick={()=>setOpenAdd(false)}>取消</Button>
-                    <Button variant="contained" onClick={()=>console.log(roomIntro)}>提交</Button>
+          <Button onClick={() => setOpenAdd(false)}>取消</Button>
+          <Button variant="contained" onClick={() => {handleAdd(); setOpenAdd(false)}}>提交</Button>
 
-      </Paper>
-    </Backdrop>
+        </Paper>
+      </Backdrop>
     </>
   );
 }
