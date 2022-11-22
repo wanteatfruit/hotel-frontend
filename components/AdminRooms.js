@@ -13,6 +13,10 @@ import {
   Typography,
   Checkbox,
   FormLabel,
+  Button,
+  Backdrop,
+  Select,
+  MenuItem
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
@@ -20,11 +24,15 @@ import axios from "axios";
 import React from "react";
 import RoomCard from "./RoomCard";
 import { AddCircleOutline } from "@mui/icons-material";
+import { roomImageUrl } from "../data";
 
-export default function AdminRooms({}) {
+
+export default function AdminRooms({hotel_list}) {
   const [roomList, setRoomList] = React.useState(null)
-  //get roomtype by hotel
-
+  const [openAdd,setOpenAdd] = React.useState(false);
+  const [roomName, setRoomName] = React.useState('')
+  const [roomPrice, setRoomPrice] = React.useState()
+  const [roomIntro, setRoomIntro] = React.useState([false, false, false])  //get roomtype by hotel
 
   React.useEffect(() => {
     axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
@@ -39,6 +47,8 @@ export default function AdminRooms({}) {
     
   })
 
+  const [hotel,setHotel] = React.useState('');
+
   const [citySelect, setCitySelect] = React.useState({
     sz: false,
     gz: false,
@@ -52,6 +62,7 @@ export default function AdminRooms({}) {
     });
   };
   return (
+    <>
     <Paper >
       <Grid container columns={16} sx={{padding:1}}>
         <Grid item xs={16} md={12}>
@@ -65,11 +76,25 @@ export default function AdminRooms({}) {
           >
             <div>
             <Typography variant="h5">房间信息</Typography>
-            <IconButton>
+            {/* <IconButton>
               <AddCircleOutline />
-            </IconButton>
+            </IconButton> */}
+            <Button sx={{marginTop:1}} onClick={()=>{setOpenAdd(!openAdd)}} endIcon={<AddCircleOutline />}>
+                添加房间
+            </Button>
             </div>
-            <FormControl>
+            <FormControl variant="standard" sx={{width:'30%'}}>
+                  <InputLabel >分店</InputLabel>
+                  <Select value={hotel} label="分店" onChange={(e) => {
+                    setHotel(e.target.value)
+                  }}>
+                    {hotel_list!==undefined && hotel_list.map((item)=>(
+                      <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+            {/* <FormControl>
               <InputLabel>搜索房型</InputLabel>
               <OutlinedInput 
                 sx={{width:'100%'}}
@@ -82,13 +107,13 @@ export default function AdminRooms({}) {
                   </InputAdornment>
                 }
               ></OutlinedInput>
-            </FormControl>
+            </FormControl> */}
           </Stack>
-          <Grid container columns={12}>
+          <Grid container columns={12} >
             {roomList !=null ? (
               roomList.map((item) => (
-                <Grid key={item.roomtypeid} item xs={12} md={6} lg={6} xl={4} padding={2}>
-                  <RoomCard admin roomName={item.roomname} roomInfo={item}></RoomCard>
+                <Grid  key={item.roomtypeid} item xs={12} md={6} lg={6} xl={4} padding={2}>
+                  <RoomCard admin roomName={item.roomname} roomInfo={item} imageUrl={roomImageUrl[item.roomtypeid]}></RoomCard>
                 </Grid>
               ))
             ) : (
@@ -147,5 +172,30 @@ export default function AdminRooms({}) {
         </Grid>
       </Grid>
     </Paper>
+    <Backdrop open={openAdd} sx={{zIndex:100000}}>
+      <Paper sx={{ width: 'max-content', padding: 2 }} >
+      <Typography variant="h4" sx={{marginBottom:3}}>添加房间</Typography>
+                    <Stack gap={2}>
+                        <TextField value={roomName} onChange={(event) => {
+                            setRoomName(event.target.value);
+                        }} label="房间名" required>
+                        </TextField>
+                        <TextField value={roomPrice} onChange={(event)=>{
+                            setRoomPrice(event.target.value)
+                        }} inputProps={{ type: 'numeric', pattern:"^([0-9]*[.])?[0-9]+$"}}  label="价格" required>
+                        </TextField>
+                        <Typography variant="h6">杂项</Typography>
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox checked={roomIntro[0]} onChange={(event)=>setRoomIntro([event.target.checked,roomIntro[1],roomIntro[2]])}/>} label="窗户" />
+                            <FormControlLabel control={<Checkbox checked={roomIntro[1]} onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked,roomIntro[2]])} />} label="阳台" />
+                            <FormControlLabel control={<Checkbox checked={roomIntro[2]} onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])} />} label="洗衣房" /> 
+                        </FormGroup>
+                    </Stack>
+                    <Button onClick={()=>setOpenAdd(false)}>取消</Button>
+                    <Button variant="contained" onClick={()=>console.log(roomIntro)}>提交</Button>
+
+      </Paper>
+    </Backdrop>
+    </>
   );
 }

@@ -12,6 +12,7 @@
 .picWrapper{
     position: relative;
     height: 92vh;
+    background-color: antiquewhite;
 }
 .pic{
     background-size: cover;
