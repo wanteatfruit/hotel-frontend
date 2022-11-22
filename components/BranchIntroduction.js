@@ -35,14 +35,14 @@ export default function BranchIntro({name,explanation,city,address,email,telepho
     // },[])
     const pic_url = fullScreenHotelImageUrl[x]
     return(
-        <Card sx={{display:'flex', width:'95%'}}>
+        <Card sx={{display:'flex', width:'98%'}}>
             <Box sx={{display:'flex',flexDirection:{xs:'column',sm:'column', md:'row'},width:'max-content'}}>
                 <CardMedia component='img' src={pic_url} sx={{width:{md:'60%', sm:'100%'}}} />
                 <CardContent>
                     <Typography variant="h4">{hotelInfo.hotelname}</Typography>
                     <hr />
-                    <List>
-                    <ListItem>
+                    <List >
+                    <ListItem disableGutters>
                         <ListItemAvatar>
                                 <Avatar>
                                     <LocationCityRoundedIcon />
@@ -50,15 +50,15 @@ export default function BranchIntro({name,explanation,city,address,email,telepho
                             </ListItemAvatar>
                             <ListItemText  primary={hotelInfo.cityname} />
                         </ListItem>
-                        <ListItem>
+                        <ListItem disableGutters>
                             <ListItemAvatar>
                                 <Avatar>
                                     <BeachAccessOutlinedIcon />
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText primary={hotelInfo.explanation} />
-                        </ListItem>
-                        <ListItem>
+                        </ListItem >
+                        <ListItem disableGutters>
                         <ListItemAvatar>
                                 <Avatar>
                                     <HomeRoundedIcon />
@@ -66,7 +66,7 @@ export default function BranchIntro({name,explanation,city,address,email,telepho
                             </ListItemAvatar>
                             <ListItemText primary={hotelInfo.address} />
                         </ListItem>
-                        <ListItem>
+                        <ListItem disableGutters>
                         <ListItemAvatar>
                                 <Avatar>
                                     <PhoneInTalkRoundedIcon />
@@ -74,7 +74,7 @@ export default function BranchIntro({name,explanation,city,address,email,telepho
                             </ListItemAvatar>
                             <ListItemText primary={hotelInfo.telephone} />
                         </ListItem>
-                        <ListItem>
+                        <ListItem disableGutters>
                         <ListItemAvatar>
                                 <Avatar>
                                     <AlternateEmailRoundedIcon />

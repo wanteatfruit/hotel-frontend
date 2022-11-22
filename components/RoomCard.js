@@ -75,7 +75,7 @@ export default function RoomCard({ imageUrl, description, hotelName, admin, room
                     height="375px">
 
                 </CardMedia>
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ paddingBottom: '0px' }}>
                         <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
                         {admin == false && <Typography variant="body1">{`${roomInfo.price}RMB / 晚`}</Typography>}
@@ -83,7 +83,7 @@ export default function RoomCard({ imageUrl, description, hotelName, admin, room
                     </CardContent>
                     {admin == false &&
                         <CardContent>
-                            <FormGroup sx={{ flexDirection: 'row' }}>
+                            <FormGroup sx={{ flexDirection: 'row', padding:0 }}>
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[0]} />} label="窗户" />
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[1]} />} label="阳台" />
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[2]} />} label="洗衣房" />

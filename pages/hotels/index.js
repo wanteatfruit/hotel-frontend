@@ -74,7 +74,7 @@ export default function HotelPage({ hotel_list, room_list }) {
               </TabList>
 
               <TabPanel value="0" >
-                <Stack sx={{ padding: 2, overflow: 'scroll', justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
+                <Stack sx={{ padding: 2,  justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
                   {hotel_list.map((item, index) => (item.cityname == "深圳" && <div>
                     <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
                   </div>
