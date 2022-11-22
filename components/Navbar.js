@@ -107,9 +107,10 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                                     <ListItem
                                         key={item.name}
                                         disablePadding
+                                        
                                         sx={{width: "100vw"}}
                                     >
-                                        <ListItemButton onClick={handleDrawerToggle}>
+                                        <ListItemButton href={item.link}>
                                             <ListItemText primary={item.name}></ListItemText>
                                         </ListItemButton>
                                     </ListItem>
@@ -128,23 +129,6 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                                 variant="outlined" color="secondary" startIcon={<HotelOutlined fontSize="24px"/>}>
                             盛夏小酒
                         </Button>
-                        {/*
-                        <IconButton color="inherit" href="/">
-                            <HotelIcon
-                                sx={{ display: { xs: "none", md: "flex" } }}
-                            />
-                        </IconButton> */}
-
-                        {/* 大屏显示酒店logo和名称*/}
-                        {/* <Typography
-                            variant="h6"
-                            color="inherit"
-                            noWrap
-                            gutterBottom
-                            sx={{ display: { xs: "none", md: "flex" }, mt: 1, mr: 1 }}
-                        >
-                            一家连锁酒店
-                        </Typography> */}
                         {pages.map((item) => (
                             <Button
                                 key={item.name}
@@ -201,9 +185,6 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                             flexItem
                             sx={{mx: 2}}
                         />
-                        {/* <Button color="error" size="large" variant="contained">
-            Book
-          </Button> */}
 
                         <Button color="error" variant="contained" onClick={() => {
                             setBookingOpen(!bookingOpen)
@@ -211,7 +192,6 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                         {/* <Button color="error" variant="contained" href="/book" >预定</Button> */}
                     </Box>
                 </Toolbar>
-                {/* </Container> */}
             </AppBar>
         </>
 

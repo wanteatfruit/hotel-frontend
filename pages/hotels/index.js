@@ -32,7 +32,7 @@ export default function HotelPage({ hotel_list, room_list }) {
     setTabValue(newValue);
   }
   return (
-    <Layout>
+    <Layout hotel_list={hotel_list} room_list={room_list}>
       <Box
         component="main"
         sx={{
