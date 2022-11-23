@@ -14,8 +14,7 @@ import axios from "axios"
 import {useEffect, useState} from "react";
 
 const drawerWidth = 240;
-
-const AppBar = styled(MuiAppBar, {
+styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
 })(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -37,11 +36,16 @@ export default function Account({id}) {
 
     const [userInfo, setUserInfo] = useState({})
 
-    useEffect(() => {
-        axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": id}}).then((response) => {
-            console.log(response.data);
+    async function getData() {
+        await axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": id}}).then((response) => {
+            setUserInfo(response.data);
+        }).catch((error) => {
+            console.log("userID: ", id)
         });
-        setUserInfo(getUserInfo) // 待改
+    }
+
+    useEffect(() => {
+        getData()
     }, [id]);
 
     function getListItemContent(name, value) {
@@ -55,15 +59,6 @@ export default function Account({id}) {
                 </Grid>
             </>
         )
-    }
-
-    function getUserInfo() {
-        let name = "wc";
-        let id = 1;
-        let deposits = 9834;
-        let telephone = 10086;
-        let points = 3242;
-        return {name, id, deposits, telephone, points};
     }
 
     function infoList() {
@@ -97,7 +92,7 @@ export default function Account({id}) {
             <React.Fragment>
                 <h1>余额</h1>
                 <Typography component="p" variant="h4">
-                    ￥{userInfo.deposits}
+                    ￥{userInfo.money}
                 </Typography>
                 <Typography color="text.secondary" sx={{flex: 1}}>
                     on 15 March, 2019
@@ -106,6 +101,7 @@ export default function Account({id}) {
                     <Link
                         href={{
                             pathname: "/account-center/top-up",
+                            query: {"userID": id}
                         }}
                         passHref
                     >
@@ -125,13 +121,16 @@ export default function Account({id}) {
             <React.Fragment>
                 <h1>积分</h1>
                 <Typography component="p" variant="h4">
-                    {userInfo.points}
+                    {userInfo.credits}
                 </Typography>
                 <br/>
                 <div>
                     <Link
                         href={{
                             pathname: "/account-center/store",
+                            query: {
+                                "userID": id
+                            }
                         }}
                         passHref
                     >

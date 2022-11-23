@@ -56,9 +56,9 @@ const tiers = [
     },
 ];
 
-export default function TopUp({userID}) {
+export default function TopUp() {
     const router = useRouter();
-    const query = router.query;
+    const userID = router.query['userID'];
     const [validInput, setValidInput] = useState(true);
     const [response, setResponse] = useState("")
     const [responseDialogOpen, setResponseDialogOpen] = useState(false)
@@ -66,7 +66,7 @@ export default function TopUp({userID}) {
         "^\\d+$"
     );
 
-    function specialOfferOnClick(amount) {
+    async function specialOfferOnClick(amount) {
         let credits = 0
         switch (amount) {
             case 1000:
@@ -81,18 +81,26 @@ export default function TopUp({userID}) {
         }
         let body = {
             "id": userID,
-            "money": amount
+            "money": amount.toString()
         }
         let res = false
-        // axios.put('http://120.25.216.186:8888/customer/money', body)
-        //     .then(response => res = response);
+        await axios.post('http://120.25.216.186:8888/customer/money', body, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+            .then(response => res = response.data);
         if (res) {
             body = {
                 "id": userID,
-                "credits": credits
+                "credits": credits.toString()
             }
-            // axios.put('http://120.25.216.186:8888/customer/credits', body)
-            //     .then(response => res = response);
+            await axios.post('http://120.25.216.186:8888/customer/credits', body, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+                .then(response => res = response.data);
         }
         if (res) {
             setResponse("您已成功充值！充值金额，赠送金额与积分均已到账")
@@ -102,10 +110,10 @@ export default function TopUp({userID}) {
         setResponseDialogOpen(true)
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const amount = data.get('amount');
+        const amount = data.get('amount').toString();
         if (validInputRegex.test(amount)) {
             setValidInput(true);
             const body = {
@@ -113,8 +121,12 @@ export default function TopUp({userID}) {
                 "money": amount
             }
             let res = false
-            // axios.post('http://120.25.216.186:8888/customer/money', body)
-            //     .then(response => res = response);
+            await axios.post('http://120.25.216.186:8888/customer/money', body, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+                .then(response => res = response.data);
             if (res) {
                 setResponse("您已成功充值！充值金额已到账")
             } else {
@@ -184,7 +196,13 @@ export default function TopUp({userID}) {
             {/* Hero unit */}
             {ResponseDialog()}
             <Grid sx={{marginLeft: "4em", marginTop: "1em"}}>
-                <Link href={"/account-center/account-center"}>
+                <Link
+                    href={{
+                        pathname: "/account-center/account-center",
+                        query: {
+                            "userID": userID,
+                        }
+                    }}>
                     <Button variant={"outlined"}>返回</Button>
                 </Link>
             </Grid>
@@ -199,7 +217,8 @@ export default function TopUp({userID}) {
                     充值活动
                 </Typography>
             </Container>
-            {/* End hero unit */}
+            {/* End hero unit */
+            }
             <Container maxWidth="md" component="main">
                 <Grid container spacing={5} alignItems="flex-end">
                     {tiers.map((tier) => (
@@ -280,5 +299,6 @@ export default function TopUp({userID}) {
                 </Grid>
             </Container>
         </React.Fragment>
-    );
+    )
+        ;
 }

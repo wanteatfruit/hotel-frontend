@@ -147,7 +147,7 @@ export default function Home({hotel_list, room_list}) {
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <div>
-                <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
+                <NavBar userID={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
                         openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
                     setChatDialogOpen(true)
                 }}/>

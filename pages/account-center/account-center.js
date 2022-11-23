@@ -20,7 +20,7 @@ import * as React from "react";
 export default function AccountCenter() {
     const router = useRouter()
     const [drawerItem, setDrawerItem] = useState(0);
-    let _id = router.query['id'];
+    let _id = router.query['userID'];
     const [id, setID] = useState(-1)
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
 

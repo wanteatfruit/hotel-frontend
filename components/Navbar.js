@@ -36,7 +36,7 @@ import {useRouter} from "next/router";
 import {useEffect} from "react";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
-                                   id,
+                                   userID,
                                    isLoggedIn,
                                    hotel_list,
                                    room_list,
@@ -118,7 +118,7 @@ export default function NavBar({
                                 let path = "/account-center/account-center"
                                 router.push({
                                     pathname: path,
-                                    query: {"id": id},
+                                    query: {"userID": userID},
                                 }, path)
                             }} color="inherit">
                                 <FaceIcon/>

@@ -15,21 +15,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 import Link from "next/link";
+import {useRouter} from "next/router";
 
-
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-function getgiftInfo() {
-    let gift_list = [];
-    let gift_a = ['大床房一晚', '免费住一晚！', '2000'];
-    let gift_b = ['喜来登大白兔', '我们的酒店公仔！', '500'];
-    gift_list.push(gift_a);
-    gift_list.push(gift_b);
-    return gift_list;
-}
-
-
-export default function Store({userID}) {
+export default function Store() {
     const [giftList, setGiftList] = useState([])
     const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false)
     const [giftOnDialog, setGiftOnDialog] = useState("")
@@ -39,19 +27,21 @@ export default function Store({userID}) {
     const [username, setUsername] = useState("")
     const [telephone, setTelephone] = useState("")
     const [address, setAddress] = useState("")
+    const router = useRouter();
+    const userID = router.query['userID'];
 
 
     useEffect(() => {
+        console.log("id:", userID)
         axios.get("http://120.25.216.186:8888/gift/findAll").then((response) => {
             setGiftList(response.data)
         });
-        // axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": userID}}).then((response) => {
-        //     setUserCredits(response.data.credits);
-        // });
-        setUserCredits(1000);
-    }, []);
+        axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": userID}}).then((response) => {
+            setUserCredits(response.data.credits);
+        });
+    }, [userID]);
 
-    const purchaseOnClick = (event) => {
+    const purchaseOnClick = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const userName = data.get("username")
@@ -61,11 +51,11 @@ export default function Store({userID}) {
         const amount = 1;
         const body = {
             "id": userID,
-            "credits": amount * giftOnDialog
+            "credits": (amount * giftOnDialog).toString()
         }
         let paySucceed = false
-        // axios.post('http://120.25.216.186:8888/customer/credits', body)
-        //     .then(response => paySucceed = response);
+        await axios.post('http://120.25.216.186:8888/customer/credits', body)
+            .then(response => paySucceed = response);
         if (paySucceed) {
             setResponse("您已成功兑换！敬请期待礼品抵达")
         } else {
@@ -137,7 +127,7 @@ export default function Store({userID}) {
                                         <typography>您拥有{userCredits}积分</typography>
                                     </Box>
                                     <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "center"}}>
-                                        <typography>本次兑换消耗{giftOnDialog.credits}积分</typography>
+                                        <typography>兑换 {giftOnDialog.giftname} 讲消耗{giftOnDialog.credits}积分</typography>
                                     </Box>
                                 </Box>
                                 <Box
@@ -210,7 +200,13 @@ export default function Store({userID}) {
             {ResponseDialog()}
             {purchaseDialog()}
             <Grid sx={{marginLeft: "4em", marginTop: "1em"}}>
-                <Link href={"/account-center/account-center"}>
+                <Link
+                    href={{
+                        pathname: "/account-center/account-center",
+                        query: {
+                            "userID": userID,
+                        }
+                    }}>
                     <Button variant={"outlined"}>返回</Button>
                 </Link>
             </Grid>

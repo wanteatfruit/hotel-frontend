@@ -1,7 +1,5 @@
 export const pages = [
-  { name: "City", link: "/city" },
   { name: "入住", link: "/hotels" },
-  { name: "Rooms", link: "/rooms" },
 ]; // 跳转到的界面名称
 export const settings = ["Account", "Logout"]; // 点用户图标后出来的选项
 export const login = ["Login"];

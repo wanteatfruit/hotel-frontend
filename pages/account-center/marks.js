@@ -24,7 +24,6 @@ import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
 import SmokeFreeIcon from '@mui/icons-material/SmokeFree';
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import {router} from "next/client";
 import {useRouter} from "next/router";
 
 
