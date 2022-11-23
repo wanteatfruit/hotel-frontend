@@ -80,6 +80,8 @@ export default function RoomCard({ imageUrl, description, hotelName, admin, room
                         <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
                         {admin == false && <Typography variant="body1">{`${roomInfo.price}RMB / 晚`}</Typography>}
                         {admin == true && <Typography variant="body1">{`${roomInfo.price}RMB / 晚`}</Typography>}
+                        <Typography variant="h5">{`推荐入住${roomInfo.number}人`}</Typography>
+
                     </CardContent>
                     {admin == false &&
                         <CardContent>

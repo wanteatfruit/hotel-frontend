@@ -50,6 +50,7 @@
     font-size: 6rem;
     margin: 0;
     padding-bottom: 10px;
+    font-family: var(--font-secondary);
 }
 
 .introWrapper{

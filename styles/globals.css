@@ -1,10 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400&family=Noto+Serif+SC&display=swap');:root{
-  --ticket-height:220px;
-  --ticket-width:500px;
-  --ticket-pic-width:400px;
+  --ticket-height:180px;
+  --ticket-width:400px;
+  --ticket-pic-width:300px;
   --ticket-bg-primary : ghostwhite;
   --font-secondary: 'Noto Serif SC', serif;
   --font-black: 'Noto Sans SC', sans-serif;
+  --color-1: #355C7D;
+  --color-2: #6C5B7B;
+  --color-3: #C06C84;
+  --color-4: #f67280;
+  --color-5: #f8b195;
 }
 .MuiStepLabel-labelContainer span {
     font-size: large;

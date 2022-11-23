@@ -54,19 +54,17 @@ export default function HotelPage({ hotel_list, room_list }) {
             <p className={styles.stay}>入住</p>
           </div>
         </div>
-        <Box sx={{ backgroundColor: 'aqua' }}>
+        {/* <Box sx={{}}>
           <div className={styles.introWrapper}>
-            <p className={styles.introContent}>
-              Beyond our legendary hotels, we offer our unique brand of
-              hospitality at luxurious residences, one-of-a-kind private homes,
-              and carefully curated partner hotels
-            </p>
+            <Typography variant="h5">
+              欢迎入住我们精心设计的酒店
+            </Typography>
           </div>
-        </Box>
+        </Box> */}
         <div className={styles.pickWrapper}>
           <Box sx={{ backgroundColor: 'grey' }}>
-            <TabContext value={tabValue} sx={{ height: '100vh' }} >
-              <TabList variant="fullWidth" sx={{ fontSize: 'xx-large' }} onChange={handleTabChange}>
+            <TabContext value={tabValue} sx={{ height: '100vh', fontSize:'30rem' }} >
+              <TabList variant="fullWidth" sx={{ fontSize: '30rem' }} onChange={handleTabChange}>
                 <Tab label="深圳" value="0"></Tab>
                 <Tab label="广州" value="1"></Tab>
                 <Tab label="重庆" value="2"></Tab>
