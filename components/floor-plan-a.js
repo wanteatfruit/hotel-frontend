@@ -4,8 +4,10 @@ import React, {useEffect, useState} from "react";
 export default function FloorPlanA({href1, href2}) {
 
     useEffect(() => {
-        document.getElementById("floorplan-frame").contentWindow.setHref(href1, href2);
-    }, [href1, href2])
+        if(typeof(window)!==undefined){
+            document.getElementById("floorplan-frame").contentWindow.setHref(href1, href2);
+        }
+    }, [href1, href2, typeof(window)])
 
 
     return (

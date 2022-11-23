@@ -55,17 +55,10 @@ export default function AdminCheckOrder({hotel_list}) {
   const router = useRouter();
 
  function handleSubmit(event) {
-    // event.preventDefault();
-    // alert(form.id);
-    // setSubmit(!submit);
-    // router.push({
-    //   query: { customer:form.customer, hotel:form.hotel, city:form.city, telephone:form.telephone },
-    // });
     console.log(form)
 
-    // const url= router.query
-    // const params = url.split("?")
     let get_url = "http://120.25.216.186:8888/orders/findbyparameters?customer="+form.customer+"&hotel="+form.hotel+"&city="+form.city+"&telephone="+form.telephone
+    console.log(get_url)
     if(form.customer==""&&form.hotel==""&&form.city==""&&form.telephone==""){
       get_url = "http://120.25.216.186:8888/orders/findAll"
     }
