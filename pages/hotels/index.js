@@ -32,7 +32,7 @@ export default function HotelPage({ hotel_list, room_list }) {
     setTabValue(newValue);
   }
   return (
-    <Layout>
+    <Layout hotel_list={hotel_list} room_list={room_list}>
       <Box
         component="main"
         sx={{
@@ -54,19 +54,17 @@ export default function HotelPage({ hotel_list, room_list }) {
             <p className={styles.stay}>入住</p>
           </div>
         </div>
-        <Box sx={{ backgroundColor: 'aqua' }}>
+        {/* <Box sx={{}}>
           <div className={styles.introWrapper}>
-            <p className={styles.introContent}>
-              Beyond our legendary hotels, we offer our unique brand of
-              hospitality at luxurious residences, one-of-a-kind private homes,
-              and carefully curated partner hotels
-            </p>
+            <Typography variant="h5">
+              欢迎入住我们精心设计的酒店
+            </Typography>
           </div>
-        </Box>
+        </Box> */}
         <div className={styles.pickWrapper}>
           <Box sx={{ backgroundColor: 'grey' }}>
-            <TabContext value={tabValue} sx={{ height: '100vh' }} >
-              <TabList variant="fullWidth" sx={{ fontSize: 'xx-large' }} onChange={handleTabChange}>
+            <TabContext value={tabValue} sx={{ height: '100vh', fontSize:'30rem' }} >
+              <TabList variant="fullWidth" sx={{ fontSize: '30rem' }} onChange={handleTabChange}>
                 <Tab label="深圳" value="0"></Tab>
                 <Tab label="广州" value="1"></Tab>
                 <Tab label="重庆" value="2"></Tab>
@@ -74,7 +72,7 @@ export default function HotelPage({ hotel_list, room_list }) {
               </TabList>
 
               <TabPanel value="0" >
-                <Stack sx={{ padding: 2, overflow: 'scroll', justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
+                <Stack sx={{ padding: 2,  justifyContent: { sm: 'center', md: 'flex-start' }, alignItems: 'center' }} spacing={{xs:4,sm:4}} direction={{ sm: 'column', md: 'row' }}>
                   {hotel_list.map((item, index) => (item.cityname == "深圳" && <div>
                     <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
                   </div>

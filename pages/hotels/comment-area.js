@@ -74,7 +74,7 @@ export default function CommentArea() {
         <>
             <main>
                 <Grid sx={{
-                    width: "80%",
+                    width: "85%",
                     height: "100%",
                     justifyContent: "center",
                     display: "flex",
@@ -115,7 +115,7 @@ export default function CommentArea() {
                     </Grid>
                     {allComments.map((comment) => (
                         // eslint-disable-next-line react/jsx-key
-                        <Grid sx={{
+                        <Grid  sx={{
                             width: "100%",
                             justifyContent: "center",
                             display: "flex",
@@ -171,6 +171,8 @@ export default function CommentArea() {
                                             component='video'
                                             image={"/videos/1.mp4"}
                                             autoPlay
+                                            allow="autoPlay"
+                                            controls
                                             sx={{
                                                 width: "250px",
                                                 height: "180px"
