@@ -177,7 +177,7 @@ export default function Home({ hotel_list, room_list }) {
                 >
                     <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
                         <motion.div initial={{ opacity: 0, y:10 }} animate={{ opacity: 1, y:0 }} transition={{
-                            duration: 0.8,
+                            duration:2 ,
                             delay: 0.5,
                             ease: [0, 0.71, 0.2, 1.01]
                         }}>

@@ -7,7 +7,7 @@ export const cities = [
   { name: "广州", id: 1 },
   { name: "深圳", id: 2 },
   { name: "上海", id: 3 },
-  { name: "重庆", id: 4},
+  { name: "重庆", id: 4 },
 ];
 
 export const branchHotels = [
@@ -16,15 +16,15 @@ export const branchHotels = [
   { id: 3, city: "gz", name: "广州文华东方酒店" },
 ];
 
-export const roomTypes =[
+export const roomTypes = [
   { id: 1, name: "山景房" },
-  { id: 2,  name: "海景房" },
-  { id: 3,  name: "总统套房" },
+  { id: 2, name: "海景房" },
+  { id: 3, name: "总统套房" },
 ]
 
-export const orderColumns=[
-  {field:'id', headerName:'ID', width:90},
-  {field: 'branch', headerName:'分店', width:150}
+export const orderColumns = [
+  { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'branch', headerName: '分店', width: 150 }
 ]
 export const orderRows = [{ id: 1, branch: "深圳文华东方酒店" }];
 
@@ -63,4 +63,16 @@ export const fullScreenHotelImageUrl = [
   "https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
   "https://images.pexels.com/photos/594077/pexels-photo-594077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
   "https://images.pexels.com/photos/2290753/pexels-photo-2290753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+]
+
+// idx从1开始，数组下标与giftid对应
+export const giftImageUrl = [
+  "",
+  "https://images.pexels.com/photos/2912108/pexels-photo-2912108.jpeg?auto=compress&cs=tinysrgb&w=600",
+  "https://images.pexels.com/photos/45202/brownie-dessert-cake-sweet-45202.jpeg",
+  "https://images.pexels.com/photos/1203803/pexels-photo-1203803.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  "https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  "https://images.pexels.com/photos/13619261/pexels-photo-13619261.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  "https://images.pexels.com/photos/393047/pexels-photo-393047.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  "https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 ]
