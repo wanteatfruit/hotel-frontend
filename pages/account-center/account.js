@@ -11,7 +11,7 @@ import {ListItem} from "@mui/material";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import axios from "axios"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 const drawerWidth = 240;
 
@@ -32,164 +32,163 @@ const AppBar = styled(MuiAppBar, {
         }),
     }),
 }));
+createTheme();
+export default function Account({id}) {
 
-const mdTheme = createTheme();
+    const [userInfo, setUserInfo] = useState({})
 
-function getListItemContent(name, value) {
-    return (
-        <>
-            <Grid xs={3}>
-                <Typography sx={{color: "#696969"}}> {name} </Typography>
-            </Grid>
-            <Grid xs={7}>
-                <Typography sx={{fontWeight: 'bold', fontStyle: 'italic', fontSize: 30}}>{value}</Typography>
-            </Grid>
-        </>
-    )
-}
+    useEffect(() => {
+        axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": id}}).then((response) => {
+            console.log(response.data);
+        });
+        setUserInfo(getUserInfo) // 待改
+    }, [id]);
 
-function getUserInfo() {
-    let name = "wc";
-    let id = 1;
-    let deposits = 9834;
-    let telephone = 10086;
-    let points = 3242;
-    return {name, id, deposits, telephone, points};
-}
-
-function infoList() {
-    const gapHeight = 4;
-    let userInfo = getUserInfo();
-    return (
-        <>
-            <List>
-                <ListItem>
-                    <Grid container>
-                        {getListItemContent("姓名", userInfo.name)}
-                    </Grid>
-                </ListItem>
-                <Divider sx={{my: gapHeight}}/>
-                <ListItem>
-                    <Grid container>
-                        {getListItemContent("电话", userInfo.telephone)}
-                    </Grid>
-                </ListItem>
-            </List>
-        </>
-    )
-}
-
-function Deposits() {
-    function preventDefault(event) {
-        event.preventDefault();
+    function getListItemContent(name, value) {
+        return (
+            <>
+                <Grid xs={3}>
+                    <Typography sx={{color: "#696969"}}> {name} </Typography>
+                </Grid>
+                <Grid xs={7}>
+                    <Typography sx={{fontWeight: 'bold', fontStyle: 'italic', fontSize: 30}}>{value}</Typography>
+                </Grid>
+            </>
+        )
     }
 
-    let userInfo = getUserInfo();
-
-    return (
-        <React.Fragment>
-            <h1>余额</h1>
-            <Typography component="p" variant="h4">
-                ￥{userInfo.deposits}
-            </Typography>
-            <Typography color="text.secondary" sx={{flex: 1}}>
-                on 15 March, 2019
-            </Typography>
-            <div>
-                <Link
-                    href={{
-                        pathname: "/account-center/top-up",
-                    }}
-                    passHref
-                >
-                    <Button variant="contained" color="secondary">充值</Button>
-                </Link>
-            </div>
-        </React.Fragment>
-    );
-}
-
-function Credits() {
-    function preventDefault(event) {
-        event.preventDefault();
+    function getUserInfo() {
+        let name = "wc";
+        let id = 1;
+        let deposits = 9834;
+        let telephone = 10086;
+        let points = 3242;
+        return {name, id, deposits, telephone, points};
     }
 
-    let userInfo = getUserInfo();
+    function infoList() {
+        const gapHeight = 4;
+        return (
+            <>
+                <List>
+                    <ListItem>
+                        <Grid container>
+                            {getListItemContent("姓名", userInfo.name)}
+                        </Grid>
+                    </ListItem>
+                    <Divider sx={{my: gapHeight}}/>
+                    <ListItem>
+                        <Grid container>
+                            {getListItemContent("电话", userInfo.telephone)}
+                        </Grid>
+                    </ListItem>
+                </List>
+            </>
+        )
+    }
 
-    return (
-        <React.Fragment>
-            <h1>积分</h1>
-            <Typography component="p" variant="h4">
-                {userInfo.points}
-            </Typography>
-            <br/>
-            <div>
-                <Link
-                    href={{
-                        pathname: "/account-center/store",
-                    }}
-                    passHref
-                >
-                    <Button variant="contained" color="secondary">积分商城</Button>
-                </Link>
-            </div>
-        </React.Fragment>
-    );
-}
+    function Deposits() {
+        function preventDefault(event) {
+            event.preventDefault();
+        }
 
-function DashboardContent() {
-    const [open, setOpen] = React.useState(true);
-    // const [msg, setMsg]
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
 
-    // useEffect(() => {
-    //     axios.get("http://120.25.216.186:8888/hotel/findAll").then((response) => {
-    //         console.log(response.data);
-    //     });
-    // }, []);
-
-    return (
-        <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
-            <Grid container spacing={3}>
-                {/* Basic Info */}
-                <Grid item xs={12}>
-                    <Paper sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
-                        {infoList()}
-                    </Paper>
-                </Grid>
-                {/* Deposits */}
-                <Grid item xs={12} md={8} lg={9}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: 240,
+        return (
+            <React.Fragment>
+                <h1>余额</h1>
+                <Typography component="p" variant="h4">
+                    ￥{userInfo.deposits}
+                </Typography>
+                <Typography color="text.secondary" sx={{flex: 1}}>
+                    on 15 March, 2019
+                </Typography>
+                <div>
+                    <Link
+                        href={{
+                            pathname: "/account-center/top-up",
                         }}
+                        passHref
                     >
-                        {Deposits()}
-                    </Paper>
-                </Grid>
-                {/* Credits */}
-                <Grid item xs={12} md={4} lg={3}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: 240,
-                        }}
-                    >
-                        {Credits()}
-                    </Paper>
-                </Grid>
-            </Grid>
-        </Container>
-    );
-}
+                        <Button variant="contained" color="secondary">充值</Button>
+                    </Link>
+                </div>
+            </React.Fragment>
+        );
+    }
 
-export default function Account() {
+    function Credits() {
+        function preventDefault(event) {
+            event.preventDefault();
+        }
+
+        return (
+            <React.Fragment>
+                <h1>积分</h1>
+                <Typography component="p" variant="h4">
+                    {userInfo.points}
+                </Typography>
+                <br/>
+                <div>
+                    <Link
+                        href={{
+                            pathname: "/account-center/store",
+                        }}
+                        passHref
+                    >
+                        <Button variant="contained" color="secondary">积分商城</Button>
+                    </Link>
+                </div>
+            </React.Fragment>
+        );
+    }
+
+    function DashboardContent() {
+        const [open, setOpen] = React.useState(true);
+        // const [msg, setMsg]
+        const toggleDrawer = () => {
+            setOpen(!open);
+        };
+
+        return (
+            <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
+                <Grid container spacing={3}>
+                    {/* Basic Info */}
+                    <Grid item xs={12}>
+                        <Paper sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
+                            {infoList()}
+                        </Paper>
+                    </Grid>
+                    {/* Deposits */}
+                    <Grid item xs={12} md={8} lg={9}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 240,
+                            }}
+                        >
+                            {Deposits()}
+                        </Paper>
+                    </Grid>
+                    {/* Credits */}
+                    <Grid item xs={12} md={4} lg={3}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: 240,
+                            }}
+                        >
+                            {Credits()}
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Container>
+        );
+    }
+
+
     return <DashboardContent/>;
 }

@@ -6,6 +6,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from '@mui/icons-material/Logout';
+import ChatIcon from '@mui/icons-material/Chat';
 import {
     List,
     Box,
@@ -34,7 +35,15 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 //传入是否已登录，决定用户处显示内容
-export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOutDialog}) {
+export default function NavBar({
+                                   id,
+                                   isLoggedIn,
+                                   hotel_list,
+                                   room_list,
+                                   openLoggedOutDialog,
+                                   buttonsMode,
+                                   openChatDialog
+                               }) {
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -72,9 +81,61 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
         openLoggedOutDialog()
     }
 
-    useEffect(() => {
-        console.log("nav: ", isLoggedIn)
-    })
+    function getButtons() {
+        if (buttonsMode === 1) {
+            return (
+                <>
+                    <Tooltip title="Chat Room">
+                        <IconButton onClick={() => {
+                            openChatDialog()
+                        }} color="inherit">
+                            <ChatIcon/>
+                        </IconButton>
+                    </Tooltip>
+                </>
+            )
+        } else {
+            if (!isLoggedIn) {
+                return (
+                    <>
+                        <Tooltip title={"Login"}>
+                            <IconButton onClick={handleLogin} color="inherit">
+                                <LoginIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <Tooltip title={"Log out"}>
+                            <IconButton onClick={handleLogout} color="inherit">
+                                <LogoutIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Account center">
+                            <IconButton onClick={() => {
+                                let path = "/account-center/account-center"
+                                router.push({
+                                    pathname: path,
+                                    query: {"id": id},
+                                }, path)
+                            }} color="inherit">
+                                <FaceIcon/>
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Chat Room">
+                            <IconButton onClick={() => {
+                                openChatDialog()
+                            }} color="inherit">
+                                <ChatIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </>
+                )
+            }
+        }
+    }
 
     return (
         <>
@@ -90,8 +151,6 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                 {/* <Container maxWidth="xl"> */}
                 <Toolbar sx={{justifyContent: "space-between"}}>
                     {/*设置小屏菜单显示*/}
-
-
                     <Box sx={{display: {xs: "flex", md: "none"}, alignItems: "center"}}>
                         <IconButton onClick={handleDrawerToggle} color="inherit">
                             <MenuIcon/>
@@ -143,22 +202,7 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                     {/*用户图标大小屏都在最右边*/}
                     <Box sx={{display: "flex"}}>
                         {/*avatar，后续可改成avatar组件*/}
-                        {!isLoggedIn && <Tooltip title={"Login"}>
-                            <IconButton onClick={handleLogin} color="inherit">
-                                <LoginIcon/>
-                            </IconButton>
-                        </Tooltip>}
-                        {isLoggedIn && <Tooltip title={"Log out"}>
-                            <IconButton onClick={handleLogout} color="inherit">
-                                <LogoutIcon/>
-                            </IconButton>
-                        </Tooltip>}
-                        <Tooltip title="Account center">
-                            <IconButton onClick={handleOpenUserMenu} color="inherit">
-                                {!isLoggedIn && <AccountCircleIcon/>}
-                                {isLoggedIn && <FaceIcon/>}
-                            </IconButton>
-                        </Tooltip>
+                        {getButtons()}
                         {/*drop down menu*/}
                         <Menu
                             keepMounted
@@ -179,16 +223,18 @@ export default function NavBar({isLoggedIn, hotel_list, room_list, openLoggedOut
                                     </MenuItem>
                                 ))}
                         </Menu>
-                        <Divider
-                            orientation="vertical"
-                            color="success"
-                            flexItem
-                            sx={{mx: 2}}
-                        />
 
-                        <Button color="error" variant="contained" onClick={() => {
+                        {buttonsMode === 0 &&
+                            <Divider
+                                orientation="vertical"
+                                color="success"
+                                flexItem
+                                sx={{mx: 2}}
+                            /> &&
+                            <Button color="error" variant="contained" onClick={() => {
                             setBookingOpen(!bookingOpen)
                         }}>预定</Button>
+                        }
                         {/* <Button color="error" variant="contained" href="/book" >预定</Button> */}
                     </Box>
                 </Toolbar>

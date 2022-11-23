@@ -62,10 +62,11 @@ export default function DrawerLeft({setDrawerItem}) {
                             width: drawerWidth,
                             boxSizing: "border-box",
                         },
+                        zIndex: 0
                     }}
                 >
                     <Toolbar />
-                    <Box sx={{ overflow: "auto", position: "relative",  display: "flex", alignItems: "flex-start"}}>
+                    <Box sx={{ overflow: "auto", position: "relative",  display: "flex", alignItems: "center", marginTop: "4em"}}>
                         <List>
                             {["账户", "订单", "收藏"].map((text, index) =>
                                 drawerItemChoose(index, text, setDrawerItem)
