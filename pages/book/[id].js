@@ -64,7 +64,9 @@ export default function BookingPage({ }) {
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
         endDate: dayjs().startOf("day").add(7, 'day'),
-        roomType: 0,
+        roomTypeID: 0,
+        roomName:'',
+        roomPrice:0,
         hotelName: hotelName == null ? '' : hotelName.toString(),
         guestsNumber: 2,
         cost: 0
@@ -104,7 +106,7 @@ export default function BookingPage({ }) {
     const calculateCost = () => {
         const days = bookingInfo.endDate.diff(bookingInfo.startDate, 'day')
         console.log(days)
-        const pricePerDay = roomList[bookingInfo.roomType].price
+        const pricePerDay = bookingInfo.roomPrice
         return days * pricePerDay
     }
 
@@ -146,8 +148,10 @@ export default function BookingPage({ }) {
                                                 setSelectedRoom(index);
                                                 setBookingInfo({
                                                     ...bookingInfo,
-                                                    roomType: item.roomtypeid,
-                                                    hotelName: hotelName
+                                                    roomTypeID: item.roomtypeid,
+                                                    hotelName: hotelName,
+                                                    roomName: item.roomname,
+                                                    roomPrice: item.price
                                                 });
                                             }}>
                                             <Card variant="outlined" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '50%', paddingLeft:0 }}>
@@ -278,7 +282,7 @@ export default function BookingPage({ }) {
                                         <CardHeader title="房间"></CardHeader>
                                         <CardContent>
                                             <Typography variant="h6">
-                                                {roomList[bookingInfo.roomType].roomname}
+                                                {bookingInfo.roomName}
                                             </Typography>
                                         </CardContent>
                                     </Card>

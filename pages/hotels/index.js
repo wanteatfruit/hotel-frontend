@@ -25,14 +25,21 @@ export async function getStaticProps() {
   }
 }
 
+export default function Hotels({hotel_list, room_list, singlePage}){
+  return(
+    <Layout>
+    <HotelPage hotel_list={hotel_list} room_list={room_list} singlePage={true} />
+    </Layout>
+  )
+}
 
-export default function HotelPage({ hotel_list, room_list }) {
+function HotelPage({ hotel_list, room_list, singlePage }) {
   const [tabValue, setTabValue] = React.useState('0');
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   }
   return (
-    <Layout hotel_list={hotel_list} room_list={room_list}>
+    <>
       <Box
         component="main"
         sx={{
@@ -46,21 +53,13 @@ export default function HotelPage({ hotel_list, room_list }) {
           paddingBottom: 2
         }}
       >
-        <div className={styles.picWrapper}>
-          {/* <div className={styles.pic}></div> */}
+        {singlePage && <div className={styles.picWrapper}>
           <Image src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             layout="fill" objectFit="cover" ></Image>
           <div className={styles.picContent}>
             <p className={styles.stay}>入住</p>
           </div>
-        </div>
-        {/* <Box sx={{}}>
-          <div className={styles.introWrapper}>
-            <Typography variant="h5">
-              欢迎入住我们精心设计的酒店
-            </Typography>
-          </div>
-        </Box> */}
+        </div>}
         <div className={styles.pickWrapper}>
           <Box sx={{ backgroundColor: 'grey' }}>
             <TabContext value={tabValue} sx={{ height: '100vh', fontSize:'30rem' }} >
@@ -107,6 +106,6 @@ export default function HotelPage({ hotel_list, room_list }) {
           </Box>
         </div>
       </Box>
-    </Layout>
+    </>
   );
 }

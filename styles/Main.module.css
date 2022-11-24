@@ -1,47 +1,32 @@
 .picOne {
-  background-image: url("https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+  /* background-image: url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"); */
+  /* background-image: url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg"); */
+ background-image: url("https://images.pexels.com/photos/47454/pexels-photo-47454.jpeg");
+  /* background-image: url("https://images.pexels.com/photos/1840893/pexels-photo-1840893.jpeg"); */
   background-repeat: no-repeat;
   background-position: center;
   background-color: white;
   background-size: cover;
-  height:100%;
+  height: 100vh;
   /* filter: blur(5px); */
-
+  justify-content: center;
   margin: 0;
   padding: 0;
   display: flex;
 }
 
-.grad {
-  position: relative;
-  white-space: nowrap;
-  writing-mode: vertical-lr;
-  /* text-orientation: upright; */
-  /* height: 40vh; */
-  font-size: 2rem;
-  font-family: var(--font-black);
-  background-size: 100%;
-  background-image: url("https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-  background-clip: text;
-  color: transparent;
-  -webkit-background-clip: text;
+.picOne::before {
+  top: 79.3%;
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, 0), antiquewhite);
+  height: 30%;
 }
-
-.neon {
-  position: relative;
-  /* left: 2; */
-  margin-top: 0;
-  margin-bottom: 7%;
-  white-space: nowrap;
-  /* height: 40vh; */
-  font-size: 10rem;
-  font-family: var(--font-black);
-  background-size: 100%;
-  background-image: url("https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
-  background-clip: text;
-  background-repeat: no-repeat;
-  color: transparent;
-  -webkit-background-clip: text;
+.picOne::after,
+.picOne::before {
+  content: "";
+  position: absolute;
+  /* transform: translateX(-10%); */
+  width: 100%;
+  z-index: 10;
 }
 
 .title::after {
@@ -57,76 +42,165 @@
   background-size: auto 100%;
   background-repeat: round;
   background-position: 0em;
+  animation: underline 6s infinite alternate;
+  mask-image:linear-gradient(90deg, #0000, rgb(255, 255, 255), #0000);
+  mask-size: 500% 1000%;
+}
+
+/* .city::after {
+  --deco-height: 0.3125em;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  bottom: -50px;
+  height: var(--deco-height);
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23a)'%3E%3Cpath d='M-17 30.5C-1 22 72-4 54 13 37.9 28.2-2.5 57.5 16 55.5s72-29 104-40' stroke='%2300FDCF' stroke-width='10'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath fill='%23fff' d='M0 0h100v64H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+  background-size: auto 100%;
+  background-repeat: round;
+  background-position: 0em;
+} */
+
+@media screen and (max-width: 768px) {
+  .picOne::before {
+    top: 84%;
+  }
+  .title {
+    font-size: 6.5rem;
+    margin: auto;
+  }
+}
+.arrows {
+  width: 60px;
+  height: 72px;
+  position: absolute;
+  left: 50%;
+  margin-left: -30px;
+  bottom: 20px;
+}
+.arrows path {
+  stroke: #f2f2f2;
+  fill: transparent;
+  stroke-width: 3px;
+  animation: arrow 2s infinite;
+  -webkit-animation: arrow 2s infinite;
+}
+
+.arrows path.a1 {
+  animation-delay: -1s;
+  -webkit-animation-delay: -1s; /* Safari 和 Chrome */
+}
+.arrows path.a2 {
+  animation-delay: -0.5s;
+  -webkit-animation-delay: -0.5s; /* Safari 和 Chrome */
+}
+.arrows path.a3 {
+  animation-delay: 0s;
+  -webkit-animation-delay: 0s; /* Safari 和 Chrome */
+}
+@keyframes underline {
+  100% {
+    -webkit-mask-position: right;
+            mask-position: right;
+  }
+}
+
+@keyframes arrow {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes arrow /*Safari and Chrome*/ {
+  0% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.title {
+  font-size: 15vw;
+  position: relative;
+  font-weight: 700;
+  font-family: "ZCOOL XiaoWei", sans-serif;
+  /* margin: auto; */
+  margin-top: 5%;
+  background: linear-gradient(
+    219deg,
+    var(--color-1) 19%,
+    transparent 19%,
+    transparent 20%,
+    var(--color-2) 20%,
+    var(--color-2) 39%,
+    transparent 39%,
+    transparent 40%,
+    var(--color-3) 40%,
+    var(--color-3) 59%,
+    transparent 59%,
+    transparent 60%,
+    var(--color-4) 60%,
+    var(--color-4) 79%,
+    transparent 79%,
+    transparent 80%,
+    var(--color-5) 80%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+.city {
+  font-size: 9vw;
+  position: relative;
+  font-weight: 400;
+  font-family: "ZCOOL XiaoWei", sans-serif;
+  margin: auto;
+  writing-mode: vertical-lr;
+  text-align: end;
+  background: linear-gradient(
+    219deg,
+    var(--color-1) 19%,
+    transparent 19%,
+    transparent 20%,
+    var(--color-2) 20%,
+    var(--color-2) 39%,
+    transparent 39%,
+    transparent 40%,
+    var(--color-3) 40%,
+    var(--color-3) 59%,
+    transparent 59%,
+    transparent 60%,
+    var(--color-4) 60%,
+    var(--color-4) 79%,
+    transparent 79%,
+    transparent 80%,
+    var(--color-5) 80%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 @media screen and (max-width: 768px) {
-    .title {
-      font-size: 6.5rem;
-    }
+  .city {
+    writing-mode: horizontal-tb;
+    margin-bottom: 10px;
+    font-size: 5rem;
   }
-  .arrows{
-    width: 60px;
-	height: 72px;
-	position: absolute;
-	left: 50%;
-	margin-left: -30px;
-	bottom: 20px;
-  }
-  .arrows path {
-	stroke: #2994D1;
-	fill: transparent;
-	stroke-width: 1px;	
-	animation: arrow 2s infinite;
-	-webkit-animation: arrow 2s infinite; 
 }
-
-.arrows path.a1{
-    animation-delay:-1s;
-	-webkit-animation-delay:-1s; /* Safari 和 Chrome */
-}
-.arrows path.a2{
-    animation-delay:-0.5s;
-	-webkit-animation-delay:-0.5s; /* Safari 和 Chrome */
-}
-.arrows path.a3{
-    animation-delay:0s;
-	-webkit-animation-delay:0s; /* Safari 和 Chrome */
-}
-
-@keyframes arrow
-{
-0% {opacity:0}
-40% {opacity:1}
-80% {opacity:0}
-100% {opacity:0}
-}
-
-@-webkit-keyframes arrow /*Safari and Chrome*/
-{
-0% {opacity:0}
-40% {opacity:1}
-80% {opacity:0}
-100% {opacity:0}
-}
-.title {
-    font-size: 15vw;
-    position: relative;
-    font-weight: 900;
-    font-family: var(--font-black);
-    /* margin: auto; */
-    margin-top: 5%;
-    background: linear-gradient(219deg, 
-      var(--color-1) 19%, 
-      transparent 19%,transparent 20%, 
-      var(--color-2) 20%, var(--color-2)  39%,
-      transparent 39%,transparent 40%, 
-      var(--color-3) 40%,var(--color-3) 59% ,
-      transparent 59%,transparent 60%, 
-      var(--color-4) 60%, var(--color-4) 79%,
-      transparent 79%, transparent 80%, 
-      var(--color-5) 80%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-}
-

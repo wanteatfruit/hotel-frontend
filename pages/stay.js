@@ -52,7 +52,7 @@ export default function Stay({ hotel_list }) {
     const [openAdd, setOpenAdd] = React.useState(false);
     const [roomName, setRoomName] = React.useState('')
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])  //get roomtype by hotel
-    const [hotel, setHotel] = React.useState('');
+    const [hotel, setHotel] = React.useState('深圳湾1号');
     const [priceRange, setPriceRange] = React.useState([30,1000])
     const [guestsNumber, setGuestNum] = React.useState(2);
     const minPriceDiff = 30;
@@ -166,7 +166,7 @@ export default function Stay({ hotel_list }) {
                             {roomList != null ? (
                                 roomList.map((item) => (
                                     <Grid key={item.roomtypeid} item xs={12} md={6} lg={4} xl={4} padding={2}>
-                                        <RoomCard admin={false} roomName={item.roomname} roomInfo={item} imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}></RoomCard>
+                                        <RoomCard  hotelName={hotel} admin={false} roomName={item.roomname} roomInfo={item} imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}></RoomCard>
                                     </Grid>
                                 ))
                             ) : (

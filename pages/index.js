@@ -12,8 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Layout from "../components/Layout";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Diversity1Icon from "@mui/icons-material/Diversity1";
+import { hotelImageUrl } from "../data";
 import { cities } from "../data";
 import Ticket, {
     TicketCQ,
@@ -22,15 +21,15 @@ import Ticket, {
     TicketSZ,
 } from "../components/CityTicket";
 import SendIcon from "@mui/icons-material/Send";
+import HotelCard from "../components/HotelCard";
 import { motion } from "framer-motion";
 import Image from "next/future/image";
-import { positions } from "@mui/system";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide } from "@mui/material";
+import { Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { isLeaf } from "@mui/x-data-grid";
+import { LocationCityOutlined } from "@mui/icons-material";
 
 const theme = createTheme();
 
@@ -66,6 +65,26 @@ export default function Home({ hotel_list, room_list }) {
     const [id, setID] = useState(-1)
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
+    const jumpToCity = [
+        { name: '深圳', href: "#shenzhen" },
+        { name: '广州', href: "#guangzhou" },
+        { name: '上海', href: "#shanghai" },
+        { name: '重庆', href: "#chongqing" },
+
+    ]
+    const cardVariants = { //for hotel card anim
+        offscreen: {
+            y: 300
+        },
+        onscreen: {
+            y: 0,
+            transition: {
+                type: "spring",
+                bounce: 0.2,
+                duration: 0.8
+            }
+        }
+    };
     const theme = createTheme({
         typography: {
             fontFamily: "'Noto Serif SC', serif",
@@ -145,13 +164,20 @@ export default function Home({ hotel_list, room_list }) {
 
     return (
         <ThemeProvider theme={theme}>
+            <SpeedDial ariaLabel="chooseCity" sx={{ position: 'fixed', bottom: 16, right: 16 }} icon={<LocationCityOutlined />}>
+                {jumpToCity.map((action) => (
+                    <SpeedDialAction tooltipOpen icon={<SpeedDialIcon />} key={action.name} tooltipTitle={action.name} title={action.name} onClick={() => {
+                        router.push(`/${action.href}`)
+                    }} />
+                ))}
+            </SpeedDial>
             <CssBaseline />
             <div>
 
                 <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
-                        openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
-                    setChatDialogOpen(true)
-                }}/>
+                    openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
+                        setChatDialogOpen(true)
+                    }} />
             </div>
             <div>
                 {ChatDialog()}
@@ -166,18 +192,18 @@ export default function Home({ hotel_list, room_list }) {
                     temporary admin
                 </Link>
                 {/* Hero unit */}
-                <Box
-                    sx={{
-                        height: '100vh',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        backgroundSize: 'cover',
-                        backgroundImage: 'url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")'
-                    }}
+                <div className={styles.picOne}
+                    // sx={{
+                    //     height: '100vh',
+                    //     display: 'flex',
+                    //     justifyContent: 'center',
+                    //     backgroundSize: 'cover',
+                    //     backgroundImage: 'url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")'
+                    // }}
                 >
                     <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
-                        <motion.div initial={{ opacity: 0, y:10 }} animate={{ opacity: 1, y:0 }} transition={{
-                            duration:2 ,
+                        <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{
+                            duration: 2,
                             delay: 0.5,
                             ease: [0, 0.71, 0.2, 1.01]
                         }}>
@@ -187,17 +213,62 @@ export default function Home({ hotel_list, room_list }) {
                         </motion.div>
                     </Box>
                     <svg className={styles.arrows}>
-							<path className={styles.a1} d="M0 0 L30 32 L60 0"></path>
-							<path className={styles.a2} d="M0 20 L30 52 L60 20"></path>
-							<path className={styles.a3} d="M0 40 L30 72 L60 40"></path>
-						</svg>
-                    {/* <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <p className={styles.grad}>
-                                盛夏小酒
-                            </p>
-                        </Box> */}
+                        <path className={styles.a1} d="M0 0 L30 32 L60 0"></path>
+                        <path className={styles.a2} d="M0 20 L30 52 L60 20"></path>
+                        <path className={styles.a3} d="M0 40 L30 72 L60 40"></path>
+                    </svg>
+                </div>
+                <Stack>
 
-                </Box>
+                    <Paper sx={{ backgroundColor: 'antiquewhite' }} elevation={0}>
+                        <Stack paddingTop={14} paddingBottom={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="guangzhou">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                                <p className={styles.city}>
+                                    广州
+                                </p>
+                            </motion.div>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                                    {hotel_list.map((item, index) => (item.cityname == "广州" &&
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                    ))}
+                                </Stack>
+                            </motion.div>
+                        </Stack>
+                        <Stack paddingY={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="shanghai">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                                <p className={styles.city}>
+                                    上海
+                                </p>
+                                {/* <Typography textAlign='end'  sx={{paddingBottom:{sm:0, xs:5}, writingMode: {sm:'vertical-lr',xs:'horizontal-tb'} }} variant="h1">上海</Typography> */}
+                            </motion.div>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                                    {hotel_list.map((item, index) => (item.cityname == "上海" &&
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                    ))}
+                                </Stack>
+                            </motion.div>
+                        </Stack>
+                        <Stack paddingY={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="chongqing">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                                <p className={styles.city}>
+                                    重庆
+                                </p>
+                            </motion.div>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
+
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+
+                                    {hotel_list.map((item, index) => (item.cityname == "重庆" &&
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                    ))}
+                                </Stack>
+                            </motion.div>
+                        </Stack>
+                    </Paper>
+
+                </Stack>
                 <div >
                     {/*城市卡片*/}
                     <Grid sx={{ display: { sm: 'flex', xs: 'none' } }} container spacing={20} columnGap={2} padding={2} columns={12} justifyContent='center'>
@@ -225,6 +296,7 @@ export default function Home({ hotel_list, room_list }) {
                     <iframe src={"map.html"} height="500" width="600" frameBorder="0"></iframe>
                 </Grid>
             </main>
+
             <Footer />
         </ThemeProvider>
     );

@@ -18,6 +18,7 @@ export default function RoomCard({ imageUrl, description, hotelName, admin, room
     const [roomName, setRoomName] = React.useState(roomInfo === undefined ? "" : roomInfo.roomname)
     const [roomPrice, setRoomPrice] = React.useState(roomInfo === undefined ? "" : roomInfo.price)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
+    console.log(roomInfo)
     function handleIntroduction() {
         let intro = roomInfo.introduction
         const intro_array = intro.split(",")
