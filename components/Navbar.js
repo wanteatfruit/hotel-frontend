@@ -36,7 +36,8 @@ import {
     DialogActions,
     DialogTitle,
     DialogContent,
-    Slide
+    Slide,
+    ThemeProvider
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -48,7 +49,6 @@ import { ChevronLeftOutlined, HotelOutlined } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import MapPanel from "./MapPanel";
 import { useTheme } from "@emotion/react";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
@@ -160,8 +160,6 @@ export default function NavBar({
 
     return (
         <>
-            {/* <MapPanel  open={mapOpen}/>
-         */}
             <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} open={mapOpen} fullWidth maxWidth='lg' sx={{ zIndex: 1000 }}>
                 <DialogTitle>
                     实时地图
@@ -169,23 +167,37 @@ export default function NavBar({
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ flexDirection: 'row', display: 'flex' }}>
+                <DialogContent sx={{ flexDirection: { md: 'row', xs: 'column' }, display: 'flex' }}>
                     <iframe src={"map.html"} id="city_map" height="500" width="600" frameBorder="0" style={{ borderRadius: 10 }}></iframe>
-                    <Stack sx={{display:{xs:'none', md:'flex'}, marginLeft:2}} gap={2}>
+                    <Stack sx={{ display: { xs: 'none', md: 'flex' }, marginLeft: 2 }} gap={2}>
                         <TicketSZ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(114.04, 22.57)
                         }} />
                         <TicketGZ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(113.23, 23.16)
                         }} />
-                                                        <TicketCQ onClick={() => {
-                                    document.getElementById('city_map').contentWindow.setNewCenter(106.54, 29.59);
-                                    console.log("clicked change city position")
-                                }} />
-                                <TicketSH onClick={() => {
-                                    document.getElementById('city_map').contentWindow.setNewCenter(121.4, 31.2)
-                                }} />
+                        <TicketCQ onClick={() => {
+                            document.getElementById('city_map').contentWindow.setNewCenter(106.54, 29.59);
+                            console.log("clicked change city position")
+                        }} />
+                        <TicketSH onClick={() => {
+                            document.getElementById('city_map').contentWindow.setNewCenter(121.4, 31.2)
+                        }} />
 
+                    </Stack>
+                    <Stack  direction='row' sx={{ display: { xs: 'flex', md: 'none' }, marginTop: 2, justifyContent:'center' }} gap={2}>
+                        <Button onClick={() => {
+                            document.getElementById('city_map').contentWindow.setNewCenter(114.04, 22.57)
+                        }} variant="outlined" fullWidth>深圳</Button>
+                        <Button onClick={() => {
+                            document.getElementById('city_map').contentWindow.setNewCenter(113.23, 23.16)
+                        }} variant="outlined" fullWidth>广州</Button>
+                        <Button onClick={() => {
+                            document.getElementById('city_map').contentWindow.setNewCenter(106.54, 29.59)
+                        }} variant="outlined" fullWidth>重庆</Button>
+                        <Button onClick={() => {
+                            document.getElementById('city_map').contentWindow.setNewCenter(121.4, 31.2)
+                        }} variant="outlined" fullWidth>上海</Button>
                     </Stack>
                 </DialogContent>
             </Dialog>

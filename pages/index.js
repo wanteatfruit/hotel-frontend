@@ -157,13 +157,13 @@ export default function Home({ hotel_list, room_list }) {
 
     return (
         <ThemeProvider theme={theme}>
-            <SpeedDial ariaLabel="chooseCity" sx={{ position: 'fixed', bottom: 16, right: 16 }} icon={<LocationCityOutlined />}>
+            {/* <SpeedDial ariaLabel="chooseCity" sx={{ position: 'fixed', bottom: 16, right: 16 }} icon={<LocationCityOutlined />}>
                 {jumpToCity.map((action) => (
                     <SpeedDialAction tooltipOpen icon={<SpeedDialIcon />} key={action.name} tooltipTitle={action.name} title={action.name} onClick={() => {
                         router.push(`/${action.href}`)
                     }} />
                 ))}
-            </SpeedDial>
+            </SpeedDial> */}
             <CssBaseline />
             <div>
 
