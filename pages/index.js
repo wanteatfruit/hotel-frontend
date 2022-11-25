@@ -8,13 +8,13 @@ import Typography from "@mui/material/Typography";
 import styles from "../styles/Main.module.css";
 import Container from "@mui/material/Container";
 import Link from "next/link";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Layout from "../components/Layout";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Diversity1Icon from "@mui/icons-material/Diversity1";
-import { cities } from "../data";
+import {cities} from "../data";
 import Ticket, {
     TicketCQ,
     TicketGZ,
@@ -22,15 +22,15 @@ import Ticket, {
     TicketSZ,
 } from "../components/CityTicket";
 import SendIcon from "@mui/icons-material/Send";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 import Image from "next/future/image";
-import { positions } from "@mui/system";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide } from "@mui/material";
+import {positions} from "@mui/system";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide} from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { isLeaf } from "@mui/x-data-grid";
+import {useState} from "react";
+import {useRouter} from "next/router";
+import {useEffect} from "react";
+import {isLeaf} from "@mui/x-data-grid";
 
 const theme = createTheme();
 
@@ -53,7 +53,7 @@ export async function getStaticProps() {
 }
 
 
-export default function Home({ hotel_list, room_list }) {
+export default function Home({hotel_list, room_list}) {
     const router = useRouter()
     let _sessionKey = router.query['sessionKey'];
     let _username = router.query['username'];
@@ -64,8 +64,7 @@ export default function Home({ hotel_list, room_list }) {
     const [username, setUsername] = useState('')
     const [sessionKey, setSessionKey] = useState('')
     const [id, setID] = useState(-1)
-    const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-    const [chatDialogOpen, setChatDialogOpen] = useState(false)
+
     const theme = createTheme({
         typography: {
             fontFamily: "'Noto Serif SC', serif",
@@ -78,63 +77,6 @@ export default function Home({ hotel_list, room_list }) {
         }
     })
 
-    function ChatDialog() {
-        return (
-            <>
-                <Dialog
-                    open={chatDialogOpen}
-                    onClose={() => {
-                        setChatDialogOpen(false)
-                    }}
-                    PaperProps={{
-                        sx: {
-                            position: "fixed",
-                            width: "100%",
-                            height: "100%",
-                            maxWidth: "md",
-                            backgroundColor: "#f1cec2"
-                        }
-                    }}
-                >
-                    <DialogContent>
-                        <iframe src={"/chat-app.html"} height="95%" width="100%" frameBorder="0"></iframe>
-                    </DialogContent>
-                </Dialog>
-            </>
-        )
-    }
-
-    function LogoutDialog() {
-        return (
-            <>
-                <Dialog
-                    open={isLogoutDialogOpen}
-                    // TransitionComponent={Transition}
-                    keepMounted
-                    onClose={() => setIsLogoutDialogOpen(false)}
-                    aria-describedby="alert-dialog-slide-description"
-                >
-                    {/*<DialogTitle>{"Use Google's location service?"}</DialogTitle>*/}
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-slide-description">
-                            You are logging out of your account...
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setIsLogoutDialogOpen(false)}>Cancel</Button>
-                        <Button onClick={() => {
-                            setIsLoggedIn(false)
-                            setUsername("")
-                            setSessionKey("")
-                            setID(-1)
-                            setIsLogoutDialogOpen(false);
-                        }}>Log out</Button>
-                    </DialogActions>
-                </Dialog>
-            </>
-        )
-    }
-
     useEffect(() => {
         setIsLoggedIn(_isLoggedIn)
         setUsername(_username)
@@ -142,20 +84,20 @@ export default function Home({ hotel_list, room_list }) {
         setID(_id)
     }, [_isLoggedIn, _username, _sessionKey, _id])
 
+    function clearLogInfo() {
+        setIsLoggedIn(false)
+        setUsername("")
+        setSessionKey("")
+        setID(-1)
+    }
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline />
+            <CssBaseline/>
             <div>
 
                 <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
-                        openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
-                    setChatDialogOpen(true)
-                }}/>
-            </div>
-            <div>
-                {ChatDialog()}
-                {LogoutDialog()}
+                        buttonsMode={0} clearLogInfo={clearLogInfo}/>
             </div>
             <main>
                 <Link
@@ -175,9 +117,9 @@ export default function Home({ hotel_list, room_list }) {
                         backgroundImage: 'url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")'
                     }}
                 >
-                    <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
-                        <motion.div initial={{ opacity: 0, y:10 }} animate={{ opacity: 1, y:0 }} transition={{
-                            duration:2 ,
+                    <Box sx={{display: {xs: 'block', sm: 'block'}}}>
+                        <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{
+                            duration: 2,
                             delay: 0.5,
                             ease: [0, 0.71, 0.2, 1.01]
                         }}>
@@ -187,10 +129,10 @@ export default function Home({ hotel_list, room_list }) {
                         </motion.div>
                     </Box>
                     <svg className={styles.arrows}>
-							<path className={styles.a1} d="M0 0 L30 32 L60 0"></path>
-							<path className={styles.a2} d="M0 20 L30 52 L60 20"></path>
-							<path className={styles.a3} d="M0 40 L30 72 L60 40"></path>
-						</svg>
+                        <path className={styles.a1} d="M0 0 L30 32 L60 0"></path>
+                        <path className={styles.a2} d="M0 20 L30 52 L60 20"></path>
+                        <path className={styles.a3} d="M0 40 L30 72 L60 40"></path>
+                    </svg>
                     {/* <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                             <p className={styles.grad}>
                                 盛夏小酒
@@ -198,20 +140,21 @@ export default function Home({ hotel_list, room_list }) {
                         </Box> */}
 
                 </Box>
-                <div >
+                <div>
                     {/*城市卡片*/}
-                    <Grid sx={{ display: { sm: 'flex', xs: 'none' } }} container spacing={20} columnGap={2} padding={2} columns={12} justifyContent='center'>
+                    <Grid sx={{display: {sm: 'flex', xs: 'none'}}} container spacing={20} columnGap={2} padding={2}
+                          columns={12} justifyContent='center'>
                         <Grid item justifyContent='center'>
-                            <TicketSZ />
-                        </Grid>
-                        <Grid item >
-                            <TicketGZ />
+                            <TicketSZ/>
                         </Grid>
                         <Grid item>
-                            <TicketCQ />
+                            <TicketGZ/>
                         </Grid>
-                        <Grid item >
-                            <TicketSH />
+                        <Grid item>
+                            <TicketCQ/>
+                        </Grid>
+                        <Grid item>
+                            <TicketSH/>
                         </Grid>
                     </Grid>
                 </div>
@@ -225,7 +168,7 @@ export default function Home({ hotel_list, room_list }) {
                     <iframe src={"map.html"} height="500" width="600" frameBorder="0"></iframe>
                 </Grid>
             </main>
-            <Footer />
+            <Footer/>
         </ThemeProvider>
     );
 }

@@ -22,7 +22,7 @@ import {
     Divider,
     Autocomplete,
     TextField,
-    Tabs
+    Tabs, Dialog, DialogContent, DialogContentText, DialogActions
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -34,21 +34,27 @@ import {ChevronLeftOutlined, HotelOutlined} from "@mui/icons-material";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
+import {useState} from "react";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
                                    userID,
                                    isLoggedIn,
                                    hotel_list,
                                    room_list,
-                                   openLoggedOutDialog,
                                    buttonsMode,
-                                   openChatDialog
+                                   clearLogInfo
                                }) {
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [bookingOpen, setBookingOpen] = React.useState(null);
+    const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+    const [chatDialogOpen, setChatDialogOpen] = useState(false)
+
+    useEffect(() => {
+        console.log("check login status: ", isLoggedIn)
+    })
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -76,9 +82,58 @@ export default function NavBar({
         })
     }
 
-    function handleLogout() {
-        console.log("log out")
-        openLoggedOutDialog()
+    function ChatDialog() {
+        return (
+            <>
+                <Dialog
+                    open={chatDialogOpen}
+                    onClose={() => {
+                        setChatDialogOpen(false)
+                    }}
+                    PaperProps={{
+                        sx: {
+                            position: "fixed",
+                            width: "100%",
+                            height: "100%",
+                            maxWidth: "md",
+                            backgroundColor: "#f1cec2"
+                        }
+                    }}
+                >
+                    <DialogContent>
+                        <iframe src={"/chat-app.html"} height="95%" width="100%" frameBorder="0"></iframe>
+                    </DialogContent>
+                </Dialog>
+            </>
+        )
+    }
+
+    function LogoutDialog() {
+        return (
+            <>
+                <Dialog
+                    open={isLogoutDialogOpen}
+                    // TransitionComponent={Transition}
+                    keepMounted
+                    onClose={() => setIsLogoutDialogOpen(false)}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    {/*<DialogTitle>{"Use Google's location service?"}</DialogTitle>*/}
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            You are logging out of your account...
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setIsLogoutDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={() => {
+                            clearLogInfo()
+                            setIsLogoutDialogOpen(false);
+                        }}>Log out</Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
     }
 
     function getButtons() {
@@ -87,7 +142,7 @@ export default function NavBar({
                 <>
                     <Tooltip title="Chat Room">
                         <IconButton onClick={() => {
-                            openChatDialog()
+                            setChatDialogOpen(true)
                         }} color="inherit">
                             <ChatIcon/>
                         </IconButton>
@@ -109,7 +164,9 @@ export default function NavBar({
                 return (
                     <>
                         <Tooltip title={"Log out"}>
-                            <IconButton onClick={handleLogout} color="inherit">
+                            <IconButton onClick={() => {
+                                setIsLogoutDialogOpen(true)
+                            }} color="inherit">
                                 <LogoutIcon/>
                             </IconButton>
                         </Tooltip>
@@ -126,7 +183,7 @@ export default function NavBar({
                         </Tooltip>
                         <Tooltip title="Chat Room">
                             <IconButton onClick={() => {
-                                openChatDialog()
+                                setChatDialogOpen(true)
                             }} color="inherit">
                                 <ChatIcon/>
                             </IconButton>
@@ -166,7 +223,7 @@ export default function NavBar({
                                     <ListItem
                                         key={item.name}
                                         disablePadding
-                                        
+
                                         sx={{width: "100vw"}}
                                     >
                                         <ListItemButton href={item.link}>
@@ -232,13 +289,15 @@ export default function NavBar({
                                 sx={{mx: 2}}
                             /> &&
                             <Button color="error" variant="contained" onClick={() => {
-                            setBookingOpen(!bookingOpen)
-                        }}>预定</Button>
+                                setBookingOpen(!bookingOpen)
+                            }}>预定</Button>
                         }
                         {/* <Button color="error" variant="contained" href="/book" >预定</Button> */}
                     </Box>
                 </Toolbar>
             </AppBar>
+            {LogoutDialog()}
+            {ChatDialog()}
         </>
 
 
