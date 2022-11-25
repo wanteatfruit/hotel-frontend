@@ -50,13 +50,17 @@ export default function Store() {
         // const amount = data.get("amount")
         const amount = 1;
         const body = {
-            "id": userID,
-            "credits": (amount * giftOnDialog).toString()
+            "userID": userID,
+            "telephone": telephone,
+            "amount": amount,
+            "address": address,
+            "giftname": giftOnDialog.giftname,
+            "username": userName
         }
         let paySucceed = false
-        await axios.post('http://120.25.216.186:8888/customer/credits', body)
+        await axios.post('http://120.25.216.186:8888/giftorder/creategiftorder', body)
             .then(response => paySucceed = response);
-        if (paySucceed) {
+        if (paySucceed === "true") {
             setResponse("您已成功兑换！敬请期待礼品抵达")
         } else {
             setResponse("您的积分不足够兑换，请尝试兑换其他物品")

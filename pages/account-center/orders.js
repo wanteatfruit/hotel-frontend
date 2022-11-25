@@ -25,8 +25,7 @@ import {
 } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
-import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
-import SmokeFreeIcon from '@mui/icons-material/SmokeFree';
+import {hotelImageUrl, roomImageUrl} from "../../data"
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 
@@ -138,12 +137,9 @@ export default function Orders({id}) {
         )
     }
 
-    function getAlbumImage(roomName) {
-        return "https://source.unsplash.com/random"
-    }
-
     function roomInfoDialog() {
         const gapHeight = 2;
+        const image_url = "url(" + roomImageUrl[roomOnDialog.roomTypeID % roomImageUrl.length] + ")"
         return (
             <>
                 <Dialog
@@ -159,7 +155,7 @@ export default function Orders({id}) {
                                 sx={{
                                     width: "50%",
                                     height: "100%",
-                                    backgroundImage: 'url(/images/sign-in.jpg)',
+                                    backgroundImage: image_url,
                                     backgroundRepeat: 'no-repeat',
                                     backgroundColor: (t) =>
                                         t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -241,7 +237,7 @@ export default function Orders({id}) {
                                         width: 300,
                                         height: 275
                                     }}
-                                    image={getAlbumImage(room)}
+                                    image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
                                     alt="random"
                                 />
                                 <CardContent sx={{flexGrow: 1}}>
@@ -282,7 +278,7 @@ export default function Orders({id}) {
                                         width: 300,
                                         height: 275
                                     }}
-                                    image={getAlbumImage(room)}
+                                    image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
                                     alt="random"
                                 />
                                 <CardContent sx={{flexGrow: 1}}>

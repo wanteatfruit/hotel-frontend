@@ -49,12 +49,12 @@ export default function SignIn() {
                 "Content-Type": "application/json"
             }
         }
-        let sessionKey = ''
+        let answer = {}
         await fetch("http://120.25.216.186:8888/login", options)
-            .then((response) => sessionKey = response.text()).then(data => sessionKey = data)
+            .then((response) => response.json()).then(data => answer = data)
         router.push({
             pathname: href,
-            query: {sessionKey: sessionKey, username: data.get("username"), id: 1, isLoggedIn: true},
+            query: {sessionKey: answer.token, username: data.get("username"), id: 1, isLoggedIn: true},
         }, href)
     };
 

@@ -53,7 +53,7 @@ export default function NavBar({
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
 
     useEffect(() => {
-        console.log("check login status: ", isLoggedIn)
+        console.log("check login status: ", isLoggedIn, "; id: ", userID, "; session: ")
     })
 
     const handleOpenNavMenu = (event) => {
