@@ -11,6 +11,7 @@ export default function HotelCard({hotelName, imageSrc, city,}) {
             <Image
                 src={imageSrc}
                 layout="fill"
+                priority
                  />
             <div className={styles.info}>
                 <IconButton>
@@ -19,7 +20,7 @@ export default function HotelCard({hotelName, imageSrc, city,}) {
             </div>
 
             <Typography sx={{ zIndex:2, position: 'absolute', bottom: 50,  color: 'white' }}
-                variant="h4">{hotelName}</Typography>
+                variant="h3">{hotelName}</Typography>
             <Button href={`/hotels/${hotelName}`} variant="contained" sx={{ color: 'black', backgroundColor: 'antiquewhite', position: 'absolute', bottom: 10, right:10, zIndex: 2, borderRadius:5 }}>查看更多</Button>
         </div>
     )

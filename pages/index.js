@@ -12,6 +12,8 @@ import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Layout from "../components/Layout";
+import { hotelImageUrl } from "../data";
+import { cities } from "../data";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Diversity1Icon from "@mui/icons-material/Diversity1";
 import {cities} from "../data";
@@ -22,11 +24,18 @@ import Ticket, {
     TicketSZ,
 } from "../components/CityTicket";
 import SendIcon from "@mui/icons-material/Send";
+import HotelCard from "../components/HotelCard";
+import { motion } from "framer-motion";
 import {motion} from "framer-motion";
 import Image from "next/future/image";
+import { Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
 import {positions} from "@mui/system";
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide} from "@mui/material";
 import axios from "axios";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { LocationCityOutlined } from "@mui/icons-material";
 import {useState} from "react";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
@@ -65,6 +74,28 @@ export default function Home({hotel_list, room_list}) {
     const [sessionKey, setSessionKey] = useState('')
     const [id, setID] = useState(-1)
 
+    const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+    const [chatDialogOpen, setChatDialogOpen] = useState(false)
+    const jumpToCity = [
+        { name: '深圳', href: "#shenzhen" },
+        { name: '广州', href: "#guangzhou" },
+        { name: '上海', href: "#shanghai" },
+        { name: '重庆', href: "#chongqing" },
+
+    ]
+    const cardVariants = { //for hotel card anim
+        offscreen: {
+            y: 300
+        },
+        onscreen: {
+            y: 0,
+            transition: {
+                type: "spring",
+                bounce: 0.2,
+                duration: 0.8
+            }
+        }
+    };
     const theme = createTheme({
         typography: {
             fontFamily: "'Noto Serif SC', serif",
@@ -93,7 +124,14 @@ export default function Home({hotel_list, room_list}) {
 
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/>
+            <SpeedDial ariaLabel="chooseCity" sx={{ position: 'fixed', bottom: 16, right: 16 }} icon={<LocationCityOutlined />}>
+                {jumpToCity.map((action) => (
+                    <SpeedDialAction tooltipOpen icon={<SpeedDialIcon />} key={action.name} tooltipTitle={action.name} title={action.name} onClick={() => {
+                        router.push(`/${action.href}`)
+                    }} />
+                ))}
+            </SpeedDial>
+            <CssBaseline />
             <div>
 
                 <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
@@ -108,17 +146,17 @@ export default function Home({hotel_list, room_list}) {
                     temporary admin
                 </Link>
                 {/* Hero unit */}
-                <Box
-                    sx={{
-                        height: '100vh',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        backgroundSize: 'cover',
-                        backgroundImage: 'url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")'
-                    }}
+                <div className={styles.picOne}
+                    // sx={{
+                    //     height: '100vh',
+                    //     display: 'flex',
+                    //     justifyContent: 'center',
+                    //     backgroundSize: 'cover',
+                    //     backgroundImage: 'url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")'
+                    // }}
                 >
-                    <Box sx={{display: {xs: 'block', sm: 'block'}}}>
-                        <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{
+                    <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
+                        <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{
                             duration: 2,
                             delay: 0.5,
                             ease: [0, 0.71, 0.2, 1.01]
@@ -133,28 +171,72 @@ export default function Home({hotel_list, room_list}) {
                         <path className={styles.a2} d="M0 20 L30 52 L60 20"></path>
                         <path className={styles.a3} d="M0 40 L30 72 L60 40"></path>
                     </svg>
-                    {/* <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                            <p className={styles.grad}>
-                                盛夏小酒
-                            </p>
-                        </Box> */}
+                </div>
+                <Stack>
 
-                </Box>
-                <div>
+                    <Paper sx={{ backgroundColor: 'antiquewhite' }} elevation={0}>
+                        <Stack paddingTop={14} paddingBottom={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="guangzhou">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                                <p className={styles.city}>
+                                    广州
+                                </p>
+                            </motion.div>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                                    {hotel_list.map((item, index) => (item.cityname == "广州" &&
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                    ))}
+                                </Stack>
+                            </motion.div>
+                        </Stack>
+                        <Stack paddingY={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="shanghai">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                                <p className={styles.city}>
+                                    上海
+                                </p>
+                                {/* <Typography textAlign='end'  sx={{paddingBottom:{sm:0, xs:5}, writingMode: {sm:'vertical-lr',xs:'horizontal-tb'} }} variant="h1">上海</Typography> */}
+                            </motion.div>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                                    {hotel_list.map((item, index) => (item.cityname == "上海" &&
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                    ))}
+                                </Stack>
+                            </motion.div>
+                        </Stack>
+                        <Stack paddingY={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="chongqing">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                                <p className={styles.city}>
+                                    重庆
+                                </p>
+                            </motion.div>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
+
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+
+                                    {hotel_list.map((item, index) => (item.cityname == "重庆" &&
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                    ))}
+                                </Stack>
+                            </motion.div>
+                        </Stack>
+                    </Paper>
+
+                </Stack>
+                <div >
                     {/*城市卡片*/}
-                    <Grid sx={{display: {sm: 'flex', xs: 'none'}}} container spacing={20} columnGap={2} padding={2}
-                          columns={12} justifyContent='center'>
+                    <Grid sx={{ display: { sm: 'flex', xs: 'none' } }} container spacing={20} columnGap={2} padding={2} columns={12} justifyContent='center'>
                         <Grid item justifyContent='center'>
-                            <TicketSZ/>
+                            <TicketSZ />
+                        </Grid>
+                        <Grid item >
+                            <TicketGZ />
                         </Grid>
                         <Grid item>
-                            <TicketGZ/>
+                            <TicketCQ />
                         </Grid>
-                        <Grid item>
-                            <TicketCQ/>
-                        </Grid>
-                        <Grid item>
-                            <TicketSH/>
+                        <Grid item >
+                            <TicketSH />
                         </Grid>
                     </Grid>
                 </div>
