@@ -16,18 +16,21 @@ import WindowIcon from '@mui/icons-material/Window';
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import BalconyIcon from '@mui/icons-material/Balcony';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import VideoCallIcon from '@mui/icons-material/VideoCall';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {useEffect, useState} from "react";
 import {
     Dialog, DialogActions,
     DialogContent, DialogContentText,
-    DialogTitle, Divider, Menu, MenuItem, TextField,
+    DialogTitle, Divider, IconButton, Menu, MenuItem, TextField,
 } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import {hotelImageUrl, roomImageUrl} from "../../data"
 import Paper from "@mui/material/Paper";
 import axios from "axios";
+import {PhotoCamera} from "@mui/icons-material";
+import Image from "next/image";
 
 
 export default function Orders({id}) {
@@ -39,6 +42,13 @@ export default function Orders({id}) {
     const [roomInfo, setRoomInfo] = useState({})
     const [modifyMenuAnchorEl, setModifyMenuAnchorEl] = useState(null);
     const [rooms, setRooms] = useState([])
+    const [uploadedImages, setUploadedImages] = useState([])
+    const [uploadedImageFiles, setUploadedImageFiles] = useState([])
+    const [uploadedVideo, setUploadVideo] = useState("")
+    const [uploadedVideoFile, setUploadedVideoFile] = useState("")
+    const [commentWords, setCommentWords] = useState("")
+    const [commentResponse, setCommentResponse] = useState("")
+    const [commentResponseDialogOpen, setCommentResponseDialogOpen] = useState(false)
 
     async function getRooms() {
         let _rooms = []
@@ -181,6 +191,81 @@ export default function Orders({id}) {
     }
 
     function commentDialog() {
+        function showUploadedImages() {
+            return <Grid sx={{display: "flex", flexDirection: "row", columnGap: "0.5em"}}>
+                {uploadedImages.length >= 1 && <Image
+                    src={uploadedImages[0]}
+                    width="100px"
+                    height="100px"
+                    alt={"Uploaded Image1"}/>}
+                {uploadedImages.length >= 2 && <Image
+                    src={uploadedImages[1]}
+                    width="100px"
+                    height="100px"
+                    alt={"Uploaded Image2"}/>}
+                {uploadedImages.length >= 3 && <Image
+                    src={uploadedImages[2]}
+                    width="100px"
+                    height="100px"
+                    alt={"Uploaded Image3"}/>}
+            </Grid>
+        }
+
+        function showUploadedVideo() {
+            return <Grid sx={{display: "flex", flexDirection: "row", columnGap: "0.5em"}}>
+                {uploadedVideo !== "" && <CardMedia
+                    component='video'
+                    image={uploadedVideo}
+                    autoPlay
+                    allow="autoPlay"
+                    controls
+                    sx={{
+                        width: "210px",
+                        height: "180px"
+                    }}
+                />}
+            </Grid>
+        }
+
+        async function uploadOnClick() {
+            let data = new FormData()
+            for (let i = 0; i < uploadedImageFiles.length; i++) {
+                data.append("picture" + (i + 1).toString(), uploadedImageFiles[i], uploadedImageFiles[i].name)
+            }
+            if (uploadedVideo !== "") {
+                data.append("video", uploadedVideoFile, uploadedVideoFile.name)
+            }
+            data.append("words", commentWords)
+            data.append("orderid", roomOnDialog.orderID)
+            for (const value of data.entries()) {
+                console.log(value);
+            }
+            let commentReceived = "true"
+            // let commentReceived = await fetch('http://120.25.216.186:8888/comment/insert', {
+            //     method: 'POST',
+            //     body: data
+            // });
+            // console.log(commentReceived)
+            if (commentReceived === "true") {
+                setCommentResponse("我们已收到您的评价！感谢您的支持")
+                setCommentResponseDialogOpen(true)
+            } else {
+                setCommentResponse("您的评论提交失败！可能是网络问题，请稍后重试")
+            }
+            setCommentResponseDialogOpen(true)
+            setCommentDialogOpen(false)
+            eraseComment()
+        }
+
+        function eraseComment() {
+            setCommentDialogOpen(false)
+            setUploadedImages([])
+            setUploadVideo("")
+            setCommentWords("")
+            setUploadedImageFiles([])
+            setUploadedVideoFile("")
+        }
+
         return (
             <>
                 <Dialog open={commentDialogOpen} onClose={() => {
@@ -188,25 +273,100 @@ export default function Orders({id}) {
                 }}>
                     <DialogTitle>评价</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
-                            您可以写下对我们酒店和房间的恶评！
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="name"
-                            fullWidth
-                            multiline
-                            variant="standard"
-                        />
+                        <Grid sx={{display: "flex", flexDirection: "column", rowGap: "1em"}}>
+                            <DialogContentText>
+                                您的支持与鼓励是我们最大的动力！
+                            </DialogContentText>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="name"
+                                fullWidth
+                                multiline
+                                variant="standard"
+                                value={commentWords}
+                                onChange={(event) => {
+                                    setCommentWords(event.target.value);
+                                }}
+                            />
+                            <Grid sx={{display: "flex", flexDirection: "row", columnGap: "1em"}}>
+                                <IconButton color="primary" aria-label="upload picture" component="label"
+                                            sx={{justifyContent: "flex-start"}}>
+                                    {uploadedImages.length < 3 &&
+                                        <input hidden accept="image/*" type="file" onChange={(event) => {
+                                            if (event.currentTarget.files) {
+                                                const file = event.currentTarget.files[0];
+                                                let binaryData = [];
+                                                binaryData.push(file);
+                                                const blobData = new Blob(binaryData)
+                                                setUploadedImageFiles(
+                                                    [
+                                                        ...uploadedImageFiles,
+                                                        blobData
+                                                    ]
+                                                )
+                                                const url = URL.createObjectURL(blobData)
+                                                setUploadedImages( // Replace the state
+                                                    [ // with a new array
+                                                        ...uploadedImages, // that contains all the old items
+                                                        url // and one new item at the end
+                                                    ]
+                                                );
+                                            }
+                                        }}/>}
+                                    <PhotoCamera/>
+                                </IconButton>
+                                <IconButton color="primary" aria-label="upload picture" component="label"
+                                            sx={{justifyContent: "flex-start"}}>
+                                    <input hidden accept="video/*" type="file" onChange={(event) => {
+                                        if (event.currentTarget.files) {
+                                            const file = event.currentTarget.files[0];
+                                            let binaryData = [];
+                                            binaryData.push(file);
+                                            const blobData = new Blob(binaryData)
+                                            setUploadedVideoFile(blobData)
+                                            const url = URL.createObjectURL(blobData);
+                                            setUploadVideo(url)
+                                        }
+                                    }}/>
+                                    <VideoCallIcon/>
+                                </IconButton>
+                            </Grid>
+                            <Grid><Typography>You can upload three photos and one video</Typography></Grid>
+                            {showUploadedImages()}
+                            {showUploadedVideo()}
+                        </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => {
-                            setCommentDialogOpen(false)
-                        }}>取消</Button>
-                        <Button onClick={() => {
-                            setCommentDialogOpen(false)
-                        }}>提交</Button>
+                        <Button onClick={eraseComment}>取消</Button>
+                        <Button onClick={uploadOnClick}>提交</Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
+    }
+
+    function ResponseDialog() {
+        return (
+            <>
+                <Dialog
+                    open={commentResponseDialogOpen}
+                    onClose={() => setCommentResponseDialogOpen(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        评论提交
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {commentResponse}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setCommentResponseDialogOpen(false)} autoFocus>
+                            好的
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </>
@@ -351,6 +511,7 @@ export default function Orders({id}) {
             <>
                 {roomInfoDialog()}
                 {commentDialog()}
+                {ResponseDialog()}
                 <Grid container spacing={4}>
                     <Grid sx={{
                         width: "100%",

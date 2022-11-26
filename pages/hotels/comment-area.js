@@ -6,26 +6,19 @@ import Image from "next/future/image";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
 
-export default function CommentArea() {
+export default function CommentArea({hotelID}) {
     const [allComments, setAllComments] = useState([])
     const [meanScore, setMeanScore] = useState(0)
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     async function getComments() {
-        // let comments = [
-        //     {
-        //         "username": "wc",
-        //         "roomType": "大床房",
-        //         "commentTime": "2022-09-30",
-        //         "score": 8,
-        //         "text": "一般般的酒店，下次不一定还回来",
-        //         "picture1": "/images/hotel.jpg",
-        //         "picture2": "/images/sign-in.jpg",
-        //         "picture3": "/images/sign-up.jpg"
-        //     }
-        // ]
         let response = await axios.get('https://mock.apifox.cn/m1/1589145-0-default/comment/1');
+        // await axios.get("http://120.25.216.186:8888/comment", {params: {"id": hotelID}}).then((response) => {
+        //     console.log(response.data);
+        // }).catch((error) => {
+        //     console.log("userID: ", id)
+        // });
         let comments = response.data
         setAllComments(comments)
         let total = 0
@@ -115,7 +108,7 @@ export default function CommentArea() {
                     </Grid>
                     {allComments.map((comment) => (
                         // eslint-disable-next-line react/jsx-key
-                        <Grid  sx={{
+                        <Grid sx={{
                             width: "100%",
                             justifyContent: "center",
                             display: "flex",
@@ -150,7 +143,7 @@ export default function CommentArea() {
                                             sx={{
                                                 fontWeight: 'bold',
                                                 fontSize: 20
-                                            }}>{comment.commentTime}</Typography>
+                                            }}>{comment.commenttime}</Typography>
                                         <Typography
                                             sx={{
                                                 fontWeight: 'bold',
@@ -160,7 +153,7 @@ export default function CommentArea() {
                                     <Grid sx={{display: "flex", flexDirection: "row", columnGap: "1em"}}>
                                         {getCommentScore(comment.score)}
                                     </Grid>
-                                    <Grid><Typography>{comment.text}</Typography></Grid>
+                                    <Grid><Typography>{comment.words}</Typography></Grid>
                                     <Grid sx={{
                                         display: "flex",
                                         flexDirection: "row",

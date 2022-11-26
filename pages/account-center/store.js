@@ -16,6 +16,7 @@ import Paper from "@mui/material/Paper";
 import axios from "axios";
 import Link from "next/link";
 import {useRouter} from "next/router";
+import {giftImageUrl, roomImageUrl} from "../../data";
 
 export default function Store() {
     const [giftList, setGiftList] = useState([])
@@ -96,6 +97,7 @@ export default function Store() {
     }
 
     function purchaseDialog() {
+        const image_url = "url(" + giftImageUrl[giftOnDialog.credits % giftImageUrl.length] + ")"
         return (
             <>
                 <Dialog open={purchaseDialogOpen} onClose={() => setPurchaseDialogOpen(false)}
@@ -117,7 +119,7 @@ export default function Store() {
                                 height={"100%"}
                                 // marginBottom={"10px"}
                                 sx={{
-                                    backgroundImage: 'url(/images/sign-in.jpg)',
+                                    backgroundImage: image_url,
                                     backgroundRepeat: 'no-repeat',
                                     backgroundColor: (t) =>
                                         t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -250,8 +252,8 @@ export default function Store() {
                                         // 16:9
                                         height: "250px"
                                     }}
-                                    image="https://source.unsplash.com/random"
-                                    alt="random"
+                                    image={giftImageUrl[gift.credits % 8]}
+                                    alt="gift image"
                                 />
                                 <CardContent sx={{flexGrow: 1}}>
                                     <Typography gutterBottom variant="h5" component="h2">
