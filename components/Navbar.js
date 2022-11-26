@@ -38,6 +38,7 @@ import {
     DialogContent,
     Slide,
     ThemeProvider
+
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -47,25 +48,32 @@ import { Stack, width } from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
 import { ChevronLeftOutlined, HotelOutlined } from "@mui/icons-material";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useTheme } from "@emotion/react";
+import {useRouter} from "next/router";
+import {useEffect} from "react";
+import {useState} from "react";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
-    id,
-    isLoggedIn,
-    hotel_list,
-    room_list,
-    openLoggedOutDialog,
-    buttonsMode,
-    openChatDialog
-}) {
+                                   userID,
+                                   isLoggedIn,
+                                   hotel_list,
+                                   room_list,
+                                   buttonsMode,
+                                   clearLogInfo
+                               }) {
+
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const [bookingOpen, setBookingOpen] = React.useState(null);
-    const [mapOpen, setMapOpen] = React.useState(false);
+
+    const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+    const [chatDialogOpen, setChatDialogOpen] = useState(false)
+const [mapOpen, setMapOpen] = React.useState(false);
+    useEffect(() => {
+        console.log("check login status: ", isLoggedIn, "; id: ", userID, "; session: ")
+    })
+    
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -93,9 +101,58 @@ export default function NavBar({
         })
     }
 
-    function handleLogout() {
-        console.log("log out")
-        openLoggedOutDialog()
+    function ChatDialog() {
+        return (
+            <>
+                <Dialog
+                    open={chatDialogOpen}
+                    onClose={() => {
+                        setChatDialogOpen(false)
+                    }}
+                    PaperProps={{
+                        sx: {
+                            position: "fixed",
+                            width: "100%",
+                            height: "100%",
+                            maxWidth: "md",
+                            backgroundColor: "#f1cec2"
+                        }
+                    }}
+                >
+                    <DialogContent>
+                        <iframe src={"/chat-app.html"} height="95%" width="100%" frameBorder="0"></iframe>
+                    </DialogContent>
+                </Dialog>
+            </>
+        )
+    }
+
+    function LogoutDialog() {
+        return (
+            <>
+                <Dialog
+                    open={isLogoutDialogOpen}
+                    // TransitionComponent={Transition}
+                    keepMounted
+                    onClose={() => setIsLogoutDialogOpen(false)}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    {/*<DialogTitle>{"Use Google's location service?"}</DialogTitle>*/}
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            You are logging out of your account...
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setIsLogoutDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={() => {
+                            clearLogInfo()
+                            setIsLogoutDialogOpen(false);
+                        }}>Log out</Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
     }
 
     function getButtons() {
@@ -104,7 +161,7 @@ export default function NavBar({
                 <>
                     <Tooltip title="Chat Room">
                         <IconButton onClick={() => {
-                            openChatDialog()
+                            setChatDialogOpen(true)
                         }} color="inherit">
                             <ChatIcon />
                         </IconButton>
@@ -126,8 +183,12 @@ export default function NavBar({
                 return (
                     <>
                         <Tooltip title={"Log out"}>
-                            <IconButton onClick={handleLogout} color="inherit">
-                                <LogoutIcon />
+
+                            <IconButton onClick={() => {
+                                setIsLogoutDialogOpen(true)
+                            }} color="inherit">
+                                <LogoutIcon/>
+
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Account center">
@@ -135,7 +196,9 @@ export default function NavBar({
                                 let path = "/account-center/account-center"
                                 router.push({
                                     pathname: path,
-                                    query: { "id": id },
+
+                                    query: {"userID": userID},
+
                                 }, path)
                             }} color="inherit">
                                 <FaceIcon />
@@ -143,7 +206,7 @@ export default function NavBar({
                         </Tooltip>
                         <Tooltip title="Chat Room">
                             <IconButton onClick={() => {
-                                openChatDialog()
+                                setChatDialogOpen(true)
                             }} color="inherit">
                                 <ChatIcon />
                             </IconButton>
@@ -229,6 +292,7 @@ export default function NavBar({
                                         key={item.name}
                                         disablePadding
 
+
                                         sx={{ width: "100vw" }}
                                     >
                                         <ListItemButton href={item.link}>
@@ -308,6 +372,8 @@ export default function NavBar({
                     </Box>
                 </Toolbar>
             </AppBar>
+            {LogoutDialog()}
+            {ChatDialog()}
         </>
 
 

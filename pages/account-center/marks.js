@@ -20,12 +20,15 @@ import {
 } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
-import SmokingRoomsIcon from '@mui/icons-material/SmokingRooms';
-import SmokeFreeIcon from '@mui/icons-material/SmokeFree';
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import {router} from "next/client";
 import {useRouter} from "next/router";
+import WindowIcon from "@mui/icons-material/Window";
+import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
+import BalconyIcon from "@mui/icons-material/Balcony";
+import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
+import {hotelImageUrl, roomImageUrl} from "../../data";
 
 
 export default function Orders({id}) {
@@ -40,80 +43,75 @@ export default function Orders({id}) {
     const [hotels, setHotels] = useState([])
     const router = useRouter()
 
-    useEffect(() => {
+    async function getRoomsAndHotels() {
         let _rooms = []
-        // axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"id": id}}).then((response) => {
-        //     console.log(response.data);
-        // });
-        _rooms = [
-            {
-                "hotelName": "府整民",
-                "roomTypeID": 62,
-                "roomTypeName": "族备无文长",
-                "roomID": 84,
-                "time": "1993-06-16 11:30:46",
-                "pay": 17,
-                "orderID": 60
-            },
-            {
-                "hotelName": "子产总性",
-                "roomTypeID": 89,
-                "roomTypeName": "况受说东",
-                "roomID": 99,
-                "time": "1994-05-10 07:22:29",
-                "pay": 10,
-                "orderID": 56
-            }
-        ];
+        await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": id}}).then((response) => {
+            _rooms = response.data
+        });
+        console.log("rooms: ", _rooms)
         setRooms(_rooms);
         let roomInfoDict = {}
-        for (const room in _rooms) {
-            if (!room.roomTypeID in roomInfoDict) {
-                let roomInfo = {
-                    "name": "两往者使改设交",
-                    "area": 67,
-                    "breakfast": true,
-                    "window": false,
-                    "smoking": false,
-                    "price": 45
-                };
-                // axios.get("http://120.25.216.186:8888/roomtype", {params: {"id": room.roomTypeID}}).then((response) => {
-                //     console.log(response.data);
-                // });
-                roomInfoDict[room.roomTypeID] = roomInfo;
+        for (const idx in _rooms) {
+            console.log("roomid: ", _rooms[idx].roomTypeID)
+            if (!(_rooms[idx].roomTypeID in roomInfoDict)) {
+                await axios.get("http://120.25.216.186:8888/roomtype", {params: {"id": _rooms[idx].roomTypeID}}).then((response) => {
+                    roomInfoDict[_rooms[idx].roomTypeID] = response.data
+                });
             }
         }
         setRoomInfo(roomInfoDict)
         let _hotels = []
-        // axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"id": id}}).then((response) => {
-        //     console.log(response.data);
-        // });
-        _hotels = [{"hotelID": 91, "hotelName": "快龙样研边", "hotelTelephone": 18193618440}]
+        await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": id}}).then((response) => {
+            _hotels = response.data
+        });
         setHotels(_hotels)
+    }
+
+    useEffect(() => {
+        getRoomsAndHotels()
     }, [id, mode, roomOnDialog])
 
     function getListItemContent() {
-        if (!roomOnDialog.roomTypeID in roomInfo || roomInfo[roomOnDialog.roomTypeID] === undefined) {
+        if (!(roomOnDialog.roomTypeID in roomInfo) || roomInfo[roomOnDialog.roomTypeID] === undefined) {
             return <></>
         }
-        let nameItem = roomInfo[roomOnDialog.roomTypeID].name
-        let areaItem = roomInfo[roomOnDialog.roomTypeID].area + "平方米"
+        let nameItem = roomInfo[roomOnDialog.roomTypeID].roomname
+        const intro = roomInfo[roomOnDialog.roomTypeID].introduction.split(",")
         let windowItem = ''
-        if (roomInfo[roomOnDialog.roomTypeID].window) {
-            windowItem = "有窗"
+        if (intro[0].substring(intro[0].length - 1) === "有") {
+            windowItem = <>
+                <Typography>有窗</Typography><WindowIcon/><DoneOutlineIcon/>
+            </>
         } else {
-            windowItem = "无窗"
+            windowItem = <>
+                <Typography>无窗</Typography><WindowIcon/><CancelIcon/>
+            </>
         }
-        let smokingItem = ''
-        if (roomInfo[roomOnDialog.roomTypeID].smoking) {
-            smokingItem = <SmokingRoomsIcon/>
+        let balconyItem = ''
+        if (intro[1].substring(intro[1].length - 1) === "有") {
+            balconyItem = <>
+                <Typography>有阳台</Typography><BalconyIcon/><DoneOutlineIcon/>
+            </>
         } else {
-            smokingItem = <SmokeFreeIcon/>
+            balconyItem = <>
+                <Typography>无阳台</Typography><BalconyIcon/><CancelIcon/>
+            </>
         }
+        let laundryItem = ''
+        if (intro[2].substring(intro[2].length - 1) === "有") {
+            laundryItem = <>
+                <Typography>有洗衣房</Typography><LocalLaundryServiceIcon/><DoneOutlineIcon/>
+            </>
+        } else {
+            laundryItem = <>
+                <Typography>无洗衣房</Typography><LocalLaundryServiceIcon/><CancelIcon/>
+            </>
+        }
+
+        const gapHeight = 2
         return (
             <>
                 <List>
-                    {/*{name, area, window, smoking};*/}
                     <ListItem>
                         <Grid container>
                             <Typography>{nameItem}</Typography>
@@ -121,20 +119,20 @@ export default function Orders({id}) {
                     </ListItem>
                     <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container>
-                            <Typography>{areaItem}</Typography>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
+                            {windowItem}
                         </Grid>
                     </ListItem>
                     <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container>
-                            <Typography>{windowItem}</Typography>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
+                            {balconyItem}
                         </Grid>
                     </ListItem>
                     <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container>
-                            <Typography>{smokingItem}</Typography>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
+                            {laundryItem}
                         </Grid>
                     </ListItem>
                 </List>
@@ -148,6 +146,7 @@ export default function Orders({id}) {
 
     function roomInfoDialog() {
         const gapHeight = 2;
+        const image_url = "url(" + roomImageUrl[roomOnDialog.roomTypeID % roomImageUrl.length] + ")"
         return (
             <>
                 <Dialog
@@ -160,12 +159,10 @@ export default function Orders({id}) {
                     <DialogContent>
                         <Grid container component="main" sx={{height: '100%'}}>
                             <Grid
-                                xs={false}
-                                sm={4}
-                                md={7}
                                 sx={{
+                                    width: "50%",
                                     height: "100%",
-                                    backgroundImage: 'url(/images/sign-in.jpg)',
+                                    backgroundImage: image_url,
                                     backgroundRepeat: 'no-repeat',
                                     backgroundColor: (t) =>
                                         t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -173,8 +170,8 @@ export default function Orders({id}) {
                                     backgroundPosition: 'center',
                                 }}
                             />
-                            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                                <Grid container marginBottom={10}>
+                            <Grid item width={"47%"} component={Paper} elevation={6} square>
+                                <Grid container marginBottom={10} marginLeft={"5%"}>
                                     {getListItemContent()}
                                 </Grid>
                                 <Grid container justifyContent="flex-end">
@@ -246,7 +243,7 @@ export default function Orders({id}) {
                                     width: 300,
                                     height: 275
                                 }}
-                                image={getAlbumImage(hotel)}
+                                image={hotelImageUrl[hotel.hotelID % hotelImageUrl.length]}
                                 alt="random"
                             />
                             <CardContent sx={{flexGrow: 1}}>
@@ -257,7 +254,7 @@ export default function Orders({id}) {
                             <CardActions>
                                 <Button size="medium" onClick={() => {
                                     router.push({
-                                        pathname: "/hotels" + hotel.hotelName,
+                                        pathname: "/hotels/" + hotel.hotelName,
                                     })
                                 }}>详情</Button>
                             </CardActions>
@@ -280,7 +277,7 @@ export default function Orders({id}) {
                                     width: 300,
                                     height: 275
                                 }}
-                                image={getAlbumImage(room)}
+                                image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
                                 alt="random"
                             />
                             <CardContent sx={{flexGrow: 1}}>

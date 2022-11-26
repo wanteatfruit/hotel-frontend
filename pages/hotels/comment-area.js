@@ -10,7 +10,7 @@ import { Stack } from "@mui/system";
 import CommentCard from "../../components/CommentCard";
 import { QuestionMark, QuestionMarkOutlined, StarOutline } from "@mui/icons-material";
 
-export default function CommentArea() {
+export default function CommentArea({hotelID}) {
     const [allComments, setAllComments] = useState([])
     const [meanScore, setMeanScore] = useState(0)
     const [reviewTag, setReviewTag] = useState('');
@@ -18,19 +18,12 @@ export default function CommentArea() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     async function getComments() {
-        // let comments = [
-        //     {
-        //         "username": "wc",
-        //         "roomType": "大床房",
-        //         "commentTime": "2022-09-30",
-        //         "score": 8,
-        //         "text": "一般般的酒店，下次不一定还回来",
-        //         "picture1": "/images/hotel.jpg",
-        //         "picture2": "/images/sign-in.jpg",
-        //         "picture3": "/images/sign-up.jpg"
-        //     }
-        // ]
         let response = await axios.get('https://mock.apifox.cn/m1/1589145-0-default/comment/1');
+        // await axios.get("http://120.25.216.186:8888/comment", {params: {"id": hotelID}}).then((response) => {
+        //     console.log(response.data);
+        // }).catch((error) => {
+        //     console.log("userID: ", id)
+        // });
         let comments = response.data
         setAllComments(comments)
         let total = 0
@@ -112,6 +105,7 @@ export default function CommentArea() {
                             ))}
                         </Stack>
                     </Grid>
+
                 </Grid>
             </Paper>
         </>
