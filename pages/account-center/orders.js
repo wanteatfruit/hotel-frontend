@@ -22,21 +22,23 @@ import {useEffect, useState} from "react";
 import {
     Dialog, DialogActions,
     DialogContent, DialogContentText,
-    DialogTitle, Divider, IconButton, Menu, MenuItem, TextField,
+    DialogTitle, Divider, IconButton, Menu, MenuItem, Stack, TextField,
 } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import {hotelImageUrl, roomImageUrl} from "../../data"
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import {PhotoCamera} from "@mui/icons-material";
+import {ChevronRightRounded, PhotoCamera} from "@mui/icons-material";
 import Image from "next/image";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 
 export default function Orders({id}) {
     const [mode, setMode] = useState(0)
     const [infoDialogOpen, setInfoDialogOpen] = useState(false)
-    const [modifyDialogOpen, setModifyDialogOpen] = useState(false)
     const [commentDialogOpen, setCommentDialogOpen] = useState(false)
     const [roomOnDialog, setRoomOnDialog] = useState("");
     const [roomInfo, setRoomInfo] = useState({})
@@ -49,6 +51,9 @@ export default function Orders({id}) {
     const [commentWords, setCommentWords] = useState("")
     const [commentResponse, setCommentResponse] = useState("")
     const [commentResponseDialogOpen, setCommentResponseDialogOpen] = useState(false)
+    const [modifyDialogOpen, setModifyDialogOpen] = useState(false)
+    const [modifyResponseDialogOpen, setModifyResponseDialogOpen] = useState(false)
+    const [modifyResponse, setModifyResponse] = useState("")
 
     async function getRooms() {
         let _rooms = []
@@ -147,7 +152,7 @@ export default function Orders({id}) {
         )
     }
 
-    function roomInfoDialog() {
+    function RoomInfoDialog() {
         const gapHeight = 2;
         const image_url = "url(" + roomImageUrl[roomOnDialog.roomTypeID % roomImageUrl.length] + ")"
         return (
@@ -190,7 +195,7 @@ export default function Orders({id}) {
         )
     }
 
-    function commentDialog() {
+    function CommentDialog() {
         function showUploadedImages() {
             return <Grid sx={{display: "flex", flexDirection: "row", columnGap: "0.5em"}}>
                 {uploadedImages.length >= 1 && <Image
@@ -374,11 +379,139 @@ export default function Orders({id}) {
     }
 
 
+    function ModifyResponseDialog() {
+        return (
+            <>
+                <Dialog
+                    open={modifyResponseDialogOpen}
+                    onClose={() => setModifyResponseDialogOpen(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        修改结果
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {modifyResponse}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setModifyResponseDialogOpen(false)} autoFocus>
+                            好的
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
+    }
+
+
+    function ModifyDialog() {
+        const [bookingInfo, setBookingInfo] = React.useState({
+            startDate: dayjs().startOf("day"),
+            endDate: dayjs().startOf("day").add(7, 'day')
+        })
+
+        function timePicker() {
+            return (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Stack direction='row' gap={2}>
+                        <DatePicker
+                            label="入住日期"
+                            minDate={dayjs().startOf("day")}
+                            inputFormat="YYYY/MM/DD"
+                            value={bookingInfo.startDate}
+                            onChange={(newDate) => {
+                                setBookingInfo({...bookingInfo, startDate: newDate})
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    required
+                                    // inputProps={{readOnly:true}}
+                                    onKeyDown={(e) => e.preventDefault()}
+                                />
+                            )}
+                        >
+                        </DatePicker>
+                        <ChevronRightRounded fontSize='large'/>
+                        <DatePicker
+                            label="离开日期"
+                            value={bookingInfo.endDate}
+                            minDate={bookingInfo.startDate.add(1, 'day')}
+                            inputFormat="YYYY/MM/DD"
+                            onChange={(newDate) => {
+                                setBookingInfo({...bookingInfo, endDate: newDate})
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    required
+                                    // inputProps={{readOnly:true}}
+                                    onKeyDown={(e) => e.preventDefault()}
+                                />
+                            )}>
+
+                        </DatePicker>
+                    </Stack>
+                </LocalizationProvider>
+            )
+        }
+
+        async function ModifyConfirmOnClick() {
+
+            const data = {
+                "orderID": roomOnDialog.orderID,
+                "checkinTime": bookingInfo.startDate,
+                "checkoutTime": bookingInfo.endDate
+            }
+            console.log("data: ", data)
+            let answer = {
+                "modifySucceeded": false,
+                "moneyChange": -400
+            }
+            // await axios.put('http://120.25.216.186:8888/orders/modifyOrderTime', data)
+            //     .then(response => answer = response);
+            let modifySucceeded = answer.modifySucceeded
+            let moneyChange = answer.moneyChange
+            if (modifySucceeded) {
+                if (moneyChange > 0) {
+                    setModifyResponse("修改住房时间成功！酒店已额外收取您房费 " + moneyChange + " 元")
+                } else {
+                    setModifyResponse("修改住房时间成功！酒店已退还您房费 " + (-moneyChange) + " 元")
+                }
+            } else {
+                setModifyResponse("修改住房时间失败!您的账户余额不足以支付额外收取的房费 " + (-moneyChange) + " 元")
+            }
+            setModifyDialogOpen(false)
+            setModifyResponseDialogOpen(true)
+        }
+
+        return (
+            <>
+                <Dialog open={modifyDialogOpen} onClose={() => {
+                    setModifyDialogOpen(false)
+                }}>
+                    <DialogTitle>修改住店时间</DialogTitle>
+                    <DialogContent sx={{marginTop: "0.5em"}}>
+                        <Grid sx={{marginTop: "1em"}}>
+                            {timePicker()}
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {
+                            setModifyDialogOpen(false)
+                        }}>取消</Button>
+                        <Button onClick={ModifyConfirmOnClick}>提交</Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
+    }
+
     function getAlbum() {
         const modifyMenuOpen = Boolean(modifyMenuAnchorEl);
-        const handleClick = (event) => {
-            setModifyMenuAnchorEl(event.currentTarget);
-        };
         const modifyMenuHandleClose = () => {
             setModifyMenuAnchorEl(null);
         };
@@ -463,7 +596,10 @@ export default function Orders({id}) {
                                             aria-controls={modifyMenuOpen ? 'basic-menu' : undefined}
                                             aria-haspopup="true"
                                             aria-expanded={modifyMenuOpen ? 'true' : undefined}
-                                            onClick={handleClick}
+                                            onClick={(event) => {
+                                                setModifyMenuAnchorEl(event.currentTarget);
+                                                setRoomOnDialog(room)
+                                            }}
                                         >
                                             修改订单
                                         </Button>
@@ -477,7 +613,7 @@ export default function Orders({id}) {
                                             }}
                                         >
                                             <MenuItem onClick={() => {
-
+                                                setModifyDialogOpen(true)
                                             }}>修改入住时间</MenuItem>
                                             <MenuItem onClick={() => {
                                                 const body = {"id": room.orderID};
@@ -509,8 +645,10 @@ export default function Orders({id}) {
 
         return (
             <>
-                {roomInfoDialog()}
-                {commentDialog()}
+                {ModifyResponseDialog()}
+                {ModifyDialog()}
+                {RoomInfoDialog()}
+                {CommentDialog()}
                 {ResponseDialog()}
                 <Grid container spacing={4}>
                     <Grid sx={{

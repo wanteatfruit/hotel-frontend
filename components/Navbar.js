@@ -36,7 +36,7 @@ import {
     DialogActions,
     DialogTitle,
     DialogContent,
-    Slide
+    Slide, DialogContentText
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -49,8 +49,6 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 import {useState} from "react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import MapPanel from "./MapPanel";
 import { useTheme } from "@emotion/react";
 //传入是否已登录，决定用户处显示内容

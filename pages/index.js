@@ -8,20 +8,33 @@ import Typography from "@mui/material/Typography";
 import styles from "../styles/Main.module.css";
 import Container from "@mui/material/Container";
 import Link from "next/link";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../components/Navbar";
-import { hotelImageUrl } from "../data";
+import {hotelImageUrl} from "../data";
 import SendIcon from "@mui/icons-material/Send";
 import HotelCard from "../components/HotelCard";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 import Image from "next/future/image";
-import { Paper, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import {
+    Paper,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+    Slide,
+    SpeedDial,
+    SpeedDialAction,
+    SpeedDialIcon
+} from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { LocationCityOutlined } from "@mui/icons-material";
+import {useState} from "react";
+import {useRouter} from "next/router";
+import {useEffect} from "react";
+import {LocationCityOutlined} from "@mui/icons-material";
 import Footer from "../components/Footer";
+
 const theme = createTheme();
 
 // 获取酒店和房间列表，传给navbar
@@ -43,7 +56,7 @@ export async function getStaticProps() {
 }
 
 
-export default function Home({ hotel_list, room_list }) {
+export default function Home({hotel_list, room_list}) {
     const router = useRouter()
     let _sessionKey = router.query['sessionKey'];
     let _username = router.query['username'];
@@ -57,10 +70,10 @@ export default function Home({ hotel_list, room_list }) {
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
     const jumpToCity = [
-        { name: '深圳', href: "#shenzhen" },
-        { name: '广州', href: "#guangzhou" },
-        { name: '上海', href: "#shanghai" },
-        { name: '重庆', href: "#chongqing" },
+        {name: '深圳', href: "#shenzhen"},
+        {name: '广州', href: "#guangzhou"},
+        {name: '上海', href: "#shanghai"},
+        {name: '重庆', href: "#chongqing"},
 
     ]
     const cardVariants = { //for hotel card anim
@@ -115,7 +128,6 @@ export default function Home({ hotel_list, room_list }) {
     }
 
 
-
     function LogoutDialog() {
         return (
             <>
@@ -157,20 +169,21 @@ export default function Home({ hotel_list, room_list }) {
 
     return (
         <ThemeProvider theme={theme}>
-            <SpeedDial ariaLabel="chooseCity" sx={{ position: 'fixed', bottom: 16, right: 16 }} icon={<LocationCityOutlined />}>
+            <SpeedDial ariaLabel="chooseCity" sx={{position: 'fixed', bottom: 16, right: 16}}
+                       icon={<LocationCityOutlined/>}>
                 {jumpToCity.map((action) => (
-                    <SpeedDialAction tooltipOpen icon={<SpeedDialIcon />} key={action.name} tooltipTitle={action.name} title={action.name} onClick={() => {
+                    <SpeedDialAction tooltipOpen icon={<SpeedDialIcon/>} key={action.name} tooltipTitle={action.name}
+                                     title={action.name} onClick={() => {
                         router.push(`/${action.href}`)
-                    }} />
+                    }}/>
                 ))}
             </SpeedDial>
-            <CssBaseline />
+            <CssBaseline/>
             <div>
-
-                <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
-                    openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
-                        setChatDialogOpen(true)
-                    }} />
+                <NavBar userID={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
+                        openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
+                    setChatDialogOpen(true)
+                }}/>
             </div>
             <div>
                 {ChatDialog()}
@@ -185,9 +198,9 @@ export default function Home({ hotel_list, room_list }) {
                     temporary admin
                 </Link>
                 {/* Hero unit */}
-                <div className={styles.picOne}                >
-                    <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
-                        <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{
+                <div className={styles.picOne}>
+                    <Box sx={{display: {xs: 'block', sm: 'block'}}}>
+                        <motion.div initial={{opacity: 0, y: 100}} animate={{opacity: 1, y: 0}} transition={{
                             duration: 2,
                             delay: 0.5,
                             ease: [0, 0.71, 0.2, 1.01]
@@ -205,48 +218,60 @@ export default function Home({ hotel_list, room_list }) {
                 </div>
                 <Stack>
 
-                    <Paper sx={{ backgroundColor: 'antiquewhite' }} elevation={0}>
-                        <Stack paddingTop={14} paddingBottom={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="guangzhou">
-                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                    <Paper sx={{backgroundColor: 'antiquewhite'}} elevation={0}>
+                        <Stack paddingTop={14} paddingBottom={4} justifyContent='space-evenly'
+                               direction={{xs: 'column', sm: 'row'}} id="guangzhou">
+                            <motion.div viewport={{once: true}} style={{display: 'flex'}} initial={{opacity: 0}}
+                                        whileInView={{opacity: 1}} transition={{duration: 1, delay: 0.8}}>
                                 <p className={styles.city}>
                                     广州
                                 </p>
                             </motion.div>
-                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
-                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                            <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
+                                        variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{xs: 'column', sm: 'row'}}>
                                     {hotel_list.map((item, index) => (item.cityname == "广州" &&
-                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid}
+                                                   imageSrc={hotelImageUrl[index]}/>
                                     ))}
                                 </Stack>
                             </motion.div>
                         </Stack>
-                        <Stack paddingY={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="shanghai">
-                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                        <Stack paddingY={4} justifyContent='space-evenly' direction={{xs: 'column', sm: 'row'}}
+                               id="shanghai">
+                            <motion.div viewport={{once: true}} style={{display: 'flex'}} initial={{opacity: 0}}
+                                        whileInView={{opacity: 1}} transition={{duration: 1, delay: 0.8}}>
                                 <p className={styles.city}>
                                     上海
                                 </p>
                                 {/* <Typography textAlign='end'  sx={{paddingBottom:{sm:0, xs:5}, writingMode: {sm:'vertical-lr',xs:'horizontal-tb'} }} variant="h1">上海</Typography> */}
                             </motion.div>
-                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
-                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                            <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
+                                        variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{xs: 'column', sm: 'row'}}>
                                     {hotel_list.map((item, index) => (item.cityname == "上海" &&
-                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid}
+                                                   imageSrc={hotelImageUrl[index]}/>
                                     ))}
                                 </Stack>
                             </motion.div>
                         </Stack>
-                        <Stack paddingY={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }} id="chongqing">
-                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.8 }}>
+                        <Stack paddingY={4} justifyContent='space-evenly' direction={{xs: 'column', sm: 'row'}}
+                               id="chongqing">
+                            <motion.div viewport={{once: true}} style={{display: 'flex'}} initial={{opacity: 0}}
+                                        whileInView={{opacity: 1}} transition={{duration: 1, delay: 0.8}}>
                                 <p className={styles.city}>
                                     重庆
                                 </p>
                             </motion.div>
-                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
+                            <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
+                                        variants={cardVariants}>
 
-                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                                <Stack paddingX={0} gap={10} direction={{xs: 'column', sm: 'row'}}>
 
                                     {hotel_list.map((item, index) => (item.cityname == "重庆" &&
-                                        <HotelCard hotelName={item.hotelname} key={item.hotelid} imageSrc={hotelImageUrl[index]} />
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid}
+                                                   imageSrc={hotelImageUrl[index]}/>
                                     ))}
                                 </Stack>
                             </motion.div>
@@ -256,7 +281,7 @@ export default function Home({ hotel_list, room_list }) {
                 </Stack>
             </main>
 
-            <Footer />
+            <Footer/>
         </ThemeProvider>
     );
 }
