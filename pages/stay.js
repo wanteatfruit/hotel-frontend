@@ -18,6 +18,8 @@ import {
     Select,
     MenuItem,
     Slider,
+    ThemeProvider,
+    createTheme,
 
 } from "@mui/material";
 import {Stack} from "@mui/system";
@@ -53,7 +55,7 @@ export default function Stay({hotel_list}) {
     const [roomName, setRoomName] = React.useState('')
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])  //get roomtype by hotel
     const [hotel, setHotel] = React.useState('深圳湾1号');
-    const [priceRange, setPriceRange] = React.useState([30, 1000])
+    const [priceRange, setPriceRange] = React.useState([270,1000])
     const [guestsNumber, setGuestNum] = React.useState(2);
     const minPriceDiff = 30;
     const guestsNumberMarks = [
@@ -88,11 +90,24 @@ export default function Stay({hotel_list}) {
         } else return "有"
     }
 
+    const theme = createTheme({
+        typography: {
+            fontFamily: "'Noto Serif SC', serif",
+            fontSize: 15
+        },
+        palette: {
+            secondary: {
+                main: '#fff'
+            }
+        }
+    })
 
     return (
-        <>
+
+        <ThemeProvider theme={theme} >
             <NavBar />
-            <Grid container spacing={2} columns={16} sx={{padding: 1}}>
+                <Grid container spacing={2} columns={16} sx={{ padding: 1 }}>
+
                 <Grid item xs={16} sm={3}>
                     <Paper elevation={false} sx={{padding: 2}}>
                         <Stack gap={2}>
@@ -188,8 +203,7 @@ export default function Stay({hotel_list}) {
                         )}
                     </Grid>
                 </Grid>
-            </Grid>
-        </>
+        </ThemeProvider>
     );
 
 }

@@ -241,15 +241,15 @@ export default function BookingPage({ }) {
                                         </DatePicker>
                                     </Stack>
                                 </LocalizationProvider>
-                                <Stack paddingX={2} sx={{ width: {xs:'100%', sm:'50%'}}}>
+                                {/* <Stack paddingX={2} sx={{ width: {xs:'100%', sm:'50%'}}}>
                                     <Typography gutterBottom>入住人数</Typography>
-                                    <Slider sx={{}} value={bookingInfo.guestsNumber}
+                                    <Slider sx={{width:'80%'}} value={bookingInfo.guestsNumber}
                                         onChange={(event, newNumber) => setBookingInfo({
                                             ...bookingInfo,
                                             guestsNumber: newNumber
                                         })} valueLabelDisplay='auto' step={1} marks={guestsNumberMarks} min={1}
                                         max={5} />
-                                </Stack>
+                                </Stack> */}
 
 
                             </Stack>

@@ -1,14 +1,19 @@
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Image from "next/future/image";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
+import { Divider, IconButton, Tooltip } from "@mui/material";
+import { Stack } from "@mui/system";
+import CommentCard from "../../components/CommentCard";
+import { QuestionMark, QuestionMarkOutlined, StarOutline } from "@mui/icons-material";
 
 export default function CommentArea({hotelID}) {
     const [allComments, setAllComments] = useState([])
     const [meanScore, setMeanScore] = useState(0)
+    const [reviewTag, setReviewTag] = useState('');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
@@ -23,13 +28,32 @@ export default function CommentArea({hotelID}) {
         setAllComments(comments)
         let total = 0
         if (comments.length === 0) {
-            setMeanScore("No score yet")
+            setMeanScore("无评论")
         } else {
             for (let idx in comments) {
                 total += comments[idx].score
             }
             setMeanScore((total / comments.length).toFixed(1))
         }
+        getReviewTag()
+    }
+
+    function getReviewTag() {
+        let reviewTag = '暂无评论';
+        if (meanScore >= 8) {
+            setReviewTag("好评如潮")
+            reviewTag = "好评如潮"
+        }
+        else if (meanScore >= 6) {
+            setReviewTag("多半好评")
+            reviewTag = "多半好评"
+
+        }
+        else {
+            setReviewTag("褒贬不一")
+            reviewTag = "褒贬不一"
+        }
+        return reviewTag;
     }
 
     useEffect(() => {
@@ -65,143 +89,25 @@ export default function CommentArea({hotelID}) {
 
     return (
         <>
-            <main>
-                <Grid sx={{
-                    width: "85%",
-                    height: "100%",
-                    justifyContent: "center",
-                    display: "flex",
-                    flexDirection: "column",
-                    rowGap: "2em",
-                    marginTop: "3em"
-                }}>
-                    <Grid sx={{
-                        width: "100%",
-                        height: "25%", justifyContent: "flex-start", marginLeft: "10em", marginBottom: "2em"
-                    }}>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'row',
-                                height: "100%",
-                            }}
-                        >
-                            <Grid sx={{
-                                width: "100%",
-                                justifyContent: "flex-start",
-                                display: "flex",
-                                flexDirection: "row",
-                                columnGap: "1em"
-                            }}
-                            >
-                                <Image src={"/images/beer-rate.png"} width={50} height={50}
-                                       alt={"Our hotel logo!"}></Image>
-                                <Typography
-                                    sx={{
-                                        fontWeight: 'bold',
-                                        fontStyle: 'italic',
-                                        fontSize: 45
-                                    }}>{meanScore}分</Typography>
-                            </Grid>
-                        </Paper>
+            <Paper elevation={false}>
+                <Grid container columns={24} spacing={2} columnSpacing={4}>
+                    <Grid item xs={24} sm={24}>
+                        <Typography variant="h5">
+                            <StarOutline sx={{marginBottom:-0.5}} />
+                            {`${meanScore} · ${allComments.length}条评价`}
+                        </Typography>
+                        <Divider sx={{pt:2}} variant="middle"/>
                     </Grid>
-                    {allComments.map((comment) => (
-                        // eslint-disable-next-line react/jsx-key
-                        <Grid sx={{
-                            width: "100%",
-                            justifyContent: "center",
-                            display: "flex",
-                            flexDirection: "column",
-                            rowGap: "0.2em",
-                        }}>
-                            <Grid sx={{
-                                width: "100%",
-                                height: "25%",
-                                justifyContent: "flex-start",
-                                marginLeft: "10em",
-                                display: "flex",
-                                flexDirection: "row",
-                            }}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        rowGap: "1em",
-                                        width: "100%",
-                                        height: "100%",
-                                    }}
-                                >
-                                    <Grid sx={{width: "100%"}}><Typography
-                                        sx={{
-                                            fontWeight: 'bold',
-                                            fontSize: 20
-                                        }}>{comment.username}</Typography></Grid>
-                                    <Grid sx={{display: "flex", flexDirection: "row", columnGap: "5em"}}>
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                fontSize: 20
-                                            }}>{comment.commenttime}</Typography>
-                                        <Typography
-                                            sx={{
-                                                fontWeight: 'bold',
-                                                fontSize: 20
-                                            }}>{comment.roomType}</Typography>
-                                    </Grid>
-                                    <Grid sx={{display: "flex", flexDirection: "row", columnGap: "1em"}}>
-                                        {getCommentScore(comment.score)}
-                                    </Grid>
-                                    <Grid><Typography>{comment.words}</Typography></Grid>
-                                    <Grid sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        columnGap: "1em",
-                                        marginTop: "1em"
-                                    }}>
-                                        <CardMedia
-                                            component='video'
-                                            image={"/videos/1.mp4"}
-                                            autoPlay
-                                            allow="autoPlay"
-                                            controls
-                                            sx={{
-                                                width: "250px",
-                                                height: "180px"
-                                            }}
-                                        />
-                                        <CardMedia
-                                            component='image'
-                                            image={comment.picture1}
-                                            sx={{
-                                                width: "150px",
-                                                height: "150px"
-                                            }}
-                                        />
-                                        <CardMedia
-                                            component='image'
-                                            image={comment.picture2}
-                                            sx={{
-                                                width: "150px",
-                                                height: "150px"
-                                            }}
-                                        />
-                                        <CardMedia
-                                            component='image'
-                                            image={comment.picture3}
-                                            sx={{
-                                                width: "150px",
-                                                height: "150px"
-                                            }}
-                                        />
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    ))}
+                    <Grid item xs={24} sm={24}>
+                        <Stack>
+                            {allComments.map((item, index) => (
+                                <CommentCard key={index} comments={item} />
+                            ))}
+                        </Stack>
+                    </Grid>
+
                 </Grid>
-            </main>
+            </Paper>
         </>
     )
 }

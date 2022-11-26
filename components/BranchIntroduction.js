@@ -35,7 +35,7 @@ export default function BranchIntro({name,explanation,city,address,email,telepho
     // },[])
     const pic_url = fullScreenHotelImageUrl[x]
     return(
-        <Card sx={{display:'flex', width:'98%'}}>
+        <Card sx={{display:'flex', width:'98%'}} elevation={5}>
             <Box sx={{display:'flex',flexDirection:{xs:'column',sm:'column', md:'row'},width:'max-content'}}>
                 <CardMedia component='img' src={pic_url} sx={{width:{md:'60%', sm:'100%'}}} />
                 <CardContent>
