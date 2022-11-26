@@ -7,6 +7,13 @@
     <style>
         svg {
             background-color: rgb(255, 255, 255);
+            height: 80vh;
+        }
+        @media screen and (max-width:900px) {
+            svg{
+                width: 78vw;
+                height: 50vh;
+            }
         }
 
         .margin {
@@ -38,6 +45,10 @@
             color: #0a61ef;
             text-decoration: none;
         }
+        .wrapper{
+            display: flex;
+            justify-content: center;
+        }
 
         .doubleBed {
 
@@ -50,9 +61,8 @@
     </style>
 </head>
 <body>
-
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="500px"
-     height="300px" viewBox="-0.5 -0.5 1083 722" animation="{&quot;scriptArr&quot;:[],&quot;cellIdArr&quot;:[]}"
+<div class="wrapper">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"viewBox="-0.5 -0.5 1083 722" animation="{&quot;scriptArr&quot;:[],&quot;cellIdArr&quot;:[]}"
      style="background-color: rgb(255, 255, 255);">
     <defs>
 
@@ -580,6 +590,6 @@
         $(".doubleBed").attr("href", hrefDouble)
     }
 </script>
-
+</div>
 </body>
 </html>

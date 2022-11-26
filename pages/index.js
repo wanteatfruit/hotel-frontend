@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import Link from "next/link";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../components/Navbar";
+
 import Footer from "../components/Footer";
 import {hotelImageUrl} from "../data";
 import Ticket, {
@@ -18,16 +19,18 @@ import Ticket, {
     TicketSH,
     TicketSZ,
 } from "../components/CityTicket";
+
 import HotelCard from "../components/HotelCard";
 import {motion} from "framer-motion";
 import Image from "next/future/image";
 import {Paper, SpeedDial, SpeedDialAction, SpeedDialIcon} from "@mui/material";
 import axios from "axios";
-import {useState} from "react";
-import {useRouter} from "next/router";
-import {useEffect} from "react";
-import {LocationCityOutlined} from "@mui/icons-material";
 
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { LocationCityOutlined } from "@mui/icons-material";
+import Footer from "../components/Footer";
 const theme = createTheme();
 
 // 获取酒店和房间列表，传给navbar
@@ -112,16 +115,24 @@ export default function Home({hotel_list, room_list}) {
 
     return (
         <ThemeProvider theme={theme}>
-            <SpeedDial ariaLabel="chooseCity" sx={{position: 'fixed', bottom: 16, right: 16}}
-                       icon={<LocationCityOutlined/>}>
+            {/* <SpeedDial ariaLabel="chooseCity" sx={{ position: 'fixed', bottom: 16, right: 16 }} icon={<LocationCityOutlined />}>
+
                 {jumpToCity.map((action) => (
                     <SpeedDialAction tooltipOpen icon={<SpeedDialIcon/>} key={action.name} tooltipTitle={action.name}
                                      title={action.name} onClick={() => {
                         router.push(`/${action.href}`)
                     }}/>
                 ))}
-            </SpeedDial>
-            <CssBaseline/>
+
+            </SpeedDial> */}
+            <CssBaseline />
+            <div>
+
+                <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
+                    openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
+                        setChatDialogOpen(true)
+                    }} />
+            </div>
             <div>
                 <NavBar userID={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
                         buttonsMode={0} clearLogInfo={clearLogInfo}/>
@@ -135,17 +146,10 @@ export default function Home({hotel_list, room_list}) {
                     temporary admin
                 </Link>
                 {/* Hero unit */}
-                <div className={styles.picOne}
-                    // sx={{
-                    //     height: '100vh',
-                    //     display: 'flex',
-                    //     justifyContent: 'center',
-                    //     backgroundSize: 'cover',
-                    //     backgroundImage: 'url("https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")'
-                    // }}
-                >
-                    <Box sx={{display: {xs: 'block', sm: 'block'}}}>
-                        <motion.div initial={{opacity: 0, y: 100}} animate={{opacity: 1, y: 0}} transition={{
+
+                <div className={styles.picOne}                >
+                    <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
+                        <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{
                             duration: 2,
                             delay: 0.5,
                             ease: [0, 0.71, 0.2, 1.01]
@@ -224,33 +228,6 @@ export default function Home({hotel_list, room_list}) {
                     </Paper>
 
                 </Stack>
-                <div>
-                    {/*城市卡片*/}
-                    <Grid sx={{display: {sm: 'flex', xs: 'none'}}} container spacing={20} columnGap={2} padding={2}
-                          columns={12} justifyContent='center'>
-                        <Grid item justifyContent='center'>
-                            <TicketSZ/>
-                        </Grid>
-                        <Grid item>
-                            <TicketGZ/>
-                        </Grid>
-                        <Grid item>
-                            <TicketCQ/>
-                        </Grid>
-                        <Grid item>
-                            <TicketSH/>
-                        </Grid>
-                    </Grid>
-                </div>
-                <Grid container sx={{
-                    marginTop: 10,
-                    marginBottom: 10,
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                }}>
-                    <iframe src={"map.html"} height="500" width="600" frameBorder="0"></iframe>
-                </Grid>
             </main>
             <Footer/>
         </ThemeProvider>

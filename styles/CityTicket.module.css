@@ -62,12 +62,12 @@
   font-size: 3rem;
   font-weight: 700;
   color: white;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .arrow {
   z-index: 1;
-  cursor: pointer;
+  /* cursor: pointer; */
   position: absolute;
   right: 35px;
   bottom: 20px;
@@ -142,7 +142,7 @@
 }
 
 .ticket:hover button{
-  transform: scale(15);
+  transform: scale(10);
 }
 
 

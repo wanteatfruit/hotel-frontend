@@ -1,19 +1,18 @@
+import { Dialog } from "@mui/material";
 import React, {useEffect, useState} from "react";
+import styles from "../styles/HotelPage.module.css";
 
 
 export default function FloorPlanA({href1, href2}) {
+    function loadFloorPlan(href1, href2){
+        document.getElementById("floorplan-frame").contentWindow.setHref("www.baidu.com", "www.bing.com");
 
-    useEffect(() => {
-        if(typeof(window)!==undefined){
-            document.getElementById("floorplan-frame").contentWindow.setHref(href1, href2);
-        }
-    }, [href1, href2, typeof(window)])
+    }
 
 
     return (
-        <>
-            <iframe id={"floorplan-frame"} src={"/floorplan1.html"} height={"400px"} width={"600px"}
+        
+            <iframe className={styles.floorplan} id={"floorplan-frame"} onLoad={loadFloorPlan} src={"/floorplan1.html"} 
                     frameBorder="0"></iframe>
-        </>
     )
 }

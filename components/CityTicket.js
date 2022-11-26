@@ -1,12 +1,14 @@
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import styles from "../styles/CityTicket.module.css";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
-export function TicketSZ() {
+import { IconButton } from "@mui/material";
+export function TicketSZ({ onClick }) {
   return (
     <div className={styles.ticket}>
       <p className={styles.ticketHeading}>深圳</p>
-      <FlightTakeoffIcon className={styles.arrow} />
-      <div className={styles.pic_sz}> </div>
+      <IconButton onClick={onClick} className={styles.arrow}>
+        <FlightTakeoffIcon />
+      </IconButton>      <div className={styles.pic_sz}> </div>
       <div className={styles.side}>开启你的旅程</div>
       <ul>
         <li></li>
@@ -36,57 +38,59 @@ export function TicketSZ() {
         <li></li>
         <li></li>
       </ul>
-      <button className={styles.button}></button>
+      <button onClick={onClick} className={styles.button}></button>
     </div>
   );
 }
 
-export function TicketGZ(){
-      return (
-        <div className={styles.ticket}>
-          <p className={styles.ticketHeading}>广州</p>
-          <FlightTakeoffIcon className={styles.arrow} />
-          <div className={styles.pic_gz}> </div>
-          <div className={styles.side}>开启你的旅程</div>
-          <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-          <button className={styles.button}></button>
-        </div>
-      );
+export function TicketGZ({ onClick }) {
+  return (
+    <div className={styles.ticket}>
+      <p className={styles.ticketHeading}>广州</p>
+      <IconButton onClick={onClick} className={styles.arrow}>
+        <FlightTakeoffIcon />
+      </IconButton>          <div className={styles.pic_gz}> </div>
+      <div className={styles.side}>开启你的旅程</div>
+      <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <button onClick={onClick} className={styles.button}></button>
+    </div>
+  );
 }
 
-export function TicketSH() {
+export function TicketSH({ onClick }) {
   return (
     <div className={styles.ticket}>
       <p className={styles.ticketHeading}>上海</p>
-      <FlightTakeoffIcon className={styles.arrow} />
-      <div className={styles.pic_sh}> </div>
+      <IconButton onClick={onClick} className={styles.arrow}>
+        <FlightTakeoffIcon />
+      </IconButton>      <div className={styles.pic_sh}> </div>
       <div className={styles.side}>开启你的旅程</div>
       <ul>
         <li></li>
@@ -116,15 +120,17 @@ export function TicketSH() {
         <li></li>
         <li></li>
       </ul>
-      <button className={styles.button}></button>
+      <button onClick={onClick} className={styles.button}></button>
     </div>
   );
 }
-export function TicketCQ() {
+export function TicketCQ({ onClick }) {
   return (
     <div className={styles.ticket}>
       <p className={styles.ticketHeading}>重庆</p>
-      <FlightTakeoffIcon className={styles.arrow} />
+      <IconButton onClick={onClick} className={styles.arrow}>
+        <FlightTakeoffIcon />
+      </IconButton>
       <div className={styles.pic_cq}> </div>
       <div className={styles.side}>开启你的旅程</div>
       <ul>
@@ -155,7 +161,7 @@ export function TicketCQ() {
         <li></li>
         <li></li>
       </ul>
-      <button className={styles.button}></button>
+      <button onClick={onClick} className={styles.button}></button>
     </div>
   );
 }
