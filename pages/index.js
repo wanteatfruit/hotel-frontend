@@ -30,7 +30,6 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { LocationCityOutlined } from "@mui/icons-material";
-import Footer from "../components/Footer";
 const theme = createTheme();
 
 // 获取酒店和房间列表，传给navbar
@@ -126,13 +125,7 @@ export default function Home({hotel_list, room_list}) {
 
             </SpeedDial> */}
             <CssBaseline />
-            <div>
 
-                <NavBar id={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
-                    openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
-                        setChatDialogOpen(true)
-                    }} />
-            </div>
             <div>
                 <NavBar userID={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
                         buttonsMode={0} clearLogInfo={clearLogInfo}/>

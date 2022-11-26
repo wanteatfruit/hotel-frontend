@@ -30,6 +30,7 @@ import {
     Divider,
     Autocomplete,
     TextField,
+    DialogContentText,
     Tabs,
     Dialog,
     useMediaQuery,
@@ -37,7 +38,8 @@ import {
     DialogTitle,
     DialogContent,
     Slide,
-    ThemeProvider
+    ThemeProvider,
+    useTheme
 
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -51,6 +53,7 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 import {useState} from "react";
+
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
                                    userID,
