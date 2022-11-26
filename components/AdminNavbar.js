@@ -122,10 +122,11 @@ export default function AdminNavBar({}) {
             <Box sx={{display: "flex"}}>
                 <CssBaseline/>
                 <AppBar position="fixed" sx={{}} color='secondary'>
-                    <Toolbar sx={{display: "flex", justifyContent: "flex-end"}}>
-                        {/*<IconButton color="inherit" onClick={handleDrawerToggle}>*/}
-                        {/*    <MenuIcon/>*/}
-                        {/*</IconButton>*/}
+                    
+                    <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
+                    <IconButton color="inherit" onClick={handleDrawerToggle}>
+                           <MenuIcon/>
+                        </IconButton>
                         <Tooltip title="Chat Room">
                             <IconButton onClick={() => {
                                 setChatDialogOpen(true)

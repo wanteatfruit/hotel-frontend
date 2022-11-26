@@ -9,8 +9,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Layout from "../../components/Layout";
+import {createTheme} from '@mui/material';
 import {useEffect, useState} from "react";
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, ThemeProvider, useTheme} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
@@ -105,35 +106,20 @@ export default function Store() {
                             sx: {
                                 position: "fixed",
                                 width: "100%",
-                                height: "100%",
                                 maxWidth: "sm",
                                 maxHeight: "sm"
                             }
                         }}>
                     <DialogContent>
-                        <Grid container component="main" sx={{height: '100%', width: '100%'}}>
+                        <Grid container component="main" sx={{ width: '100%'}}>
                             <CssBaseline/>
-                            <Grid
-                                item
-                                width={"100%"}
-                                height={"100%"}
-                                // marginBottom={"10px"}
-                                sx={{
-                                    backgroundImage: image_url,
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundColor: (t) =>
-                                        t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                }}
-                            />
-                            <Grid width={"100%"} component={Paper} elevation={6} square>
+                            <Grid width={"100%"} elevation={6} square>
                                 <Box container width={"100%"} justifyContent={"center"} my={8}>
                                     <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "center"}}>
-                                        <typography>您拥有{userCredits}积分</typography>
+                                        <Typography>您拥有{userCredits}积分</Typography>
                                     </Box>
                                     <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "center"}}>
-                                        <typography>兑换 {giftOnDialog.giftname} 讲消耗{giftOnDialog.credits}积分</typography>
+                                        <Typography>兑换 {giftOnDialog.giftname} 将消耗{giftOnDialog.credits}积分</Typography>
                                     </Box>
                                 </Box>
                                 <Box
@@ -199,10 +185,22 @@ export default function Store() {
                 </Dialog>
             </>
         )
-    }
+    }   
+    const theme = createTheme({
+        typography: {
+            fontFamily: "'Noto Serif SC', serif",
+            fontSize: 15
+        },
+        palette: {
+            secondary: {
+                main: '#fff'
+            }
+        }
+    })
+
 
     return (
-        <main>
+        <ThemeProvider theme={theme}>
             {ResponseDialog()}
             {purchaseDialog()}
             <Grid sx={{marginLeft: "4em", marginTop: "1em"}}>
@@ -277,6 +275,6 @@ export default function Store() {
                     ))}
                 </Grid>
             </Container>
-        </main>
+        </ThemeProvider>
     );
 }

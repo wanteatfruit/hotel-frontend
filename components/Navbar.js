@@ -234,7 +234,7 @@ const [mapOpen, setMapOpen] = React.useState(false);
                     </IconButton>
                 </DialogTitle>
                 <DialogContent sx={{ flexDirection: { md: 'row', xs: 'column' }, display: 'flex' }}>
-                    <iframe src={"map.html"} id="city_map" height="500" width="600" frameBorder="0" style={{ borderRadius: 10 }}></iframe>
+                    <iframe src={"/map.html"} id="city_map" height="500" width="600" frameBorder="0" style={{ borderRadius: 10 }}></iframe>
                     <Stack sx={{ display: { xs: 'none', md: 'flex' }, marginLeft: 2 }} gap={2}>
                         <TicketSZ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(114.04, 22.57)
@@ -273,8 +273,8 @@ const [mapOpen, setMapOpen] = React.useState(false);
                 </IconButton>
             </BookingDrawer>
             <AppBar
-                position="relative"
-                sx={{ background: "#2E3B55", zIndex: 1 }}
+                position="fixed"
+                sx={{ background: "#2E3B55", zIndex: 1000 }}
             >
                 {/* <Container maxWidth="xl"> */}
                 <Toolbar sx={{ justifyContent: "space-between" }}>
@@ -294,8 +294,6 @@ const [mapOpen, setMapOpen] = React.useState(false);
                                     <ListItem
                                         key={item.name}
                                         disablePadding
-
-
                                         sx={{ width: "100vw" }}
                                     >
                                         <ListItemButton href={item.link}>

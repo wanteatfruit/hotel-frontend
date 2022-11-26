@@ -73,7 +73,7 @@ export default function RoomCard({ imageUrl, description, hotelName, admin, room
         <>
             <Card>
                 <CardMedia component='img' loading="eager" src={imageUrl}
-                    height="375px">
+                    height="300">
 
                 </CardMedia>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
