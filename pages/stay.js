@@ -53,8 +53,8 @@ export default function Stay({hotel_list}) {
     const [roomList, setRoomList] = React.useState(null)
     const [openAdd, setOpenAdd] = React.useState(false);
     const [roomName, setRoomName] = React.useState('')
-    const [roomIntro, setRoomIntro] = React.useState([false, false, false])  //get roomtype by hotel
-    const [hotel, setHotel] = React.useState('深圳湾1号');
+    const [roomIntro, setRoomIntro] = React.useState([true, true, true])  //get roomtype by hotel
+    const [hotel, setHotel] = React.useState('汤臣一品');
     const [priceRange, setPriceRange] = React.useState([270,1000])
     const [guestsNumber, setGuestNum] = React.useState(2);
     const minPriceDiff = 30;
@@ -67,14 +67,7 @@ export default function Stay({hotel_list}) {
 
     ]
 
-    React.useEffect(() => {
-        if (hotel === '') {
-            axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
-                setRoomList(resp.data)
-            })
-            console.log(roomList)
-        }
-    }, [openAdd])
+
 
     React.useEffect(() => {
         if (hotel !== '') {
@@ -83,6 +76,25 @@ export default function Stay({hotel_list}) {
             })
         }
     }, [hotel, openAdd])
+
+    function handleFilter(){
+        const intro = `窗户%7C${convertYesNo(roomIntro[0])},阳台%7C${convertYesNo(roomIntro[1])},洗衣房%7C${convertYesNo(roomIntro[2])}`
+        const url = `http://120.25.216.186:8888/roomtype/findByParameter?roomName=${roomName}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&guestNum=${guestsNumber}&introduction=${intro}`
+        // console.log(url)
+        axios.get(url).then((resp)=>{
+            setRoomList(resp.data)
+        })
+        
+    }
+    function handleReset(){
+        if (hotel !== '') {
+            axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
+                setRoomList(resp.data)
+            })
+        }
+    }
+
+
 
     function convertYesNo(bool) {
         if (bool === false) {
@@ -106,7 +118,7 @@ export default function Stay({hotel_list}) {
 
         <ThemeProvider theme={theme} >
             <NavBar />
-                <Grid container spacing={2} columns={16} sx={{ padding: 1, mt:'64px' }}>
+                <Grid container spacing={2} columns={16} sx={{ padding: 1, mt:'60px' }}>
 
                 <Grid item xs={16} sm={3}>
                     <Paper elevation={false} sx={{padding: 2}}>
@@ -115,7 +127,7 @@ export default function Stay({hotel_list}) {
                             <Typography>
                                 房间名
                             </Typography>
-                            <TextField size="small" value={roomName} onChange={(event) => {
+                            <TextField variant="standard" size="small" value={roomName} onChange={(event) => {
                                 setRoomName(event.target.value);
                             }}>
                             </TextField>
@@ -151,11 +163,8 @@ export default function Stay({hotel_list}) {
                                                   label="洗衣房"/>
                             </FormGroup>
                             <Stack direction='row' justifyContent='space-between'>
-                                <Button fullWidth onClick={() => setOpenAdd(false)}>取消</Button>
-                                <Button fullWidth variant="contained" onClick={() => {
-                                    handleAdd();
-                                    setOpenAdd(false)
-                                }}>提交</Button>
+                                <Button fullWidth onClick={handleReset} >重设</Button>
+                                <Button fullWidth variant="contained" onClick={handleFilter}>提交</Button>
 
                             </Stack>
                         </Stack>

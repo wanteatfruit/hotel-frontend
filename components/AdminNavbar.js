@@ -85,7 +85,7 @@ export default function AdminNavBar({}) {
             </Toolbar>
             <Divider/>
             <List>
-                {["数据面板", "订单信息", "房间信息", "促销活动"].map((text, index) => (
+                {["数据面板", "订单信息", "房间信息"].map((text, index) => (
                     <ListItem key={text} sx={{}} disablePadding alignItems="center">
                         <ListItemButton href={handleJump(index)}>
                             {index == 0 && <DashboardIcon color="secondary"/>}
