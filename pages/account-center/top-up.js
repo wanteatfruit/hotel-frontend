@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import Layout from "../../components/Layout";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import TextField from "@mui/material/TextField";
 import {useRouter} from "next/router";
 import axios from "axios";
@@ -57,14 +57,17 @@ const tiers = [
 ];
 
 export default function TopUp() {
-    const router = useRouter();
-    const userID = router.query['userID'];
+    const [userID, setUserID]= useState(0)
     const [validInput, setValidInput] = useState(true);
     const [response, setResponse] = useState("")
     const [responseDialogOpen, setResponseDialogOpen] = useState(false)
     const validInputRegex = new RegExp(
         "^\\d+$"
     );
+
+    useEffect(() => {
+        setUserID(localStorage.getItem("userID"))
+    })
 
     async function specialOfferOnClick(amount) {
         let credits = 0
@@ -208,10 +211,7 @@ export default function TopUp() {
             <Grid sx={{marginLeft: "4em", marginTop: "1em"}}>
                 <Link
                     href={{
-                        pathname: "/account-center/account-center",
-                        query: {
-                            "userID": userID,
-                        }
+                        pathname: "/account-center/account-center"
                     }}>
                     <Button variant={"outlined"}>返回</Button>
                 </Link>

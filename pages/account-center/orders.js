@@ -55,6 +55,7 @@ export default function Orders({id}) {
     const [modifyDialogOpen, setModifyDialogOpen] = useState(false)
     const [modifyResponseDialogOpen, setModifyResponseDialogOpen] = useState(false)
     const [modifyResponse, setModifyResponse] = useState("")
+    const [refresh, setRefresh] = useState(true)
 
     async function getRooms() {
         let _rooms = []
@@ -82,7 +83,7 @@ export default function Orders({id}) {
 
     useEffect(() => {
         getRooms()
-    }, [id, mode, roomOnDialog])
+    }, [id, mode, roomOnDialog, refresh])
 
     function getListItemContent() {
         if (!(roomOnDialog.roomTypeID in roomInfo) || roomInfo[roomOnDialog.roomTypeID] === undefined) {
@@ -421,6 +422,7 @@ export default function Orders({id}) {
                             value={bookingInfo.startDate}
                             onChange={(newDate) => {
                                 setBookingInfo({...bookingInfo, startDate: newDate})
+                                console.log("here: ", newDate)
                             }}
                             renderInput={(params) => (
                                 <TextField
@@ -460,8 +462,8 @@ export default function Orders({id}) {
 
             const data = {
                 "orderID": roomOnDialog.orderID,
-                "checkinTime": bookingInfo.startDate,
-                "checkoutTime": bookingInfo.endDate
+                "checkinTime": bookingInfo.startDate.format('YYYY-MM-DD HH:mm:ss'),
+                "checkoutTime": bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss')
             }
             console.log("data: ", data)
             let answer = {
@@ -608,22 +610,14 @@ export default function Orders({id}) {
                                             }}>修改入住时间</MenuItem>
                                             <MenuItem onClick={async () => {
                                                 const body = {"id": room.orderID};
-                                                // const resp= await fetch('http://120.25.216.186:8888/orders/delete', {
-                                                //     method: 'POST',
-                                                //     body: JSON.stringify(body),
-                                                //     headers: {
-                                                //         'Content-type': 'application/json'
-                                                //     }
-                                                // })
-                                                // console.log(body)
-                                                // console.log("jwjwww ", body)
                                                 await axios.post('http://120.25.216.186:8888/orders/delete', body, {
                                                     headers: {
                                                         'Content-Type': 'application/x-www-form-urlencoded'
                                                     }
                                                 })
-                                                    .then(response => console.log("取消: "));
-                                                console.log("取消1: ", body)
+                                                    .then(response => response);
+                                                setRefresh(!refresh)
+                                                modifyMenuHandleClose()
                                             }
                                             }>取消订单</MenuItem>
                                         </Menu>

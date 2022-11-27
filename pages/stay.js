@@ -191,8 +191,8 @@ export default function Stay({hotel_list}) {
                         {roomList != null ? (
                             roomList.map((item) => (
                                 <Grid key={item.roomtypeid} item xs={12} md={6} lg={4} xl={4} padding={2}>
-                                    <RoomCard hotelName={hotel} admin={false} roomName={item.roomname}
-                                              roomInfo={item}
+                                    <RoomCard hotelID={item.hotelid} hotelName={hotel} admin={false} roomName={item.roomname}
+                                              roomInfo={item} roomTypeID={item.roomtypeid}
                                               imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}></RoomCard>
                                 </Grid>
                             ))

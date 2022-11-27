@@ -11,7 +11,16 @@ import Container from '@mui/material/Container';
 import Layout from "../../components/Layout";
 import {createTheme} from '@mui/material';
 import {useEffect, useState} from "react";
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, ThemeProvider, useTheme} from "@mui/material";
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField,
+    ThemeProvider,
+    useTheme
+} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
@@ -29,19 +38,21 @@ export default function Store() {
     const [username, setUsername] = useState("")
     const [telephone, setTelephone] = useState("")
     const [address, setAddress] = useState("")
-    const router = useRouter();
-    const userID = router.query['userID'];
+    const [userID, setUserID] = useState(0)
 
-
-    useEffect(() => {
-        console.log("id:", userID)
-        axios.get("http://120.25.216.186:8888/gift/findAll").then((response) => {
+    async function GetData() {
+        await axios.get("http://120.25.216.186:8888/gift/findAll").then((response) => {
             setGiftList(response.data)
         });
-        axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": userID}}).then((response) => {
+        await axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": userID}}).then((response) => {
             setUserCredits(response.data.credits);
         });
-    }, [userID]);
+    }
+
+    useEffect(() => {
+        setUserID(localStorage.getItem("userID"))
+        GetData()
+    }, []);
 
     const purchaseOnClick = async (event) => {
         event.preventDefault();
@@ -54,19 +65,22 @@ export default function Store() {
         const body = {
             "userID": userID,
             "telephone": telephone,
-            "amount": amount,
+            "amount": amount.toString(),
             "address": address,
-            "giftname": giftOnDialog.giftname,
-            "username": userName
+            "giftName": giftOnDialog.giftname,
+            "userName": userName
         }
-        let paySucceed = false
+        console.log("body: ", body)
+        let paySucceed = ""
         await axios.post('http://120.25.216.186:8888/giftorder/creategiftorder', body)
-            .then(response => paySucceed = response);
-        if (paySucceed === "true") {
+            .then(response => paySucceed = response.data);
+        console.log("response, ", paySucceed)
+        if (paySucceed.toString() === "true") {
             setResponse("您已成功兑换！敬请期待礼品抵达")
         } else {
             setResponse("您的积分不足够兑换，请尝试兑换其他物品")
         }
+        setPurchaseDialogOpen(false)
         setResponseDialogOpen(true)
     }
 
@@ -98,7 +112,7 @@ export default function Store() {
     }
 
     function purchaseDialog() {
-        const image_url = "url(" + giftImageUrl[giftOnDialog.credits % giftImageUrl.length] + ")"
+        const image_url = "url(" + giftImageUrl[giftOnDialog.giftid % (giftImageUrl.length + 1)] + ")"
         return (
             <>
                 <Dialog open={purchaseDialogOpen} onClose={() => setPurchaseDialogOpen(false)}
@@ -111,9 +125,9 @@ export default function Store() {
                             }
                         }}>
                     <DialogContent>
-                        <Grid container component="main" sx={{ width: '100%'}}>
+                        <Grid container component="main" sx={{width: '100%'}}>
                             <CssBaseline/>
-                            <Grid width={"100%"} elevation={6} square>
+                            <Grid width={"100%"} elevation={6} sx={{backgroundImage: image_url}} square>
                                 <Box container width={"100%"} justifyContent={"center"} my={8}>
                                     <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "center"}}>
                                         <Typography>您拥有{userCredits}积分</Typography>
@@ -185,7 +199,8 @@ export default function Store() {
                 </Dialog>
             </>
         )
-    }   
+    }
+
     const theme = createTheme({
         typography: {
             fontFamily: "'Noto Serif SC', serif",
@@ -206,10 +221,7 @@ export default function Store() {
             <Grid sx={{marginLeft: "4em", marginTop: "1em"}}>
                 <Link
                     href={{
-                        pathname: "/account-center/account-center",
-                        query: {
-                            "userID": userID,
-                        }
+                        pathname: "/account-center/account-center"
                     }}>
                     <Button variant={"outlined"}>返回</Button>
                 </Link>
@@ -250,7 +262,7 @@ export default function Store() {
                                         // 16:9
                                         height: "250px"
                                     }}
-                                    image={giftImageUrl[gift.credits % 8]}
+                                    image={giftImageUrl[gift.giftid % (giftImageUrl.length + 1)]}
                                     alt="gift image"
                                 />
                                 <CardContent sx={{flexGrow: 1}}>

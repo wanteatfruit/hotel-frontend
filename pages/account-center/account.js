@@ -7,12 +7,12 @@ import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {Avatar, Card, CardContent, CardHeader, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
+import {Avatar, Box, Card, CardContent, CardHeader, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import axios from "axios"
 import {useEffect, useState} from "react";
-import { AccountCircleOutlined, Phone } from '@mui/icons-material';
+import {AccountCircleOutlined, Phone} from '@mui/icons-material';
 
 const drawerWidth = 240;
 styled(MuiAppBar, {
@@ -57,18 +57,18 @@ export default function Account({id}) {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar>
-                            <AccountCircleOutlined />
+                                <AccountCircleOutlined/>
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={userInfo.name} secondary='姓名'></ListItemText>
-                            {/* {getListItemContent("姓名", userInfo.name)} */}
+                        {/* {getListItemContent("姓名", userInfo.name)} */}
 
                     </ListItem>
-                    <Divider />
+                    <Divider/>
                     <ListItem>
-                    <ListItemAvatar>
+                        <ListItemAvatar>
                             <Avatar>
-                               <Phone ></Phone>
+                                <Phone></Phone>
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={userInfo.telephone} secondary='电话'></ListItemText>
@@ -89,15 +89,14 @@ export default function Account({id}) {
                 <Typography gutterBottom component="p" variant="h4">
                     ￥{userInfo.money}
                 </Typography>
-                    <Link
-                        href={{
-                            pathname: "/account-center/top-up",
-                            query: {"userID": id}
-                        }}
-                        passHref
-                    >
-                        <Button variant="contained" color="secondary">充值</Button>
-                    </Link>
+                <Link
+                    href={{
+                        pathname: "/account-center/top-up"
+                    }}
+                    passHref
+                >
+                    <Button variant="contained" color="secondary">充值</Button>
+                </Link>
             </React.Fragment>
         );
     }
@@ -115,10 +114,7 @@ export default function Account({id}) {
                 <div>
                     <Link
                         href={{
-                            pathname: "/account-center/store",
-                            query: {
-                                "userID": id
-                            }
+                            pathname: "/account-center/store"
                         }}
                         passHref
                     >
@@ -139,11 +135,10 @@ export default function Account({id}) {
         return (
             <Container maxWidth="lg" sx={{mt: 8}}>
                 <Grid container spacing={3}>
-                    {/* Basic Info */}
                     <Grid item xs={12}>
                         <Card>
-                            <CardHeader  title='个人信息'></CardHeader>
-                            <CardContent sx={{pt:0}}>
+                            <CardHeader title='个人信息'></CardHeader>
+                            <CardContent sx={{pt: 0}}>
                                 {infoList()}
                             </CardContent>
                         </Card>
@@ -160,7 +155,7 @@ export default function Account({id}) {
                     {/* Credits */}
                     <Grid item xs={12} md={4} lg={3}>
                         <Card>
-                            <CardHeader title='积分' />
+                            <CardHeader title='积分'/>
                             <CardContent>
                                 {Credits()}
                             </CardContent>
