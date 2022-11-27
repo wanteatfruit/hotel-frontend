@@ -15,8 +15,6 @@ import {
     ListItemText,
     IconButton,
     Slider,
-    createTheme,
-    ThemeProvider,
     Autocomplete,
     Stepper,
     Step,
@@ -39,6 +37,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useRouter } from "next/router";
 import { fontSize } from "@mui/system";
 import handleIntroduction from "../../utils/utils";
+import NavBar from "../../components/Navbar";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const steps = ['选择房间', '入住信息', '确认订单'];
 
@@ -111,14 +111,14 @@ export default function BookingPage({ }) {
     }
 
     return (
-
-        <Layout>
+        <>
             <ThemeProvider theme={theme}>
+                <NavBar />
                 <Box>
                     <div style={{
                         backgroundImage: 'url("https://images.pexels.com/photos/585753/pexels-photo-585753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
                         backgroundSize: 'cover',
-                        height: '30vh',
+                        height: '25vh',
                         display: 'flex',
                         alignItems: 'flex-end'
                     }}>
@@ -331,7 +331,7 @@ export default function BookingPage({ }) {
                     )}
                 </Box>
             </ThemeProvider>
-        </Layout>
+        </>
 
     )
 }

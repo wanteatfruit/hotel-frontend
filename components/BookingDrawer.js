@@ -93,7 +93,7 @@ export default function BookingDrawer({ open, hotel_list, room_list, children })
         <ThemeProvider theme={theme}>
             <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '70vw' }}>
                 {/* <Button onClick={()=>open=false}>asdad</Button> */}
-                <Box sx={{ width: '70vw' }}>
+                <Box sx={{ width: {sm:'70vw',xs:'100vw'} }}>
                     <Stack>
                         <div style={{ backgroundImage:'url("https://images.pexels.com/photos/887723/pexels-photo-887723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',backgroundSize:'cover', height: '30vh', display: 'flex', alignItems: 'flex-end' }}>
                             {children}

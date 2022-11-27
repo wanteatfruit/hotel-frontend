@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import Link from "next/link";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../components/Navbar";
+
 import Footer from "../components/Footer";
 import {hotelImageUrl} from "../data";
 import Ticket, {
@@ -25,11 +26,11 @@ import Image from "next/future/image";
 import {Paper, SpeedDial, SpeedDialAction, SpeedDialIcon} from "@mui/material";
 import axios from "axios";
 
-import {createContext, useState} from "react";
-import {useRouter} from "next/router";
-import {useEffect} from "react";
-import {LocationCityOutlined} from "@mui/icons-material";
-import {Provider} from "@uiw/react-baidu-map";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { LocationCityOutlined } from "@mui/icons-material";
+const theme = createTheme();
 
 // 获取酒店和房间列表，传给navbar
 
@@ -61,10 +62,10 @@ export default function Home({hotel_list, room_list}) {
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
     const jumpToCity = [
-        {name: '深圳', href: "#shenzhen"},
-        {name: '广州', href: "#guangzhou"},
-        {name: '上海', href: "#shanghai"},
-        {name: '重庆', href: "#chongqing"},
+        { name: '深圳', href: "#shenzhen" },
+        { name: '广州', href: "#guangzhou" },
+        { name: '上海', href: "#shanghai" },
+        { name: '重庆', href: "#chongqing" },
 
     ]
     const cardVariants = { //for hotel card anim
@@ -137,60 +138,60 @@ export default function Home({hotel_list, room_list}) {
                 </div>
                 <Stack>
 
-                    <Paper sx={{backgroundColor: 'antiquewhite'}} elevation={0}>
-                        <Stack paddingTop={14} paddingBottom={4} justifyContent='space-evenly'
-                               direction={{xs: 'column', sm: 'row'}} id="guangzhou">
-                            <motion.div viewport={{once: true}} style={{display: 'flex'}} initial={{opacity: 0}}
-                                        whileInView={{opacity: 1}} transition={{duration: 1, delay: 0.8}}>
+                    <Paper sx={{ backgroundColor: 'antiquewhite' }} elevation={0}>
+                        <Stack paddingTop={14} paddingBottom={10} justifyContent='space-evenly'
+                            direction={{ xs: 'column', sm: 'row' }} id="guangzhou">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.4 }}>
                                 <p className={styles.city}>
                                     广州
                                 </p>
                             </motion.div>
-                            <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
-                                        variants={cardVariants}>
-                                <Stack paddingX={0} gap={10} direction={{xs: 'column', sm: 'row'}}>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen'
+                                variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
                                     {hotel_list.map((item, index) => (item.cityname == "广州" &&
                                         <HotelCard hotelName={item.hotelname} key={item.hotelid}
-                                                   imageSrc={hotelImageUrl[index]}/>
+                                            imageSrc={hotelImageUrl[index]} />
                                     ))}
                                 </Stack>
                             </motion.div>
                         </Stack>
-                        <Stack paddingY={4} justifyContent='space-evenly' direction={{xs: 'column', sm: 'row'}}
-                               id="shanghai">
-                            <motion.div viewport={{once: true}} style={{display: 'flex'}} initial={{opacity: 0}}
-                                        whileInView={{opacity: 1}} transition={{duration: 1, delay: 0.8}}>
+                        <Stack paddingY={4} paddingBottom={10} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }}
+                            id="shanghai">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.4 }}>
                                 <p className={styles.city}>
                                     上海
                                 </p>
                                 {/* <Typography textAlign='end'  sx={{paddingBottom:{sm:0, xs:5}, writingMode: {sm:'vertical-lr',xs:'horizontal-tb'} }} variant="h1">上海</Typography> */}
                             </motion.div>
-                            <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
-                                        variants={cardVariants}>
-                                <Stack paddingX={0} gap={10} direction={{xs: 'column', sm: 'row'}}>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen'
+                                variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
                                     {hotel_list.map((item, index) => (item.cityname == "上海" &&
                                         <HotelCard hotelName={item.hotelname} key={item.hotelid}
-                                                   imageSrc={hotelImageUrl[index]}/>
+                                            imageSrc={hotelImageUrl[index]} />
                                     ))}
                                 </Stack>
                             </motion.div>
                         </Stack>
-                        <Stack paddingY={4} justifyContent='space-evenly' direction={{xs: 'column', sm: 'row'}}
-                               id="chongqing">
-                            <motion.div viewport={{once: true}} style={{display: 'flex'}} initial={{opacity: 0}}
-                                        whileInView={{opacity: 1}} transition={{duration: 1, delay: 0.8}}>
+                        <Stack paddingY={4} justifyContent='space-evenly' direction={{ xs: 'column', sm: 'row' }}
+                            id="chongqing">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.4 }}>
                                 <p className={styles.city}>
                                     重庆
                                 </p>
                             </motion.div>
-                            <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
-                                        variants={cardVariants}>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen'
+                                variants={cardVariants}>
 
-                                <Stack paddingX={0} gap={10} direction={{xs: 'column', sm: 'row'}}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
 
                                     {hotel_list.map((item, index) => (item.cityname == "重庆" &&
                                         <HotelCard hotelName={item.hotelname} key={item.hotelid}
-                                                   imageSrc={hotelImageUrl[index]}/>
+                                            imageSrc={hotelImageUrl[index]} />
                                     ))}
                                 </Stack>
                             </motion.div>
@@ -199,8 +200,7 @@ export default function Home({hotel_list, room_list}) {
 
                 </Stack>
             </main>
-            <Footer/>
+            <Footer />
         </ThemeProvider>
-    )
-
+    );
 }

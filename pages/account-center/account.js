@@ -7,11 +7,12 @@ import Divider from '@mui/material/Divider';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {ListItem} from "@mui/material";
+import {Avatar, Card, CardContent, CardHeader, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 import Link from "next/link";
 import Button from "@mui/material/Button";
 import axios from "axios"
 import {useEffect, useState} from "react";
+import { AccountCircleOutlined, Phone } from '@mui/icons-material';
 
 const drawerWidth = 240;
 styled(MuiAppBar, {
@@ -48,34 +49,29 @@ export default function Account({id}) {
         getData()
     }, [id]);
 
-    function getListItemContent(name, value) {
-        return (
-            <>
-                <Grid xs={3}>
-                    <Typography sx={{color: "#696969"}}> {name} </Typography>
-                </Grid>
-                <Grid xs={7}>
-                    <Typography sx={{fontWeight: 'bold', fontStyle: 'italic', fontSize: 30}}>{value}</Typography>
-                </Grid>
-            </>
-        )
-    }
 
     function infoList() {
-        const gapHeight = 4;
         return (
             <>
-                <List>
+                <List disablePadding>
                     <ListItem>
-                        <Grid container>
-                            {getListItemContent("姓名", userInfo.name)}
-                        </Grid>
+                        <ListItemAvatar>
+                            <Avatar>
+                            <AccountCircleOutlined />
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={userInfo.name} secondary='姓名'></ListItemText>
+                            {/* {getListItemContent("姓名", userInfo.name)} */}
+
                     </ListItem>
-                    <Divider sx={{my: gapHeight}}/>
+                    <Divider />
                     <ListItem>
-                        <Grid container>
-                            {getListItemContent("电话", userInfo.telephone)}
-                        </Grid>
+                    <ListItemAvatar>
+                            <Avatar>
+                               <Phone ></Phone>
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={userInfo.telephone} secondary='电话'></ListItemText>
                     </ListItem>
                 </List>
             </>
@@ -90,14 +86,9 @@ export default function Account({id}) {
 
         return (
             <React.Fragment>
-                <h1>余额</h1>
-                <Typography component="p" variant="h4">
+                <Typography gutterBottom component="p" variant="h4">
                     ￥{userInfo.money}
                 </Typography>
-                <Typography color="text.secondary" sx={{flex: 1}}>
-                    on 15 March, 2019
-                </Typography>
-                <div>
                     <Link
                         href={{
                             pathname: "/account-center/top-up",
@@ -107,7 +98,6 @@ export default function Account({id}) {
                     >
                         <Button variant="contained" color="secondary">充值</Button>
                     </Link>
-                </div>
             </React.Fragment>
         );
     }
@@ -119,11 +109,9 @@ export default function Account({id}) {
 
         return (
             <React.Fragment>
-                <h1>积分</h1>
-                <Typography component="p" variant="h4">
+                <Typography gutterBottom component="p" variant="h4">
                     {userInfo.credits}
                 </Typography>
-                <br/>
                 <div>
                     <Link
                         href={{
@@ -149,39 +137,34 @@ export default function Account({id}) {
         };
 
         return (
-            <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
+            <Container maxWidth="lg" sx={{mt: 8}}>
                 <Grid container spacing={3}>
                     {/* Basic Info */}
                     <Grid item xs={12}>
-                        <Paper sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
-                            {infoList()}
-                        </Paper>
+                        <Card>
+                            <CardHeader  title='个人信息'></CardHeader>
+                            <CardContent sx={{pt:0}}>
+                                {infoList()}
+                            </CardContent>
+                        </Card>
                     </Grid>
                     {/* Deposits */}
                     <Grid item xs={12} md={8} lg={9}>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 240,
-                            }}
-                        >
-                            {Deposits()}
-                        </Paper>
+                        <Card>
+                            <CardHeader title='余额'></CardHeader>
+                            <CardContent>
+                                {Deposits()}
+                            </CardContent>
+                        </Card>
                     </Grid>
                     {/* Credits */}
                     <Grid item xs={12} md={4} lg={3}>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 240,
-                            }}
-                        >
-                            {Credits()}
-                        </Paper>
+                        <Card>
+                            <CardHeader title='积分' />
+                            <CardContent>
+                                {Credits()}
+                            </CardContent>
+                        </Card>
                     </Grid>
                 </Grid>
             </Container>

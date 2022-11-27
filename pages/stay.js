@@ -203,6 +203,7 @@ export default function Stay({hotel_list}) {
                         )}
                     </Grid>
                 </Grid>
+                </Grid>
         </ThemeProvider>
     );
 

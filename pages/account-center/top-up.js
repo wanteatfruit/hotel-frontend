@@ -16,7 +16,7 @@ import {useState} from "react";
 import TextField from "@mui/material/TextField";
 import {useRouter} from "next/router";
 import axios from "axios";
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {createTheme, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, ThemeProvider} from "@mui/material";
 import Link from "next/link";
 
 
@@ -29,7 +29,7 @@ const tiers = [
             "额外赠送100元，马上充值到钱包"
         ],
         buttonText: '购买',
-        buttonVariant: 'outlined',
+        buttonVariant: 'contained',
     },
     {
         title: '优惠活动2',
@@ -188,9 +188,19 @@ export default function TopUp() {
             )
         }
     }
-
+    const theme = createTheme({
+        typography: {
+            fontFamily: "'Noto Serif SC', serif",
+            fontSize: 15
+        },
+        palette: {
+            secondary: {
+                main: '#fff'
+            }
+        }
+    })
     return (
-        <React.Fragment>
+        <ThemeProvider theme={theme}>
             <GlobalStyles styles={{ul: {margin: 0, padding: 0, listStyle: 'none'}}}/>
             <CssBaseline/>
             {/* Hero unit */}
@@ -298,7 +308,7 @@ export default function TopUp() {
                     </Grid>
                 </Grid>
             </Container>
-        </React.Fragment>
+        </ThemeProvider>
     )
         ;
 }

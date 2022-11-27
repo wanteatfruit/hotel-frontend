@@ -1,16 +1,17 @@
 .card {
     /* background-image: url('https://photos.mandarinoriental.com/is/image/MandarinOriental/guangzhou-exterior-dusk?wid=1024&hei=576&fmt=jpeg&op_usm=1,1,5,0&resMode=sharp2&fit=crop&qlt=75,0'); */
     position: relative;
-    width: 35rem;
-    padding: 2.7rem;
+    width: 30rem;
+    padding: 3rem;
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    height: 45rem;
-    /* border-radius: 8px; */
+    height: 40rem;
+    border-radius: 16px;
     overflow: visible;
     transition: all ease 0.2s;
     margin: auto;
+    cursor: pointer;
 }
 
 

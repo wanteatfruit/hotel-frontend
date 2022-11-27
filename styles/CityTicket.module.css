@@ -81,8 +81,11 @@
   background-image: url("https://images.unsplash.com/photo-1634647626782-f5fffa9fd9b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80");
   background-size: 100% 100%;
   filter: grayscale(100%);
-  width: var(--ticket-pic-width);
-  height: var(--ticket-height);
+ max-width: var(--ticket-pic-width);
+  max-height: var(--ticket-height);
+  min-width: var(--ticket-pic-width);
+  min-height: var(--ticket-height);
+
   transition: all 0.2s ease;
 }
 

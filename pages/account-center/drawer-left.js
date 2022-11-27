@@ -11,19 +11,20 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import ChairIcon from '@mui/icons-material/Chair';
-import {Drawer} from "@mui/material";
+import { Drawer, Button, Divider } from "@mui/material";
+import { HotelOutlined } from "@mui/icons-material";
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 function drawerItemChoose(index, text, setDrawerContent) {
     return (
         <>
-            <ListItem key={text} disablePadding>
+            <ListItem key={text} alignItems="center" disablePadding>
                 <ListItemButton onClick={() => setDrawerContent(index)}>
                     <ListItemIcon>
                         {getIcon(index)}
                     </ListItemIcon>
-                    <ListItemText primary={text}/>
+                    <ListItemText color='secondary' primary={text} />
                 </ListItemButton>
             </ListItem>
         </>
@@ -33,24 +34,82 @@ function drawerItemChoose(index, text, setDrawerContent) {
 function getIcon(index) {
     switch (index) {
         case 0:
-            return <AccountBalanceWalletIcon/>;
+            return <AccountBalanceWalletIcon />;
         case 1:
             // setDrawerItem(index);
-            return <ChairIcon/>;
+            return <ChairIcon />;
         case 2:
             // setDrawerItem(index);
-            return <BookmarksIcon/>;
+            return <BookmarksIcon />;
         case 3:
             // setDrawerItem(index);
-            return <LocalGroceryStoreIcon/>;
+            return <LocalGroceryStoreIcon />;
     }
 }
 
 
-export default function DrawerLeft({setDrawerItem}) {
+export default function DrawerLeft({ setDrawerItem }) {
+    const drawer = (
+        <>
+            <div style={{ }}>
+                <List>
+                    {["账户", "订单", "收藏"].map((text, index) =>
+                        drawerItemChoose(index, text, setDrawerItem)
+                    )}
+                </List>
+            </div>
+        </>
+    );
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
+
     return (
         <>
-            <Box sx={{ display: "flex", position: "relative"}}>
+            <Box sx={{ width: { sm: drawerWidth, flexShrink: { sm: 0 } },  }}>
+                {/* <Drawer
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    ModalProps={{ keepMounted: true }}
+                    color='primary'
+                    sx={{
+
+                        display: { xs: "block", sm: "none" },
+                        "& .MuiDrawer-paper": {
+                            boxSizing: "border-box",
+                            width: drawerWidth,
+                            backgroundColor: '#2E3B55'
+                        },
+                    }}
+                >
+                    {drawer}
+                </Drawer> */}
+                <Drawer
+                    width={drawerWidth}
+                    variant="permanent"
+                    open
+
+                    sx={{
+                        backgroundColor: 'white',
+                        display: { xs: "none", sm: "block" },
+                        "& .MuiDrawer-paper": {
+                            boxSizing: "border-box",
+                            width: drawerWidth,
+                            backgroundColor: 'white',
+                            marginTop:'70px',
+                            position:'absolute',
+                            zIndex:1
+                        },
+                        // marginTop:10
+                    }}
+                >
+                    {drawer}
+                </Drawer>
+            </Box>
+            {/* <Box sx={{ display: "flex", position: "relative"}}>
                 <CssBaseline />
                 <Drawer
                     variant="permanent"
@@ -65,7 +124,6 @@ export default function DrawerLeft({setDrawerItem}) {
                         zIndex: 0
                     }}
                 >
-                    <Toolbar />
                     <Box sx={{ overflow: "auto", position: "relative",  display: "flex", alignItems: "center", marginTop: "4em"}}>
                         <List>
                             {["账户", "订单", "收藏"].map((text, index) =>
@@ -74,7 +132,7 @@ export default function DrawerLeft({setDrawerItem}) {
                         </List>
                     </Box>
                 </Drawer>
-            </Box>
+            </Box> */}
         </>
     );
 }

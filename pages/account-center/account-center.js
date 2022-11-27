@@ -8,7 +8,7 @@ import Account from "./account";
 import Orders from "./orders";
 import Marks from "./marks";
 import {useRouter} from "next/router";
-import {createTheme, Dialog, DialogContent} from "@mui/material";
+import {ButtonGroup, createTheme, Dialog, DialogContent, Stack} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
@@ -102,9 +102,9 @@ export default function AccountCenter() {
                         setChatDialogOpen(true)
                     }}/>
             <main>
-                <Box sx={{display: 'flex'}}>
-                    <CssBaseline/>
-                    <DrawerLeft setDrawerItem={setDrawerItem}></DrawerLeft>
+
+                <Box sx={{display: {md:'flex',xs:'none'}, marginTop:'62px'}}>
+                <DrawerLeft setDrawerItem={setDrawerItem}></DrawerLeft>
                     {ChatDialog()}
                     <Box
                         component="main"
@@ -114,17 +114,27 @@ export default function AccountCenter() {
                                     ? theme.palette.grey[100]
                                     : theme.palette.grey[900],
                             flexGrow: 1,
-                            height: '100vh',
-                            overflow: 'auto',
+                            minHeight:'100vh',
+                            pb:6,
+                            zIndex:100
+                            // overflow: 'hidden',
                         }}
                     >
-                        <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
+                       
                             {drawerContent()}
-                        </Container>
+                        
                     </Box>
                 </Box>
+                <Box sx={{display:{xs:'flex', md:'none'}, flexDirection:'column', marginTop:'62px', minHeight:'100vh',
+                            pb:6}}>
+                    <ButtonGroup sx={{px:2,pt:3, height:'10vh', fontSize:'2rem'}} fullWidth direction='row'>
+                        <Button onClick={()=>setDrawerItem(0)}>账单</Button>
+                        <Button onClick={()=>setDrawerItem(1)}>订单</Button>
+                        <Button onClick={()=>setDrawerItem(2)}>收藏</Button>
+                    </ButtonGroup>
+                    {drawerContent()}
+                </Box>
             </main>
-            <Footer/>
         </ThemeProvider>
 
     );
