@@ -10,32 +10,26 @@ import Container from "@mui/material/Container";
 import Link from "next/link";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../components/Navbar";
+import Footer from "../components/Footer";
 import {hotelImageUrl} from "../data";
-import SendIcon from "@mui/icons-material/Send";
+import Ticket, {
+    TicketCQ,
+    TicketGZ,
+    TicketSH,
+    TicketSZ,
+} from "../components/CityTicket";
+
 import HotelCard from "../components/HotelCard";
 import {motion} from "framer-motion";
 import Image from "next/future/image";
-import {
-    Paper,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    IconButton,
-    Slide,
-    SpeedDial,
-    SpeedDialAction,
-    SpeedDialIcon
-} from "@mui/material";
+import {Paper, SpeedDial, SpeedDialAction, SpeedDialIcon} from "@mui/material";
 import axios from "axios";
-import {useState} from "react";
+
+import {createContext, useState} from "react";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 import {LocationCityOutlined} from "@mui/icons-material";
-import Footer from "../components/Footer";
-
-const theme = createTheme();
+import {Provider} from "@uiw/react-baidu-map";
 
 // 获取酒店和房间列表，传给navbar
 
@@ -58,15 +52,12 @@ export async function getStaticProps() {
 
 export default function Home({hotel_list, room_list}) {
     const router = useRouter()
-    let _sessionKey = router.query['sessionKey'];
-    let _username = router.query['username'];
-    let _isLoggedIn = router.query['isLoggedIn'];
-    let _id = router.query['id'];
     // don't use the three above, the three below instead
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState('')
     const [sessionKey, setSessionKey] = useState('')
     const [id, setID] = useState(-1)
+
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
     const jumpToCity = [
@@ -101,103 +92,31 @@ export default function Home({hotel_list, room_list}) {
         }
     })
 
-    function ChatDialog() {
-        return (
-            <>
-                <Dialog
-                    open={chatDialogOpen}
-                    onClose={() => {
-                        setChatDialogOpen(false)
-                    }}
-                    PaperProps={{
-                        sx: {
-                            position: "fixed",
-                            width: "100%",
-                            height: "100%",
-                            maxWidth: "md",
-                            backgroundColor: "#f1cec2"
-                        }
-                    }}
-                >
-                    <DialogContent>
-                        <iframe src={"/chat-app.html"} height="95%" width="100%" frameBorder="0"></iframe>
-                    </DialogContent>
-                </Dialog>
-            </>
-        )
-    }
-
-
-    function LogoutDialog() {
-        return (
-            <>
-                <Dialog
-                    open={isLogoutDialogOpen}
-                    // TransitionComponent={Transition}
-                    keepMounted
-                    onClose={() => setIsLogoutDialogOpen(false)}
-                    aria-describedby="alert-dialog-slide-description"
-                >
-                    {/*<DialogTitle>{"Use Google's location service?"}</DialogTitle>*/}
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-slide-description">
-                            You are logging out of your account...
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => setIsLogoutDialogOpen(false)}>Cancel</Button>
-                        <Button onClick={() => {
-                            setIsLoggedIn(false)
-                            setUsername("")
-                            setSessionKey("")
-                            setID(-1)
-                            setIsLogoutDialogOpen(false);
-                        }}>Log out</Button>
-                    </DialogActions>
-                </Dialog>
-            </>
-        )
-    }
-
     useEffect(() => {
-        setIsLoggedIn(_isLoggedIn)
-        setUsername(_username)
-        setSessionKey(_sessionKey)
-        setID(_id)
-    }, [_isLoggedIn, _username, _sessionKey, _id])
-
+        setIsLoggedIn(localStorage.getItem("isLoggedIn"))
+        setUsername(localStorage.getItem("username"))
+        setSessionKey(localStorage.getItem("sessionKey"))
+        setID(localStorage.getItem("userID"))
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>
-            <SpeedDial ariaLabel="chooseCity" sx={{position: 'fixed', bottom: 16, right: 16}}
-                       icon={<LocationCityOutlined/>}>
+            {/* <SpeedDial ariaLabel="chooseCity" sx={{ position: 'fixed', bottom: 16, right: 16 }} icon={<LocationCityOutlined />}>
+
                 {jumpToCity.map((action) => (
                     <SpeedDialAction tooltipOpen icon={<SpeedDialIcon/>} key={action.name} tooltipTitle={action.name}
                                      title={action.name} onClick={() => {
                         router.push(`/${action.href}`)
                     }}/>
                 ))}
-            </SpeedDial>
+
+            </SpeedDial> */}
             <CssBaseline/>
             <div>
-                <NavBar userID={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
-                        openLoggedOutDialog={() => setIsLogoutDialogOpen(true)} buttonsMode={0} openChatDialog={() => {
-                    setChatDialogOpen(true)
-                }}/>
-            </div>
-            <div>
-                {ChatDialog()}
-                {LogoutDialog()}
+                <NavBar hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
+                        buttonsMode={0}/>
             </div>
             <main>
-                <Link
-                    href={{
-                        pathname: "/admin/dashboard",
-                    }}
-                >
-                    temporary admin
-                </Link>
-                {/* Hero unit */}
                 <div className={styles.picOne}>
                     <Box sx={{display: {xs: 'block', sm: 'block'}}}>
                         <motion.div initial={{opacity: 0, y: 100}} animate={{opacity: 1, y: 0}} transition={{
@@ -280,8 +199,8 @@ export default function Home({hotel_list, room_list}) {
 
                 </Stack>
             </main>
-
             <Footer/>
         </ThemeProvider>
-    );
+    )
+
 }

@@ -242,15 +242,11 @@ export default function Orders({id}) {
             }
             data.append("words", commentWords)
             data.append("orderid", roomOnDialog.orderID)
-            for (const value of data.entries()) {
-                console.log(value);
-            }
-            let commentReceived = "true"
-            // let commentReceived = await fetch('http://120.25.216.186:8888/comment/insert', {
-            //     method: 'POST',
-            //     body: data
-            // });
-            // console.log(commentReceived)
+            let commentReceived = await fetch('http://120.25.216.186:8888/comment/insert', {
+                method: 'POST',
+                body: data
+            });
+            console.log(commentReceived)
             if (commentReceived === "true") {
                 setCommentResponse("我们已收到您的评价！感谢您的支持")
                 setCommentResponseDialogOpen(true)
@@ -615,11 +611,24 @@ export default function Orders({id}) {
                                             <MenuItem onClick={() => {
                                                 setModifyDialogOpen(true)
                                             }}>修改入住时间</MenuItem>
-                                            <MenuItem onClick={() => {
+                                            <MenuItem onClick={async () => {
                                                 const body = {"id": room.orderID};
-                                                axios.post('http://120.25.216.186:8888/orders/delete', body)
-                                                    .then(response => console.log("取消", response));
-                                                console.log("取消")
+                                                // const resp= await fetch('http://120.25.216.186:8888/orders/delete', {
+                                                //     method: 'POST',
+                                                //     body: JSON.stringify(body),
+                                                //     headers: {
+                                                //         'Content-type': 'application/json'
+                                                //     }
+                                                // })
+                                                // console.log(body)
+                                                // console.log("jwjwww ", body)
+                                                await axios.post('http://120.25.216.186:8888/orders/delete', body, {
+                                                    headers: {
+                                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                                    }
+                                                })
+                                                    .then(response => console.log("取消: "));
+                                                console.log("取消1: ", body)
                                             }
                                             }>取消订单</MenuItem>
                                         </Menu>

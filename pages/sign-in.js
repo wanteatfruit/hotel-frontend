@@ -34,7 +34,7 @@ const theme = createTheme();
 export default function SignIn() {
     const router = useRouter();
     const href = router.query['href'];
-    const [succeed, setSucceed] = useState(false);
+    const [adminLogin, setAdminLogin] = useState(false)
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -50,11 +50,25 @@ export default function SignIn() {
             }
         }
         let answer = {}
-        await fetch("http://120.25.216.186:8888/login", options)
-            .then((response) => response.json()).then(data => answer = data)
+        if (adminLogin) {
+            // await fetch("http://120.25.216.186:8888/manager-login", options)
+            //     .then((response) => response.json()).then(data => answer = data)
+            localStorage.setItem("username", data.get("username").toString())
+            // localStorage.setItem("userID", answer.id)
+            // localStorage.setItem("sessionKey", answer.token)
+            localStorage.setItem("isLoggedIn", false)
+            localStorage.setItem("adminLoggedIn", true)
+        } else {
+            await fetch("http://120.25.216.186:8888/login", options)
+                .then((response) => response.json()).then(data => answer = data)
+            localStorage.setItem("username", data.get("username").toString())
+            localStorage.setItem("userID", answer.id)
+            localStorage.setItem("sessionKey", answer.token)
+            localStorage.setItem("isLoggedIn", "true")
+            localStorage.setItem("adminLoggedIn", "false")
+        }
         router.push({
-            pathname: href,
-            query: {sessionKey: answer.token, username: data.get("username"), id: 1, isLoggedIn: true},
+            pathname: href
         }, href)
     };
 
@@ -113,6 +127,18 @@ export default function SignIn() {
                                 id="password"
                                 autoComplete="密码"
                             />
+                            <Grid sx={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "flex-start",
+                                alignItems: "center"
+                            }}>
+                                <Typography>Admin? </Typography>
+                                <Checkbox id="admin" checked={adminLogin} onChange={(event) => {
+                                    setAdminLogin(event.target.checked)
+                                }}/>
+                            </Grid>
                             <Button
                                 type="submit"
                                 fullWidth
@@ -121,8 +147,13 @@ export default function SignIn() {
                             >
                                 登录
                             </Button>
-                            <Grid container>
-                                <Grid item>
+                            <Grid container sx={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "flex-start"
+                            }}>
+                                <Grid sx={{width: "91%", justifyContent: "flex-start"}}>
                                     <Link variant="body2" href={{
                                         pathname: "/sign-up",
                                         query: {href: '/sign-in', original_href: href}
