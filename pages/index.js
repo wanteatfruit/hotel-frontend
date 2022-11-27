@@ -8,11 +8,11 @@ import Typography from "@mui/material/Typography";
 import styles from "../styles/Main.module.css";
 import Container from "@mui/material/Container";
 import Link from "next/link";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../components/Navbar";
 
 import Footer from "../components/Footer";
-import { hotelImageUrl } from "../data";
+import {hotelImageUrl} from "../data";
 import Ticket, {
     TicketCQ,
     TicketGZ,
@@ -21,9 +21,9 @@ import Ticket, {
 } from "../components/CityTicket";
 
 import HotelCard from "../components/HotelCard";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 import Image from "next/future/image";
-import { Paper, SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+import {Paper, SpeedDial, SpeedDialAction, SpeedDialIcon} from "@mui/material";
 import axios from "axios";
 
 import { useState } from "react";
@@ -51,12 +51,8 @@ export async function getStaticProps() {
 }
 
 
-export default function Home({ hotel_list, room_list }) {
+export default function Home({hotel_list, room_list}) {
     const router = useRouter()
-    let _sessionKey = router.query['sessionKey'];
-    let _username = router.query['username'];
-    let _isLoggedIn = router.query['isLoggedIn'];
-    let _id = router.query['id'];
     // don't use the three above, the three below instead
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState('')
@@ -98,19 +94,11 @@ export default function Home({ hotel_list, room_list }) {
     })
 
     useEffect(() => {
-        setIsLoggedIn(_isLoggedIn)
-        setUsername(_username)
-        setSessionKey(_sessionKey)
-        setID(_id)
-        console.log("my id is, ", _id)
+        setIsLoggedIn(localStorage.getItem("isLoggedIn"))
+        setUsername(localStorage.getItem("username"))
+        setSessionKey(localStorage.getItem("sessionKey"))
+        setID(localStorage.getItem("userID"))
     }, [])
-
-    function clearLogInfo() {
-        setIsLoggedIn(false)
-        setUsername("")
-        setSessionKey("")
-        setID(_id)
-    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -124,25 +112,15 @@ export default function Home({ hotel_list, room_list }) {
                 ))}
 
             </SpeedDial> */}
-            <CssBaseline />
-
+            <CssBaseline/>
             <div>
-                <NavBar userID={id} hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
-                    buttonsMode={0} clearLogInfo={clearLogInfo} />
+                <NavBar hotel_list={hotel_list} room_list={room_list} href={"/"}
+                        buttonsMode={0}/>
             </div>
             <main>
-                <Link
-                    href={{
-                        pathname: "/admin/dashboard",
-                    }}
-                >
-                    temporary admin
-                </Link>
-                {/* Hero unit */}
-
-                <div className={styles.picOne}                >
-                    <Box sx={{ display: { xs: 'block', sm: 'block' } }}>
-                        <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{
+                <div className={styles.picOne}>
+                    <Box sx={{display: {xs: 'block', sm: 'block'}}}>
+                        <motion.div initial={{opacity: 0, y: 100}} animate={{opacity: 1, y: 0}} transition={{
                             duration: 2,
                             delay: 0.5,
                             ease: [0, 0.71, 0.2, 1.01]

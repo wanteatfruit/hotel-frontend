@@ -7,6 +7,7 @@ import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from '@mui/icons-material/Logout';
 import ChatIcon from '@mui/icons-material/Chat';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import Ticket, {
     TicketCQ,
     TicketGZ,
@@ -45,25 +46,21 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in user
-import { login, pages, settings } from "../data";
-import { Stack, width } from "@mui/system";
+import {login, pages, settings} from "../data";
+import {Stack, width} from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
-import { ChevronLeftOutlined, HotelOutlined } from "@mui/icons-material";
+import {ChevronLeftOutlined, HotelOutlined} from "@mui/icons-material";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 import {useState} from "react";
-
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
-                                   userID,
-                                   isLoggedIn,
                                    hotel_list,
                                    room_list,
                                    buttonsMode,
-                                   clearLogInfo
+                                   href
                                }) {
-
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -72,11 +69,14 @@ export default function NavBar({
 
     const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
-const [mapOpen, setMapOpen] = React.useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState("false")
+    const [adminLoggedIn, setAdminLoggedIn] = useState("false")
+
     useEffect(() => {
-        console.log("check login status: ", isLoggedIn, "; id: ", userID, "; session: ")
-    })
-    
+        setIsLoggedIn(localStorage.getItem("isLoggedIn"))
+        setAdminLoggedIn(localStorage.getItem("adminLoggedIn"))
+    }, [])
+    const [mapOpen, setMapOpen] = React.useState(false);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -100,7 +100,7 @@ const [mapOpen, setMapOpen] = React.useState(false);
     const handleLogin = () => {
         router.push({
             pathname: "/sign-in",
-            query: { href: "/" },
+            query: {href: href},
         })
     }
 
@@ -128,6 +128,16 @@ const [mapOpen, setMapOpen] = React.useState(false);
                 </Dialog>
             </>
         )
+    }
+
+    function clearLogInfo() {
+        localStorage.setItem("username", "")
+        localStorage.setItem("userID", 0)
+        localStorage.setItem("sessionKey", "")
+        localStorage.setItem("isLoggedIn", "false")
+        localStorage.setItem("adminLoggedIn", "false")
+        setIsLoggedIn("false")
+        setAdminLoggedIn("false")
     }
 
     function LogoutDialog() {
@@ -159,25 +169,46 @@ const [mapOpen, setMapOpen] = React.useState(false);
     }
 
     function getButtons() {
-        if (buttonsMode === 1) {
+        if (adminLoggedIn === "true") {
+            return (
+                <>
+                    <Tooltip title={"Log out"}>
+                        <IconButton onClick={() => {
+                            setIsLogoutDialogOpen(true)
+                        }} color="inherit">
+                            <LogoutIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Admin Center">
+                        <IconButton onClick={() => {
+                            router.push({
+                                pathname: "/admin/dashboard"
+                            })
+                        }} color="inherit">
+                            <SupervisorAccountIcon/>
+                        </IconButton>
+                    </Tooltip>
+                </>
+            )
+        } else if (buttonsMode === 1) {
             return (
                 <>
                     <Tooltip title="Chat Room">
                         <IconButton onClick={() => {
                             setChatDialogOpen(true)
                         }} color="inherit">
-                            <ChatIcon />
+                            <ChatIcon/>
                         </IconButton>
                     </Tooltip>
                 </>
             )
         } else {
-            if (!isLoggedIn) {
+            if (isLoggedIn === "false") {
                 return (
                     <>
                         <Tooltip title={"Login"}>
                             <IconButton onClick={handleLogin} color="inherit">
-                                <LoginIcon />
+                                <LoginIcon/>
                             </IconButton>
                         </Tooltip>
                     </>
@@ -186,32 +217,27 @@ const [mapOpen, setMapOpen] = React.useState(false);
                 return (
                     <>
                         <Tooltip title={"Log out"}>
-
                             <IconButton onClick={() => {
                                 setIsLogoutDialogOpen(true)
                             }} color="inherit">
                                 <LogoutIcon/>
-
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Account center">
                             <IconButton onClick={() => {
                                 let path = "/account-center/account-center"
                                 router.push({
-                                    pathname: path,
-
-                                    query: {"userID": userID},
-
+                                    pathname: path
                                 }, path)
                             }} color="inherit">
-                                <FaceIcon />
+                                <FaceIcon/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Chat Room">
                             <IconButton onClick={() => {
                                 setChatDialogOpen(true)
                             }} color="inherit">
-                                <ChatIcon />
+                                <ChatIcon/>
                             </IconButton>
                         </Tooltip>
                     </>
@@ -226,32 +252,35 @@ const [mapOpen, setMapOpen] = React.useState(false);
 
     return (
         <>
-            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} open={mapOpen} fullWidth maxWidth='lg' sx={{ zIndex: 1000 }}>
+            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} open={mapOpen} fullWidth
+                    maxWidth='lg' sx={{zIndex: 1000}}>
                 <DialogTitle>
                     实时地图
                     <IconButton onClick={() => setMapOpen(false)}>
-                        <CloseIcon />
+                        <CloseIcon/>
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ flexDirection: { md: 'row', xs: 'column' }, display: 'flex' }}>
-                    <iframe src={"/map.html"} id="city_map" height="500" width="600" frameBorder="0" style={{ borderRadius: 10 }}></iframe>
-                    <Stack sx={{ display: { xs: 'none', md: 'flex' }, marginLeft: 2 }} gap={2}>
+                <DialogContent sx={{flexDirection: {md: 'row', xs: 'column'}, display: 'flex'}}>
+                    <iframe src={"/map.html"} id="city_map" height="500" width="600" frameBorder="0"
+                            style={{borderRadius: 10}}></iframe>
+                    <Stack sx={{display: {xs: 'none', md: 'flex'}, marginLeft: 2}} gap={2}>
                         <TicketSZ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(114.04, 22.57)
-                        }} />
+                        }}/>
                         <TicketGZ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(113.23, 23.16)
-                        }} />
+                        }}/>
                         <TicketCQ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(106.54, 29.59);
                             console.log("clicked change city position")
-                        }} />
+                        }}/>
                         <TicketSH onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(121.4, 31.2)
-                        }} />
+                        }}/>
 
                     </Stack>
-                    <Stack  direction='row' sx={{ display: { xs: 'flex', md: 'none' }, marginTop: 2, justifyContent:'center' }} gap={2}>
+                    <Stack direction='row'
+                           sx={{display: {xs: 'flex', md: 'none'}, marginTop: 2, justifyContent: 'center'}} gap={2}>
                         <Button onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(114.04, 22.57)
                         }} variant="outlined" fullWidth>深圳</Button>
@@ -269,32 +298,32 @@ const [mapOpen, setMapOpen] = React.useState(false);
             </Dialog>
             <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list}>
                 <IconButton onClick={() => setBookingOpen(false)} color="secondary">
-                    <ChevronLeftOutlined fontSize="large" />
+                    <ChevronLeftOutlined fontSize="large"/>
                 </IconButton>
             </BookingDrawer>
             <AppBar
                 position="fixed"
-                sx={{ background: "#2E3B55", zIndex: 1000 }}
+                sx={{background: "#2E3B55", zIndex: 1000}}
             >
                 {/* <Container maxWidth="xl"> */}
-                <Toolbar sx={{ justifyContent: "space-between" }}>
+                <Toolbar sx={{justifyContent: "space-between"}}>
                     {/*设置小屏菜单显示*/}
-                    <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}>
+                    <Box sx={{display: {xs: "flex", md: "none"}, alignItems: "center"}}>
                         <IconButton onClick={handleDrawerToggle} color="inherit">
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Drawer open={drawerOpen} onClose={handleDrawerToggle}>
                             <List>
-                                <ListItem sx={{ width: "fit-content" }}>
+                                <ListItem sx={{width: "fit-content"}}>
                                     <ListItemButton onClick={handleDrawerToggle}>
-                                        <CloseIcon />
+                                        <CloseIcon/>
                                     </ListItemButton>
                                 </ListItem>
                                 {pages.map((item) => (
                                     <ListItem
                                         key={item.name}
                                         disablePadding
-                                        sx={{ width: "100vw" }}
+                                        sx={{width: "100vw"}}
                                     >
                                         <ListItemButton href={item.link}>
                                             <ListItemText primary={item.name}></ListItemText>
@@ -311,9 +340,9 @@ const [mapOpen, setMapOpen] = React.useState(false);
                     {/* 小屏只显示logo，在屏幕中心*/}
 
                     {/*大屏显示完整跳转名称*/}
-                    <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                        <Button sx={{ paddingRight: 2, marginRight: 2 }} href="/" fullWidth size="large"
-                            variant="outlined" color="secondary" startIcon={<HotelOutlined fontSize="24px" />}>
+                    <Box sx={{display: {xs: "none", md: "flex"}}}>
+                        <Button sx={{paddingRight: 2, marginRight: 2}} href="/" fullWidth size="large"
+                                variant="outlined" color="secondary" startIcon={<HotelOutlined fontSize="24px"/>}>
                             盛夏小酒
                         </Button>
                         {pages.map((item) => (
@@ -326,12 +355,11 @@ const [mapOpen, setMapOpen] = React.useState(false);
                                 {item.name}
                             </Button>
                         ))}
-
                     </Box>
                     {/*用户图标大小屏都在最右边*/}
-                    <Box sx={{ display: "flex" }}>
+                    <Box sx={{display: "flex"}}>
                         <Button color="inherit"
-                            size="large" onClick={() => setMapOpen(true)}>
+                                size="large" onClick={() => setMapOpen(true)}>
                             测试地图
                         </Button>
 
@@ -358,12 +386,12 @@ const [mapOpen, setMapOpen] = React.useState(false);
                                 ))}
                         </Menu>
 
-                        {buttonsMode === 0 &&
+                        {buttonsMode === 0 && adminLoggedIn === "false" &&
                             <Divider
                                 orientation="vertical"
                                 color="success"
                                 flexItem
-                                sx={{ mx: 2 }}
+                                sx={{mx: 2}}
                             /> &&
                             <Button color="error" variant="contained" onClick={() => {
                                 setBookingOpen(!bookingOpen)

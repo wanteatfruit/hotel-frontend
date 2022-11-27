@@ -20,13 +20,12 @@ import * as React from "react";
 export default function AccountCenter() {
     const router = useRouter()
     const [drawerItem, setDrawerItem] = useState(0);
-    let _id = router.query['userID'];
     const [id, setID] = useState(-1)
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
 
     useEffect(() => {
-        setID(_id)
-    }, [_id])
+        setID(localStorage.getItem("userID"))
+    }, [])
 
     function accountContent() {
         return <Account id={id}/>;
@@ -52,7 +51,15 @@ export default function AccountCenter() {
                     onClose={() => {
                         setChatDialogOpen(false)
                     }}
-                    PaperProps={{sx: {position: "fixed", width: "100%", height: "100%", maxWidth: "md", backgroundColor: "#f1cec2"}}}
+                    PaperProps={{
+                        sx: {
+                            position: "fixed",
+                            width: "100%",
+                            height: "100%",
+                            maxWidth: "md",
+                            backgroundColor: "#f1cec2"
+                        }
+                    }}
                 >
                     <DialogContent>
                         <iframe src={"/chat-app.html"} height="95%" width="100%" frameBorder="0"></iframe>

@@ -18,7 +18,7 @@ import BalconyIcon from '@mui/icons-material/Balcony';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {
     Dialog, DialogActions,
     DialogContent, DialogContentText,
@@ -26,17 +26,20 @@ import {
 } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
-import { hotelImageUrl, roomImageUrl } from "../../data"
+import {hotelImageUrl, roomImageUrl} from "../../data"
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import { PhotoCamera } from "@mui/icons-material";
+import {ChevronRightRounded, PhotoCamera} from "@mui/icons-material";
 import Image from "next/image";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import {Stack} from "@mui/system";
 
 
-export default function Orders({ id }) {
+export default function Orders({id}) {
     const [mode, setMode] = useState(0)
     const [infoDialogOpen, setInfoDialogOpen] = useState(false)
-    const [modifyDialogOpen, setModifyDialogOpen] = useState(false)
     const [commentDialogOpen, setCommentDialogOpen] = useState(false)
     const [roomOnDialog, setRoomOnDialog] = useState("");
     const [roomInfo, setRoomInfo] = useState({})
@@ -49,16 +52,19 @@ export default function Orders({ id }) {
     const [commentWords, setCommentWords] = useState("")
     const [commentResponse, setCommentResponse] = useState("")
     const [commentResponseDialogOpen, setCommentResponseDialogOpen] = useState(false)
+    const [modifyDialogOpen, setModifyDialogOpen] = useState(false)
+    const [modifyResponseDialogOpen, setModifyResponseDialogOpen] = useState(false)
+    const [modifyResponse, setModifyResponse] = useState("")
 
     async function getRooms() {
         let _rooms = []
         if (mode) {
-            await axios.get("http://120.25.216.186:8888/orders/finished-orders", { params: { "userID": id } }).then((response) => {
+            await axios.get("http://120.25.216.186:8888/orders/finished-orders", {params: {"userID": id}}).then((response) => {
                 _rooms = response.data
             });
             setRooms(_rooms);
         } else {
-            await axios.get("http://120.25.216.186:8888/orders/ongoing-orders", { params: { "userID": id } }).then((response) => {
+            await axios.get("http://120.25.216.186:8888/orders/ongoing-orders", {params: {"userID": id}}).then((response) => {
                 _rooms = response.data
             });
             setRooms(_rooms);
@@ -66,7 +72,7 @@ export default function Orders({ id }) {
         let roomInfoDict = {}
         for (const idx in _rooms) {
             if (!(_rooms[idx].roomTypeID in roomInfoDict)) {
-                await axios.get("http://120.25.216.186:8888/roomtype", { params: { "id": _rooms[idx].roomTypeID } }).then((response) => {
+                await axios.get("http://120.25.216.186:8888/roomtype", {params: {"id": _rooms[idx].roomTypeID}}).then((response) => {
                     roomInfoDict[_rooms[idx].roomTypeID] = response.data
                 });
             }
@@ -87,31 +93,31 @@ export default function Orders({ id }) {
         let windowItem = ''
         if (intro[0].substring(intro[0].length - 1) === "有") {
             windowItem = <>
-                <Typography>有窗</Typography><WindowIcon /><DoneOutlineIcon />
+                <Typography>有窗</Typography><WindowIcon/><DoneOutlineIcon/>
             </>
         } else {
             windowItem = <>
-                <Typography>无窗</Typography><WindowIcon /><CancelIcon />
+                <Typography>无窗</Typography><WindowIcon/><CancelIcon/>
             </>
         }
         let balconyItem = ''
         if (intro[1].substring(intro[1].length - 1) === "有") {
             balconyItem = <>
-                <Typography>有阳台</Typography><BalconyIcon /><DoneOutlineIcon />
+                <Typography>有阳台</Typography><BalconyIcon/><DoneOutlineIcon/>
             </>
         } else {
             balconyItem = <>
-                <Typography>无阳台</Typography><BalconyIcon /><CancelIcon />
+                <Typography>无阳台</Typography><BalconyIcon/><CancelIcon/>
             </>
         }
         let laundryItem = ''
         if (intro[2].substring(intro[2].length - 1) === "有") {
             laundryItem = <>
-                <Typography>有洗衣房</Typography><LocalLaundryServiceIcon /><DoneOutlineIcon />
+                <Typography>有洗衣房</Typography><LocalLaundryServiceIcon/><DoneOutlineIcon/>
             </>
         } else {
             laundryItem = <>
-                <Typography>无洗衣房</Typography><LocalLaundryServiceIcon /><CancelIcon />
+                <Typography>无洗衣房</Typography><LocalLaundryServiceIcon/><CancelIcon/>
             </>
         }
 
@@ -124,21 +130,21 @@ export default function Orders({ id }) {
                             <Typography>{nameItem}</Typography>
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {windowItem}
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {balconyItem}
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {laundryItem}
                         </Grid>
                     </ListItem>
@@ -147,7 +153,7 @@ export default function Orders({ id }) {
         )
     }
 
-    function roomInfoDialog() {
+    function RoomInfoDialog() {
         const gapHeight = 2;
         const image_url = "url(" + roomImageUrl[roomOnDialog.roomTypeID % roomImageUrl.length] + ")"
         return (
@@ -157,10 +163,10 @@ export default function Orders({ id }) {
                     onClose={() => {
                         setInfoDialogOpen(false)
                     }}
-                    PaperProps={{ sx: { position: "fixed", width: "100%", height: "100%", maxWidth: "md" } }}
+                    PaperProps={{sx: {position: "fixed", width: "100%", height: "100%", maxWidth: "md"}}}
                 >
                     <DialogContent>
-                        <Grid container component="main" sx={{ height: '100%' }}>
+                        <Grid container component="main" sx={{height: '100%'}}>
                             <Grid
                                 sx={{
                                     width: "50%",
@@ -190,29 +196,29 @@ export default function Orders({ id }) {
         )
     }
 
-    function commentDialog() {
+    function CommentDialog() {
         function showUploadedImages() {
-            return <Grid sx={{ display: "flex", flexDirection: "row", columnGap: "0.5em" }}>
+            return <Grid sx={{display: "flex", flexDirection: "row", columnGap: "0.5em"}}>
                 {uploadedImages.length >= 1 && <Image
                     src={uploadedImages[0]}
                     width="100px"
                     height="100px"
-                    alt={"Uploaded Image1"} />}
+                    alt={"Uploaded Image1"}/>}
                 {uploadedImages.length >= 2 && <Image
                     src={uploadedImages[1]}
                     width="100px"
                     height="100px"
-                    alt={"Uploaded Image2"} />}
+                    alt={"Uploaded Image2"}/>}
                 {uploadedImages.length >= 3 && <Image
                     src={uploadedImages[2]}
                     width="100px"
                     height="100px"
-                    alt={"Uploaded Image3"} />}
+                    alt={"Uploaded Image3"}/>}
             </Grid>
         }
 
         function showUploadedVideo() {
-            return <Grid sx={{ display: "flex", flexDirection: "row", columnGap: "0.5em" }}>
+            return <Grid sx={{display: "flex", flexDirection: "row", columnGap: "0.5em"}}>
                 {uploadedVideo !== "" && <CardMedia
                     component='video'
                     image={uploadedVideo}
@@ -237,15 +243,11 @@ export default function Orders({ id }) {
             }
             data.append("words", commentWords)
             data.append("orderid", roomOnDialog.orderID)
-            for (const value of data.entries()) {
-                console.log(value);
-            }
-            let commentReceived = "true"
-            // let commentReceived = await fetch('http://120.25.216.186:8888/comment/insert', {
-            //     method: 'POST',
-            //     body: data
-            // });
-            // console.log(commentReceived)
+            let commentReceived = await fetch('http://120.25.216.186:8888/comment/insert', {
+                method: 'POST',
+                body: data
+            });
+            console.log(commentReceived)
             if (commentReceived === "true") {
                 setCommentResponse("我们已收到您的评价！感谢您的支持")
                 setCommentResponseDialogOpen(true)
@@ -273,7 +275,7 @@ export default function Orders({ id }) {
                 }}>
                     <DialogTitle>评价</DialogTitle>
                     <DialogContent>
-                        <Grid sx={{ display: "flex", flexDirection: "column", rowGap: "1em" }}>
+                        <Grid sx={{display: "flex", flexDirection: "column", rowGap: "1em"}}>
                             <DialogContentText>
                                 您的支持与鼓励是我们最大的动力！
                             </DialogContentText>
@@ -289,9 +291,9 @@ export default function Orders({ id }) {
                                     setCommentWords(event.target.value);
                                 }}
                             />
-                            <Grid sx={{ display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                            <Grid sx={{display: "flex", flexDirection: "row", columnGap: "1em"}}>
                                 <IconButton color="primary" aria-label="upload picture" component="label"
-                                    sx={{ justifyContent: "flex-start" }}>
+                                            sx={{justifyContent: "flex-start"}}>
                                     {uploadedImages.length < 3 &&
                                         <input hidden accept="image/*" type="file" onChange={(event) => {
                                             if (event.currentTarget.files) {
@@ -313,11 +315,11 @@ export default function Orders({ id }) {
                                                     ]
                                                 );
                                             }
-                                        }} />}
-                                    <PhotoCamera />
+                                        }}/>}
+                                    <PhotoCamera/>
                                 </IconButton>
                                 <IconButton color="primary" aria-label="upload picture" component="label"
-                                    sx={{ justifyContent: "flex-start" }}>
+                                            sx={{justifyContent: "flex-start"}}>
                                     <input hidden accept="video/*" type="file" onChange={(event) => {
                                         if (event.currentTarget.files) {
                                             const file = event.currentTarget.files[0];
@@ -328,8 +330,8 @@ export default function Orders({ id }) {
                                             const url = URL.createObjectURL(blobData);
                                             setUploadVideo(url)
                                         }
-                                    }} />
-                                    <VideoCallIcon />
+                                    }}/>
+                                    <VideoCallIcon/>
                                 </IconButton>
                             </Grid>
                             <Grid><Typography>You can upload three photos and one video</Typography></Grid>
@@ -374,11 +376,139 @@ export default function Orders({ id }) {
     }
 
 
+    function ModifyResponseDialog() {
+        return (
+            <>
+                <Dialog
+                    open={modifyResponseDialogOpen}
+                    onClose={() => setModifyResponseDialogOpen(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        修改结果
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {modifyResponse}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setModifyResponseDialogOpen(false)} autoFocus>
+                            好的
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
+    }
+
+
+    function ModifyDialog() {
+        const [bookingInfo, setBookingInfo] = React.useState({
+            startDate: dayjs().startOf("day"),
+            endDate: dayjs().startOf("day").add(7, 'day')
+        })
+
+        function timePicker() {
+            return (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <Stack direction='row' gap={2}>
+                        <DatePicker
+                            label="入住日期"
+                            minDate={dayjs().startOf("day")}
+                            inputFormat="YYYY/MM/DD"
+                            value={bookingInfo.startDate}
+                            onChange={(newDate) => {
+                                setBookingInfo({...bookingInfo, startDate: newDate})
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    required
+                                    // inputProps={{readOnly:true}}
+                                    onKeyDown={(e) => e.preventDefault()}
+                                />
+                            )}
+                        >
+                        </DatePicker>
+                        <ChevronRightRounded fontSize='large'/>
+                        <DatePicker
+                            label="离开日期"
+                            value={bookingInfo.endDate}
+                            minDate={bookingInfo.startDate.add(1, 'day')}
+                            inputFormat="YYYY/MM/DD"
+                            onChange={(newDate) => {
+                                setBookingInfo({...bookingInfo, endDate: newDate})
+                            }}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    required
+                                    // inputProps={{readOnly:true}}
+                                    onKeyDown={(e) => e.preventDefault()}
+                                />
+                            )}>
+
+                        </DatePicker>
+                    </Stack>
+                </LocalizationProvider>
+            )
+        }
+
+        async function ModifyConfirmOnClick() {
+
+            const data = {
+                "orderID": roomOnDialog.orderID,
+                "checkinTime": bookingInfo.startDate,
+                "checkoutTime": bookingInfo.endDate
+            }
+            console.log("data: ", data)
+            let answer = {
+                "modifySucceeded": false,
+                "moneyChange": -400
+            }
+            // await axios.put('http://120.25.216.186:8888/orders/modifyOrderTime', data)
+            //     .then(response => answer = response);
+            let modifySucceeded = answer.modifySucceeded
+            let moneyChange = answer.moneyChange
+            if (modifySucceeded) {
+                if (moneyChange > 0) {
+                    setModifyResponse("修改住房时间成功！酒店已额外收取您房费 " + moneyChange + " 元")
+                } else {
+                    setModifyResponse("修改住房时间成功！酒店已退还您房费 " + (-moneyChange) + " 元")
+                }
+            } else {
+                setModifyResponse("修改住房时间失败!您的账户余额不足以支付额外收取的房费 " + (-moneyChange) + " 元")
+            }
+            setModifyDialogOpen(false)
+            setModifyResponseDialogOpen(true)
+        }
+
+        return (
+            <>
+                <Dialog open={modifyDialogOpen} onClose={() => {
+                    setModifyDialogOpen(false)
+                }}>
+                    <DialogTitle>修改住店时间</DialogTitle>
+                    <DialogContent sx={{marginTop: "0.5em"}}>
+                        <Grid sx={{marginTop: "1em"}}>
+                            {timePicker()}
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {
+                            setModifyDialogOpen(false)
+                        }}>取消</Button>
+                        <Button onClick={ModifyConfirmOnClick}>提交</Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
+    }
+
     function getAlbum() {
         const modifyMenuOpen = Boolean(modifyMenuAnchorEl);
-        const handleClick = (event) => {
-            setModifyMenuAnchorEl(event.currentTarget);
-        };
         const modifyMenuHandleClose = () => {
             setModifyMenuAnchorEl(null);
         };
@@ -389,7 +519,7 @@ export default function Orders({ id }) {
                     <>
                         <Grid item key={room.hotelName} xs={12} sm={6} md={4}>
                             <Card
-                                sx={{ display: 'flex', flexDirection: 'column' }}
+                                sx={{display: 'flex', flexDirection: 'column'}}
                             >
                                 <CardMedia
                                     component="img"
@@ -427,7 +557,7 @@ export default function Orders({ id }) {
                     <>
                         <Grid item key={room.hotelName} xs={12} sm={6} md={4}>
                             <Card
-                                sx={{ display: 'flex', flexDirection: 'column' }}
+                                sx={{display: 'flex', flexDirection: 'column'}}
                             >
                                 <CardMedia
                                     component="img"
@@ -435,7 +565,7 @@ export default function Orders({ id }) {
                                     image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
                                     alt="random"
                                 />
-                                <CardContent sx={{ flexGrow: 1 }}>
+                                <CardContent sx={{flexGrow: 1}}>
                                     <Typography gutterBottom variant="h5" component="h2">
                                         {room.hotelName}
                                     </Typography>
@@ -457,7 +587,10 @@ export default function Orders({ id }) {
                                             aria-controls={modifyMenuOpen ? 'basic-menu' : undefined}
                                             aria-haspopup="true"
                                             aria-expanded={modifyMenuOpen ? 'true' : undefined}
-                                            onClick={handleClick}
+                                            onClick={(event) => {
+                                                setModifyMenuAnchorEl(event.currentTarget);
+                                                setRoomOnDialog(room)
+                                            }}
                                         >
                                             修改订单
                                         </Button>
@@ -471,13 +604,26 @@ export default function Orders({ id }) {
                                             }}
                                         >
                                             <MenuItem onClick={() => {
-
+                                                setModifyDialogOpen(true)
                                             }}>修改入住时间</MenuItem>
-                                            <MenuItem onClick={() => {
-                                                const body = { "id": room.orderID };
-                                                axios.post('http://120.25.216.186:8888/orders/delete', body)
-                                                    .then(response => console.log("取消", response));
-                                                console.log("取消")
+                                            <MenuItem onClick={async () => {
+                                                const body = {"id": room.orderID};
+                                                // const resp= await fetch('http://120.25.216.186:8888/orders/delete', {
+                                                //     method: 'POST',
+                                                //     body: JSON.stringify(body),
+                                                //     headers: {
+                                                //         'Content-type': 'application/json'
+                                                //     }
+                                                // })
+                                                // console.log(body)
+                                                // console.log("jwjwww ", body)
+                                                await axios.post('http://120.25.216.186:8888/orders/delete', body, {
+                                                    headers: {
+                                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                                    }
+                                                })
+                                                    .then(response => console.log("取消: "));
+                                                console.log("取消1: ", body)
                                             }
                                             }>取消订单</MenuItem>
                                         </Menu>
@@ -495,7 +641,7 @@ export default function Orders({ id }) {
             if (rooms.length === 0) {
                 return (
                     <>
-                        <Typography sx={{ fontSize: "2em" }}>暂无订单</Typography>
+                        <Typography sx={{fontSize: "2em"}}>暂无订单</Typography>
                     </>
                 )
             }
@@ -503,8 +649,10 @@ export default function Orders({ id }) {
 
         return (
             <>
-                {roomInfoDialog()}
-                {commentDialog()}
+                {ModifyResponseDialog()}
+                {ModifyDialog()}
+                {RoomInfoDialog()}
+                {CommentDialog()}
                 {ResponseDialog()}
                 <Grid container spacing={2}>
                     <Grid sx={{
@@ -525,7 +673,7 @@ export default function Orders({ id }) {
     }
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4,px:2 }}>
+        <Container maxWidth="lg" sx={{mt: 4, px: 2}}>
             <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
                     <Typography variant='h4'>订单信息</Typography>
@@ -536,12 +684,12 @@ export default function Orders({ id }) {
                     name="row-radio-buttons-group"
                     defaultValue={'已预定'}
                 >
-                    <FormControlLabel value="已预定" control={<Radio />} label="已预定" onClick={() => {
+                    <FormControlLabel value="已预定" control={<Radio/>} label="已预定" onClick={() => {
                         setMode(0)
-                    }} />
-                    <FormControlLabel value="已完成" control={<Radio />} label="已完成" onClick={() => {
+                    }}/>
+                    <FormControlLabel value="已完成" control={<Radio/>} label="已完成" onClick={() => {
                         setMode(1)
-                    }} />
+                    }}/>
                 </RadioGroup>
             </FormControl>
             {getAlbum()}
