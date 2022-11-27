@@ -99,7 +99,7 @@ export default function RoomCard({ imageUrl, description, hotelName, admin, room
                         <FavoriteIcon />
                     </IconButton>
 
-                    <Button variant="contained" href={`/book/${hotelName}`}>订房</Button>
+                    <Button variant="outlined" href={`/book/${hotelName}`}>预定</Button>
 
                 </CardActions>}
                 {admin &&

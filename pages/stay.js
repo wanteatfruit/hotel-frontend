@@ -108,11 +108,15 @@ export default function Stay({hotel_list}) {
             fontSize: 15
         },
         palette: {
+            primary:{
+                main:'#2E3B55'
+            },
             secondary: {
                 main: '#fff'
             }
         }
     })
+
 
     return (
 
@@ -164,7 +168,7 @@ export default function Stay({hotel_list}) {
                             </FormGroup>
                             <Stack direction='row' justifyContent='space-between'>
                                 <Button fullWidth onClick={handleReset} >重设</Button>
-                                <Button fullWidth variant="contained" onClick={handleFilter}>提交</Button>
+                                <Button fullWidth variant="outlined" onClick={handleFilter}>提交</Button>
 
                             </Stack>
                         </Stack>

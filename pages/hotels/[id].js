@@ -10,6 +10,7 @@ import axios from "axios";
 import { roomImageUrl } from "../../data";
 import CommentArea from "./comment-area";
 import FloorPlanA from "../../components/floor-plan-a";
+import FloorPlanB from "../../components/floor-plan-b";
 import FloorPlanC from "../../components/floor-plan-c";
 import { CloseOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -27,6 +28,7 @@ import { motion } from "framer-motion";
 export default function HotelDetail() {
     const router = useRouter()
     const hotel_name = router.query.id
+    const book_url = `book/${hotel_name}`
     //id为酒店名，动态路径
     const [roomList, setRoomList] = React.useState([]);
     const [hotelInfo, setHotelInfo] = React.useState({})
@@ -53,6 +55,9 @@ export default function HotelDetail() {
             fontSize: 15
         },
         palette: {
+            primary:{
+                main:'#2E3B55'
+            },
             secondary: {
                 main: '#fff'
             }
@@ -86,7 +91,7 @@ export default function HotelDetail() {
                     backgroundColor: 'white',
                     flexGrow: 1,
                     height: "max-content",
-                    overflow: "auto",
+                    overflow: "hidden",
                     paddingX: 5,
                     mt:'60px',
                 }}
@@ -115,7 +120,7 @@ export default function HotelDetail() {
                     </Grid>
                 </Box>
                 <Box sx={{ paddingX: {xs:0,sm:4}, paddingY: 6 }}>
-                    <CommentArea />
+                    <CommentArea hotelID={hotel_name} />
                 </Box>
             </Box>
             <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg' sx={{ zIndex: 1000 }} open={openFloorPlan}>
@@ -127,7 +132,9 @@ export default function HotelDetail() {
                 </DialogTitle>
                 <DialogContent sx={{ display: 'flex', justifyContent: 'center' }}>
                     {/* 根据hotelname给三家酒店写死平面图 */}
-                    <FloorPlanA href1={"www.baidu.com"} href2={"www.baidu.com"} />
+                    {hotel_name==='深圳湾1号' && <FloorPlanA href1={book_url} href2={book_url} />}
+                    {hotel_name==='广州1号' && <FloorPlanC href1={book_url} href2={book_url} />}
+                    {hotel_name==='汤臣一品' && <FloorPlanB href1={book_url} href2={book_url} />}
 
                 </DialogContent>
             </Dialog>

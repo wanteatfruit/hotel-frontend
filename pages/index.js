@@ -82,17 +82,19 @@ export default function Home({hotel_list, room_list}) {
         }
     };
     const theme = createTheme({
-        typography: {
-            fontFamily: "'Noto Serif SC', serif",
-            fontSize: 15
-        },
         palette: {
+            primary: {
+                main: '#2E3B55'
+            },
             secondary: {
                 main: '#fff'
             }
+        },
+        typography: {
+            fontFamily: "'Noto Serif SC', serif",
+
         }
     })
-
     useEffect(() => {
         setIsLoggedIn(localStorage.getItem("isLoggedIn"))
         setUsername(localStorage.getItem("username"))
@@ -118,8 +120,8 @@ export default function Home({hotel_list, room_list}) {
                         buttonsMode={0}/>
             </div>
             <main>
-                <div className={styles.picOne}>
-                    <Box sx={{display: {xs: 'block', sm: 'block'}}}>
+                <div className={styles.picOne} style={{ marginTop:'60px'}}>
+                    <Box sx={{display: {xs: 'block', sm: 'block'},}}>
                         <motion.div initial={{opacity: 0, y: 100}} animate={{opacity: 1, y: 0}} transition={{
                             duration: 2,
                             delay: 0.5,

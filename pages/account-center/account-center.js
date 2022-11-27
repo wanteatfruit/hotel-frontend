@@ -83,14 +83,17 @@ export default function AccountCenter() {
     }
 
     const theme = createTheme({
-        typography: {
-            fontFamily: "'Noto Serif SC', serif",
-            fontSize: 15
-        },
         palette: {
+            primary: {
+                main: '#2E3B55'
+            },
             secondary: {
                 main: '#fff'
             }
+        },
+        typography: {
+            fontFamily: "'Noto Serif SC', serif",
+
         }
     })
 

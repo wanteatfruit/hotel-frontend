@@ -4,8 +4,9 @@ import styles from "../styles/HotelPage.module.css";
 
 
 export default function FloorPlanA({href1, href2}) {
-    function loadFloorPlan(href1, href2){
-        document.getElementById("floorplan-frame").contentWindow.setHref("www.baidu.com", "www.bing.com");
+
+    function loadFloorPlan(){
+        document.getElementById("floorplan-frame").contentWindow.setHref(href1,href2);
 
     }
 

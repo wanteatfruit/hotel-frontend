@@ -47,7 +47,7 @@ export default function BookingPage({ }) {
     const hotelName = router.query.id
     const [roomList, setRoomList] = React.useState(null)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
-
+    const [bookingCost, setBookingCost]  = React.useState(0);
     const [roomTypeName, setRoomTypeName] = React.useState(null)
     //get roomtype by hotel
     React.useEffect(() => {
@@ -56,6 +56,7 @@ export default function BookingPage({ }) {
                 setRoomList(resp.data)
             })
             console.log(roomList)
+            setBookingInfo
         }
     }, [router.isReady])
 
@@ -64,11 +65,9 @@ export default function BookingPage({ }) {
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
         endDate: dayjs().startOf("day").add(7, 'day'),
-        roomTypeID: 0,
-        roomName:'',
+        roomName:roomList !== null?roomList[0].roomname:'',
         roomPrice:0,
         hotelName: hotelName == null ? '' : hotelName.toString(),
-        guestsNumber: 2,
         cost: 0
     })
     console.log(bookingInfo)
@@ -88,26 +87,47 @@ export default function BookingPage({ }) {
         }
     })
 
-
-    const city_list = ['深圳', '广州', '上海', '重庆'];
-
-
-    const guestsNumberMarks = [
-        { value: 1, label: '1' },
-        { value: 2, label: '2' },
-        { value: 3, label: '3' },
-        { value: 4, label: '4' },
-        { value: 5, label: '5' },
-
-    ]
-
     const [activeStep, setActiveStep] = React.useState(0);
 
     const calculateCost = () => {
         const days = bookingInfo.endDate.diff(bookingInfo.startDate, 'day')
         console.log(days)
         const pricePerDay = bookingInfo.roomPrice
-        return days * pricePerDay
+        const cost1 = days * pricePerDay
+        setBookingCost(cost1)
+    }
+
+    async function handleOrder(event){
+        event.preventDefault()
+        if(localStorage.getItem("isLoggedIn")==="false"){
+            alert("请先登录！")
+            return
+        }
+        const uname = localStorage.getItem("username")
+        const uid = localStorage.getItem("userID")
+        const userInfo = await axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`)
+        if(userInfo.data.money<bookingCost){
+            alert("用户余额不足！")
+            return
+        }
+        const orderInfo = {
+            startDate: bookingInfo.startDate.format('YYYY-MM-DD HH:mm:ss'),
+            endDate: bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss'),
+            roomType: bookingInfo.roomName,
+            hotelName: bookingInfo.hotelName,
+            cost:bookingCost,
+            username:uname
+        }
+
+        const resp = await fetch('http://120.25.216.186:8888/orders/booking',{
+            method:'POST',
+            body:JSON.stringify(orderInfo),
+            headers:{
+              'Content-type': 'application/json'
+            }
+          })
+          console.log(orderInfo)
+        router.push("/account-center/account-center")
     }
 
     return (
@@ -140,16 +160,15 @@ export default function BookingPage({ }) {
                         })}
                     </Stepper>
                     {activeStep === 0 && (
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <div style={{paddingBottom:4, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                             <List sx={{}}>
                                 {roomList !== null && roomList.map((item, index) => (
                                     <ListItem sx={{}} key={item.roomtypeid}>
-                                        <ListItemButton disabled={item.remain <= 0} selected={selectedRoom === index}
+                                        <ListItemButton  selected={selectedRoom === index}
                                             onClick={() => {
                                                 setSelectedRoom(index);
                                                 setBookingInfo({
                                                     ...bookingInfo,
-                                                    roomTypeID: item.roomtypeid,
                                                     hotelName: hotelName,
                                                     roomName: item.roomname,
                                                     roomPrice: item.price
@@ -173,17 +192,15 @@ export default function BookingPage({ }) {
                                                             checked={handleIntroduction(item, 2)}></Checkbox>}
                                                             label="洗衣房" />
                                                     </FormGroup>
-                                                    <Typography textAlign="end" paddingRight={2} variant="h6">{`剩余: ${item.remain}间`}</Typography>
-
                                                 </CardContent>
                                             </Card>
                                         </ListItemButton>
                                     </ListItem>
                                 ))}
                             </List>
-                            <div style={{ paddingBottom: 10, display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
+                            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
                                 <Button sx={{ width: '15vh', marginRight: 4 }} href="/hotels">返回主页</Button>
-                                <Button sx={{ width: '15vh', marginRight: 4 }} variant="outlined" onClick={() => {
+                                <Button sx={{ width: '15vh', marginRight: 4 }} variant="outlined" disabled={bookingInfo.roomName===''} onClick={() => {
                                     setActiveStep(activeStep + 1)
                                 }}>下一步</Button>
                             </div>
@@ -255,18 +272,18 @@ export default function BookingPage({ }) {
 
                             </Stack>
 
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
+                            <div style={{ marginBottom: 20,display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
                                 <Button sx={{ width: '15vh', marginRight: 4 }} onClick={() => {
                                     setActiveStep(activeStep - 1)
                                 }}>上一步</Button>
                                 <Button sx={{ width: '15vh', marginRight: 4 }} variant="outlined" onClick={() => {
-                                    setActiveStep(activeStep + 1)
+                                    setActiveStep(activeStep + 1); calculateCost()
                                 }}>下一步</Button>
                             </div>
                         </div>
                     )}
                     {activeStep === 2 && (
-                        <div>
+                        <form onSubmit={handleOrder} >
                             <Grid container columns={6} spacing={2} padding={6}>
                                 <Grid item xs={3} sm={2}>
                                     <Card sx={{ flexDirection: 'row' }}>
@@ -293,7 +310,7 @@ export default function BookingPage({ }) {
                                         <CardHeader title="总费用"></CardHeader>
                                         <CardContent>
                                             <Typography variant="h6">
-                                                {calculateCost()}
+                                                {bookingCost}
                                             </Typography>
                                         </CardContent>
 
@@ -320,15 +337,15 @@ export default function BookingPage({ }) {
                                     </Card>
                                 </Grid>
                                 <Grid item xs={3} sm={2}>
-                                    <Button variant="contained" sx={{width:'100%', height:'100%', fontSize:'2rem'}}>提交订单</Button>
+                                    <Button type="submit" variant="contained" sx={{width:'100%', height:'100%', fontSize:'2rem'}}>提交订单</Button>
                                 </Grid>
                             </Grid>
-                            <div style={{ display: 'flex', padding: 4 }}>
-                                <Button variant="outlined" sx={{ width: '15vh', marginLeft: 4, marginBottom:4 }} onClick={() => {
+                            <div style={{ display: 'flex', padding: 4, justifyContent:'flex-end' }}>
+                                <Button  variant="outlined" sx={{ width: '15vh', marginRight: 5, marginBottom:4 }} onClick={() => {
                                     setActiveStep(activeStep - 1)
                                 }}>上一步</Button>
                             </div>
-                        </div>
+                        </form>
                     )}
                 </Box>
             </ThemeProvider>
