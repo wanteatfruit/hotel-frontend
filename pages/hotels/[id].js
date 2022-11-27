@@ -87,7 +87,8 @@ export default function HotelDetail() {
                     flexGrow: 1,
                     height: "max-content",
                     overflow: "auto",
-                    paddingX: 5
+                    paddingX: 5,
+                    mt:'60px',
                 }}
             >
                 <Box sx={{ display: 'flex', paddingY: 4, paddingX: {xs:0,sm:4}, justifyContent: 'center', flexDirection: 'column' }}>

@@ -106,7 +106,7 @@ export default function Stay({hotel_list}) {
 
         <ThemeProvider theme={theme} >
             <NavBar />
-                <Grid container spacing={2} columns={16} sx={{ padding: 1 }}>
+                <Grid container spacing={2} columns={16} sx={{ padding: 1, mt:'64px' }}>
 
                 <Grid item xs={16} sm={3}>
                     <Paper elevation={false} sx={{padding: 2}}>

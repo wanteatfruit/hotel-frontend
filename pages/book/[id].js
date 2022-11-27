@@ -114,12 +114,13 @@ export default function BookingPage({ }) {
         <>
             <ThemeProvider theme={theme}>
                 <NavBar />
-                <Box>
+                <Box sx={{mt:'60px',}}>
                     <div style={{
                         backgroundImage: 'url("https://images.pexels.com/photos/585753/pexels-photo-585753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
                         backgroundSize: 'cover',
                         height: '25vh',
                         display: 'flex',
+                        
                         alignItems: 'flex-end'
                     }}>
 
