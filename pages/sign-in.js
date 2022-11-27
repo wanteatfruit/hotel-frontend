@@ -134,7 +134,7 @@ export default function SignIn() {
                                 justifyContent: "flex-start",
                                 alignItems: "center"
                             }}>
-                                <Typography>Admin? </Typography>
+                                <Typography>管理员</Typography>
                                 <Checkbox id="admin" checked={adminLogin} onChange={(event) => {
                                     setAdminLogin(event.target.checked)
                                 }}/>

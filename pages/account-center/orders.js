@@ -26,14 +26,15 @@ import {
 } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
-import { hotelImageUrl, roomImageUrl } from "../../data"
+import {hotelImageUrl, roomImageUrl} from "../../data"
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import {PhotoCamera} from "@mui/icons-material";
+import {ChevronRightRounded, PhotoCamera} from "@mui/icons-material";
 import Image from "next/image";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import {Stack} from "@mui/system";
 
 
 export default function Orders({id}) {
@@ -92,31 +93,31 @@ export default function Orders({id}) {
         let windowItem = ''
         if (intro[0].substring(intro[0].length - 1) === "有") {
             windowItem = <>
-                <Typography>有窗</Typography><WindowIcon /><DoneOutlineIcon />
+                <Typography>有窗</Typography><WindowIcon/><DoneOutlineIcon/>
             </>
         } else {
             windowItem = <>
-                <Typography>无窗</Typography><WindowIcon /><CancelIcon />
+                <Typography>无窗</Typography><WindowIcon/><CancelIcon/>
             </>
         }
         let balconyItem = ''
         if (intro[1].substring(intro[1].length - 1) === "有") {
             balconyItem = <>
-                <Typography>有阳台</Typography><BalconyIcon /><DoneOutlineIcon />
+                <Typography>有阳台</Typography><BalconyIcon/><DoneOutlineIcon/>
             </>
         } else {
             balconyItem = <>
-                <Typography>无阳台</Typography><BalconyIcon /><CancelIcon />
+                <Typography>无阳台</Typography><BalconyIcon/><CancelIcon/>
             </>
         }
         let laundryItem = ''
         if (intro[2].substring(intro[2].length - 1) === "有") {
             laundryItem = <>
-                <Typography>有洗衣房</Typography><LocalLaundryServiceIcon /><DoneOutlineIcon />
+                <Typography>有洗衣房</Typography><LocalLaundryServiceIcon/><DoneOutlineIcon/>
             </>
         } else {
             laundryItem = <>
-                <Typography>无洗衣房</Typography><LocalLaundryServiceIcon /><CancelIcon />
+                <Typography>无洗衣房</Typography><LocalLaundryServiceIcon/><CancelIcon/>
             </>
         }
 
@@ -129,21 +130,21 @@ export default function Orders({id}) {
                             <Typography>{nameItem}</Typography>
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {windowItem}
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {balconyItem}
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {laundryItem}
                         </Grid>
                     </ListItem>
@@ -162,10 +163,10 @@ export default function Orders({id}) {
                     onClose={() => {
                         setInfoDialogOpen(false)
                     }}
-                    PaperProps={{ sx: { position: "fixed", width: "100%", height: "100%", maxWidth: "md" } }}
+                    PaperProps={{sx: {position: "fixed", width: "100%", height: "100%", maxWidth: "md"}}}
                 >
                     <DialogContent>
-                        <Grid container component="main" sx={{ height: '100%' }}>
+                        <Grid container component="main" sx={{height: '100%'}}>
                             <Grid
                                 sx={{
                                     width: "50%",
@@ -197,27 +198,27 @@ export default function Orders({id}) {
 
     function CommentDialog() {
         function showUploadedImages() {
-            return <Grid sx={{ display: "flex", flexDirection: "row", columnGap: "0.5em" }}>
+            return <Grid sx={{display: "flex", flexDirection: "row", columnGap: "0.5em"}}>
                 {uploadedImages.length >= 1 && <Image
                     src={uploadedImages[0]}
                     width="100px"
                     height="100px"
-                    alt={"Uploaded Image1"} />}
+                    alt={"Uploaded Image1"}/>}
                 {uploadedImages.length >= 2 && <Image
                     src={uploadedImages[1]}
                     width="100px"
                     height="100px"
-                    alt={"Uploaded Image2"} />}
+                    alt={"Uploaded Image2"}/>}
                 {uploadedImages.length >= 3 && <Image
                     src={uploadedImages[2]}
                     width="100px"
                     height="100px"
-                    alt={"Uploaded Image3"} />}
+                    alt={"Uploaded Image3"}/>}
             </Grid>
         }
 
         function showUploadedVideo() {
-            return <Grid sx={{ display: "flex", flexDirection: "row", columnGap: "0.5em" }}>
+            return <Grid sx={{display: "flex", flexDirection: "row", columnGap: "0.5em"}}>
                 {uploadedVideo !== "" && <CardMedia
                     component='video'
                     image={uploadedVideo}
@@ -274,7 +275,7 @@ export default function Orders({id}) {
                 }}>
                     <DialogTitle>评价</DialogTitle>
                     <DialogContent>
-                        <Grid sx={{ display: "flex", flexDirection: "column", rowGap: "1em" }}>
+                        <Grid sx={{display: "flex", flexDirection: "column", rowGap: "1em"}}>
                             <DialogContentText>
                                 您的支持与鼓励是我们最大的动力！
                             </DialogContentText>
@@ -290,9 +291,9 @@ export default function Orders({id}) {
                                     setCommentWords(event.target.value);
                                 }}
                             />
-                            <Grid sx={{ display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                            <Grid sx={{display: "flex", flexDirection: "row", columnGap: "1em"}}>
                                 <IconButton color="primary" aria-label="upload picture" component="label"
-                                    sx={{ justifyContent: "flex-start" }}>
+                                            sx={{justifyContent: "flex-start"}}>
                                     {uploadedImages.length < 3 &&
                                         <input hidden accept="image/*" type="file" onChange={(event) => {
                                             if (event.currentTarget.files) {
@@ -314,11 +315,11 @@ export default function Orders({id}) {
                                                     ]
                                                 );
                                             }
-                                        }} />}
-                                    <PhotoCamera />
+                                        }}/>}
+                                    <PhotoCamera/>
                                 </IconButton>
                                 <IconButton color="primary" aria-label="upload picture" component="label"
-                                    sx={{ justifyContent: "flex-start" }}>
+                                            sx={{justifyContent: "flex-start"}}>
                                     <input hidden accept="video/*" type="file" onChange={(event) => {
                                         if (event.currentTarget.files) {
                                             const file = event.currentTarget.files[0];
@@ -329,8 +330,8 @@ export default function Orders({id}) {
                                             const url = URL.createObjectURL(blobData);
                                             setUploadVideo(url)
                                         }
-                                    }} />
-                                    <VideoCallIcon />
+                                    }}/>
+                                    <VideoCallIcon/>
                                 </IconButton>
                             </Grid>
                             <Grid><Typography>You can upload three photos and one video</Typography></Grid>
@@ -518,7 +519,7 @@ export default function Orders({id}) {
                     <>
                         <Grid item key={room.hotelName} xs={12} sm={6} md={4}>
                             <Card
-                                sx={{ display: 'flex', flexDirection: 'column' }}
+                                sx={{display: 'flex', flexDirection: 'column'}}
                             >
                                 <CardMedia
                                     component="img"
@@ -556,7 +557,7 @@ export default function Orders({id}) {
                     <>
                         <Grid item key={room.hotelName} xs={12} sm={6} md={4}>
                             <Card
-                                sx={{ display: 'flex', flexDirection: 'column' }}
+                                sx={{display: 'flex', flexDirection: 'column'}}
                             >
                                 <CardMedia
                                     component="img"
@@ -564,7 +565,7 @@ export default function Orders({id}) {
                                     image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
                                     alt="random"
                                 />
-                                <CardContent sx={{ flexGrow: 1 }}>
+                                <CardContent sx={{flexGrow: 1}}>
                                     <Typography gutterBottom variant="h5" component="h2">
                                         {room.hotelName}
                                     </Typography>
@@ -640,7 +641,7 @@ export default function Orders({id}) {
             if (rooms.length === 0) {
                 return (
                     <>
-                        <Typography sx={{ fontSize: "2em" }}>暂无订单</Typography>
+                        <Typography sx={{fontSize: "2em"}}>暂无订单</Typography>
                     </>
                 )
             }
@@ -672,7 +673,7 @@ export default function Orders({id}) {
     }
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4,px:2 }}>
+        <Container maxWidth="lg" sx={{mt: 4, px: 2}}>
             <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
                     <Typography variant='h4'>订单信息</Typography>
@@ -683,12 +684,12 @@ export default function Orders({id}) {
                     name="row-radio-buttons-group"
                     defaultValue={'已预定'}
                 >
-                    <FormControlLabel value="已预定" control={<Radio />} label="已预定" onClick={() => {
+                    <FormControlLabel value="已预定" control={<Radio/>} label="已预定" onClick={() => {
                         setMode(0)
-                    }} />
-                    <FormControlLabel value="已完成" control={<Radio />} label="已完成" onClick={() => {
+                    }}/>
+                    <FormControlLabel value="已完成" control={<Radio/>} label="已完成" onClick={() => {
                         setMode(1)
-                    }} />
+                    }}/>
                 </RadioGroup>
             </FormControl>
             {getAlbum()}

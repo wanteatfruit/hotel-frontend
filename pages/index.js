@@ -114,7 +114,7 @@ export default function Home({hotel_list, room_list}) {
             </SpeedDial> */}
             <CssBaseline/>
             <div>
-                <NavBar hotel_list={hotel_list} room_list={room_list} isLoggedIn={isLoggedIn}
+                <NavBar hotel_list={hotel_list} room_list={room_list} href={"/"}
                         buttonsMode={0}/>
             </div>
             <main>
