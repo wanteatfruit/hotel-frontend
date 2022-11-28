@@ -15,6 +15,7 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import axios from "axios";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 
 function Copyright(props) {
     return (
@@ -35,6 +36,7 @@ export default function SignIn() {
     const router = useRouter();
     const href = router.query['href'];
     const [adminLogin, setAdminLogin] = useState(false)
+    const [responseDialogOpen, setResponseDialogOpen] = useState(false)
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -51,31 +53,72 @@ export default function SignIn() {
         }
         let answer = {}
         if (adminLogin) {
-            // await fetch("http://120.25.216.186:8888/manager-login", options)
-            //     .then((response) => response.json()).then(data => answer = data)
-            localStorage.setItem("username", data.get("username").toString())
-            // localStorage.setItem("userID", answer.id)
-            // localStorage.setItem("sessionKey", answer.token)
-            localStorage.setItem("isLoggedIn", false)
-            localStorage.setItem("adminLoggedIn", true)
+            await fetch("http://120.25.216.186:8888/login/manager", options)
+                .then((response) => response.json()).then(data => answer = data)
+            console.log("answer: ", answer)
+            if (answer.id === 0) {
+                setResponseDialogOpen(true)
+            } else {
+                localStorage.setItem("username", data.get("username").toString())
+                // localStorage.setItem("userID", answer.id)
+                localStorage.setItem("sessionKey", answer.token)
+                localStorage.setItem("isLoggedIn", "false")
+                localStorage.setItem("adminLoggedIn", "true")
+                localStorage.setItem("adminID", answer.id)
+                router.push({
+                    pathname: href
+                }, href)
+            }
         } else {
             await fetch("http://120.25.216.186:8888/login", options)
                 .then((response) => response.json()).then(data => answer = data)
-            localStorage.setItem("username", data.get("username").toString())
-            localStorage.setItem("userID", answer.id)
-            localStorage.setItem("sessionKey", answer.token)
-            localStorage.setItem("isLoggedIn", "true")
-            localStorage.setItem("adminLoggedIn", "false")
+            if (answer.id === 0) {
+                setResponseDialogOpen(true)
+            } else {
+                localStorage.setItem("username", data.get("username").toString())
+                localStorage.setItem("userID", answer.id)
+                localStorage.setItem("sessionKey", answer.token)
+                localStorage.setItem("isLoggedIn", "true")
+                localStorage.setItem("adminLoggedIn", "false")
+                router.push({
+                    pathname: href
+                }, href)
+            }
         }
-        router.push({
-            pathname: href
-        }, href)
     };
+
+    function ResponseDialog() {
+        return (
+            <>
+                <Dialog
+                    open={responseDialogOpen}
+                    onClose={() => setResponseDialogOpen(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                        登陆失败
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            用户名与密码错误，请重试
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setResponseDialogOpen(false)} autoFocus>
+                            确认
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </>
+        )
+    }
 
     return (
         <ThemeProvider theme={theme}>
             <Grid container component="main" sx={{height: '100vh'}}>
                 <CssBaseline/>
+                {ResponseDialog()}
                 <Grid
                     item
                     xs={false}
