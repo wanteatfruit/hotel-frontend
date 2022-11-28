@@ -60,7 +60,6 @@ export default function SignUp() {
         } else {
             setAlertShown(true)
         }
-
     };
 
     return (
@@ -134,7 +133,7 @@ export default function SignUp() {
                             </Grid>
                             {alertShown && <Grid sx={{marginTop: "1em"}}>
                                 <Alert variant="outlined" severity="error">
-                                    注册新账户失败，用户名已被使用
+                                    注册新账户失败，用户名和电话已被使用
                                 </Alert>
                             </Grid>}
 
