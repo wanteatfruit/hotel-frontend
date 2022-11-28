@@ -65,6 +65,7 @@ export default function SignIn() {
                 localStorage.setItem("isLoggedIn", "false")
                 localStorage.setItem("adminLoggedIn", "true")
                 localStorage.setItem("adminID", answer.id)
+                console.log(localStorage.getItem("adminID"))
                 router.push({
                     pathname: href
                 }, href)

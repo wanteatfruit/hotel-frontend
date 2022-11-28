@@ -35,6 +35,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import {Stack} from "@mui/system";
+import {Rating} from "@mui/lab";
 
 
 export default function Orders({id}) {
@@ -56,6 +57,7 @@ export default function Orders({id}) {
     const [modifyResponseDialogOpen, setModifyResponseDialogOpen] = useState(false)
     const [modifyResponse, setModifyResponse] = useState("")
     const [refresh, setRefresh] = useState(true)
+    const [ratingValue, setRatingValue] = useState(0)
 
     async function getRooms() {
         let _rooms = []
@@ -236,6 +238,7 @@ export default function Orders({id}) {
 
         async function uploadOnClick() {
             let data = new FormData()
+            data.append("score", ratingValue*2)
             for (let i = 0; i < uploadedImageFiles.length; i++) {
                 data.append("picture" + (i + 1).toString(), uploadedImageFiles[i], uploadedImageFiles[i].name)
             }
@@ -244,11 +247,12 @@ export default function Orders({id}) {
             }
             data.append("words", commentWords)
             data.append("orderid", roomOnDialog.orderID)
-            let commentReceived = await fetch('http://120.25.216.186:8888/comment/insert', {
+            console.log("HERE")
+            let commentReceived = await fetch('http://10.26.111.227:8888/comment/insert', {
                 method: 'POST',
                 body: data
             });
-            console.log(commentReceived)
+            console.log("HERE", commentReceived)
             if (commentReceived === "true") {
                 setCommentResponse("我们已收到您的评价！感谢您的支持")
                 setCommentResponseDialogOpen(true)
@@ -280,6 +284,13 @@ export default function Orders({id}) {
                             <DialogContentText>
                                 您的支持与鼓励是我们最大的动力！
                             </DialogContentText>
+                            <Rating
+                                name="simple-controlled"
+                                value={ratingValue}
+                                onChange={(event, newValue) => {
+                                    setRatingValue(newValue)
+                                }}
+                            />
                             <TextField
                                 autoFocus
                                 margin="dense"
@@ -465,21 +476,34 @@ export default function Orders({id}) {
                 "checkinTime": bookingInfo.startDate.format('YYYY-MM-DD HH:mm:ss'),
                 "checkoutTime": bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss')
             }
-            console.log("data: ", data)
-            let answer = {
-                "modifySucceeded": false,
-                "moneyChange": -400
-            }
-            // await axios.put('http://120.25.216.186:8888/orders/modifyOrderTime', data)
-            //     .then(response => answer = response);
+            const body = JSON.stringify(data);
+            console.log("data: ", body)
+            const customConfig = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            // const options = {
+            //     method: "PUT",
+            //     body: JSON.stringify(body),
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     }
+            // }
+            // await fetch("http://120.25.216.186:8888/orders/modifyOrderTime", options)
+            //     .then((response) => response.json()).then(data => console.log(data))
+            const resp = await axios.put('http://120.25.216.186:8888/orders/modifyordertime', body, customConfig);
+            const answer = resp.data
+            console.log("answer: ", answer)
             let modifySucceeded = answer.modifySucceeded
             let moneyChange = answer.moneyChange
             if (modifySucceeded) {
-                if (moneyChange > 0) {
-                    setModifyResponse("修改住房时间成功！酒店已额外收取您房费 " + moneyChange + " 元")
+                if (moneyChange < 0) {
+                    setModifyResponse("修改住房时间成功！酒店已额外收取您房费 " + (-moneyChange) + " 元")
                 } else {
-                    setModifyResponse("修改住房时间成功！酒店已退还您房费 " + (-moneyChange) + " 元")
+                    setModifyResponse("修改住房时间成功！酒店已退还您房费 " + moneyChange + " 元")
                 }
+                setRefresh(!refresh)
             } else {
                 setModifyResponse("修改住房时间失败!您的账户余额不足以支付额外收取的房费 " + (-moneyChange) + " 元")
             }
@@ -609,7 +633,7 @@ export default function Orders({id}) {
                                                 setModifyDialogOpen(true)
                                             }}>修改入住时间</MenuItem>
                                             <MenuItem onClick={async () => {
-                                                const body = {"id": room.orderID};
+                                                const body = {"id": roomOnDialog.orderID};
                                                 await axios.post('http://120.25.216.186:8888/orders/delete', body, {
                                                     headers: {
                                                         'Content-Type': 'application/x-www-form-urlencoded'

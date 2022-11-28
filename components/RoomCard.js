@@ -24,20 +24,32 @@ import {
 import styles from "../styles/RoomCard.module.css"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Image from "next/image";
-import React from "react";
+import React, {useState} from "react";
 import {CheckBox, ColorLensSharp} from "@mui/icons-material";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
-import LikeButton from "./like-button";
 
-export default function RoomCard({hotelID, roomTypeID, imageUrl, description, hotelName, admin, roomInfo, refresh}) {
+export default function RoomCard({
+                                     hotelID,
+                                     roomTypeID,
+                                     imageUrl,
+                                     description,
+                                     hotelName,
+                                     admin,
+                                     roomInfo,
+                                     refresh,
+                                     markedRooms,
+                                     userID,
+                                     refreshRooms,
+                                     needMarkBox
+                                 }) {
     const [deleteDialog, setDeleteDialog] = React.useState(false);
     const [changeInfo, setchangeInfo] = React.useState(false)
     const [guestNum, setGuestNum] = React.useState(roomInfo === undefined ? "" : roomInfo.number)
     const [roomName, setRoomName] = React.useState(roomInfo === undefined ? "" : roomInfo.roomname)
     const [roomPrice, setRoomPrice] = React.useState(roomInfo === undefined ? "" : roomInfo.price)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
-    console.log(roomInfo)
+    const [isMarked, setIsMarked] = useState(false)
 
     function handleIntroduction() {
         let intro = roomInfo.introduction
@@ -57,7 +69,14 @@ export default function RoomCard({hotelID, roomTypeID, imageUrl, description, ho
 
     React.useEffect(() => {
         handleIntroduction()
-    }, [changeInfo])
+        if (needMarkBox) {
+            if (markedRooms.indexOf(roomTypeID) !== -1) {
+                setIsMarked(true)
+            } else {
+                setIsMarked(false)
+            }
+        }
+    }, [markedRooms, needMarkBox, roomTypeID, userID])
 
     function convertYesNo(bool) {
         if (bool === false) {
@@ -93,6 +112,56 @@ export default function RoomCard({hotelID, roomTypeID, imageUrl, description, ho
         // console.log(roomInfo.roomtypeid)
     }
 
+    async function MarkRoom(isChecked) {
+        setIsMarked(isChecked)
+        const body = {"userID": Number(userID), "roomTypeID": roomTypeID, "hotelID": hotelID};
+        const options = {
+            method: "PUT",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        console.log("here: ", body)
+        if (isChecked) {
+            await fetch("http://120.25.216.186:8888/roomtypewishlist/add", options)
+                .then((response) => response.text()).then(data => console.log(data))
+        } else {
+            const info = JSON.stringify(body);
+            const customConfig = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            const result = await axios.put('http://120.25.216.186:8888/roomtypewishlist/remove', info, customConfig);
+            console.log("result: ", result)
+        }
+        // refreshRooms()
+    }
+
+
+    function MarkBox() {
+        if (needMarkBox) {
+            return (
+                <Grid
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: 'left',
+                        alignItems: "center",
+                        width: "50%",
+                        marginLeft: "0.5em"
+                    }}>
+                    <Typography>收藏</Typography>
+                    <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
+                        MarkRoom(event.target.checked)
+                    }}/>
+                </Grid>
+            )
+        } else {
+            return <></>
+        }
+    }
 
     return (
         <>
@@ -120,25 +189,37 @@ export default function RoomCard({hotelID, roomTypeID, imageUrl, description, ho
                     }
                 </div>
                 {admin == false &&
-                    <CardActions sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <IconButton onClick={async () => {
-                            const body = {
-                                "userID": localStorage.getItem("userID"),
-                                "roomTypeID": roomTypeID,
-                                "hotelID": hotelID
-                            }
-                            await fetch('http://120.25.216.186:8888/roomtypewishlist/add', {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-type': 'application/json'
-                                },
-                                body: JSON.stringify(body)
-                            });
-                        }
-                        }>
-                        </IconButton>
-                        <Button variant="contained" href={`/book/${hotelName}`}>订房</Button>
-                    </CardActions>}
+                    <Grid sx={{display: "flex", flexDirection: "row", alignItems: "center", width: "100%"}}>
+                        {MarkBox()}
+                        <Grid sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: 'flex-end',
+                            alignItems: "flex-end",
+                            width: "100%"
+                        }}>
+                            <CardActions>
+                                <IconButton onClick={async () => {
+                                    const body = {
+                                        "userID": localStorage.getItem("userID"),
+                                        "roomTypeID": roomTypeID,
+                                        "hotelID": hotelID
+                                    }
+                                    await fetch('http://120.25.216.186:8888/roomtypewishlist/add', {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-type': 'application/json'
+                                        },
+                                        body: JSON.stringify(body)
+                                    });
+                                }
+                                }>
+                                </IconButton>
+                                <Button variant="contained" href={`/book/${hotelName}`}>订房</Button>
+                            </CardActions>
+                        </Grid>
+                    </Grid>
+                }
                 {admin &&
                     <CardActions sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <div>

@@ -1,20 +1,31 @@
-import { useMediaQuery, Box, Button, Dialog, DialogContent, Grid, IconButton, Typography, DialogTitle, Stack } from "@mui/material"
+import {
+    useMediaQuery,
+    Box,
+    Button,
+    Dialog,
+    DialogContent,
+    Grid,
+    IconButton,
+    Typography,
+    DialogTitle,
+    Stack
+} from "@mui/material"
 import Image from "next/image";
-import { useRouter } from "next/router"
-import React from "react";
+import {useRouter} from "next/router"
+import React, {useEffect, useState} from "react";
 import BranchIntro from "../../components/BranchIntroduction";
 import Layout from "../../components/Layout"
 import RoomCard from "../../components/RoomCard";
 import styles from "../../styles/HotelPage.module.css";
 import axios from "axios";
-import { roomImageUrl } from "../../data";
+import {roomImageUrl} from "../../data";
 import CommentArea from "./comment-area";
 import FloorPlanA from "../../components/floor-plan-a";
 import FloorPlanC from "../../components/floor-plan-c";
-import { CloseOutlined } from "@mui/icons-material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {CloseOutlined} from "@mui/icons-material";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../../components/Navbar";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 
 // export async function getStaticPaths() { //确定酒店名字后写死
 //     return {
@@ -31,6 +42,25 @@ export default function HotelDetail() {
     const [roomList, setRoomList] = React.useState([]);
     const [hotelInfo, setHotelInfo] = React.useState({})
     const [openFloorPlan, setOpenFloorPlan] = React.useState(false);
+    const [userID, setUserID] = useState(0)
+    const [markedHotels, setMarkedHotels] = useState([])
+
+    async function getMarked() {
+        let hotelsInfo = ""
+        await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
+            hotelsInfo = response.data
+        });
+        let newList = []
+        for (const hotelsInfoKey in hotelsInfo) {
+            newList.push(hotelsInfo[hotelsInfoKey].hotelID)
+        }
+        setMarkedHotels(newList)
+    }
+
+    useEffect(() => {
+        setUserID(localStorage.getItem("userID"))
+        getMarked()
+    }, [userID])
 
     React.useEffect(() => {
         if (router.isReady) {
@@ -78,8 +108,8 @@ export default function HotelDetail() {
     const fullScreenMap = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
-        <ThemeProvider theme={theme} >
-            <NavBar />
+        <ThemeProvider theme={theme}>
+            <NavBar/>
             <Box
                 component="main"
                 sx={{
@@ -90,43 +120,56 @@ export default function HotelDetail() {
                     paddingX: 5
                 }}
             >
-                <Box sx={{ display: 'flex', paddingY: 4, paddingX: {xs:0,sm:4}, justifyContent: 'center', flexDirection: 'column' }}>
+                <Box sx={{
+                    display: 'flex',
+                    paddingY: 4,
+                    paddingX: {xs: 0, sm: 4},
+                    justifyContent: 'center',
+                    flexDirection: 'column'
+                }}>
                     <Typography paddingBottom={2} variant="h4">开启您的旅程</Typography>
-                    <BranchIntro hotelInfo={hotelInfo} name={hotel_name} url={"https://images.unsplash.com/photo-1608381742187-ea4b48c56630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1224&q=80"} description={'改革开放的起点'} />
+                    <BranchIntro hotelInfo={hotelInfo} name={hotel_name} userID={userID}
+                                 url={"https://images.unsplash.com/photo-1608381742187-ea4b48c56630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1224&q=80"}
+                                 description={'改革开放的起点'} markedHotels={markedHotels}/>
                 </Box>
-                <Box sx={{ paddingX: {xs:0,sm:4}, paddingY: 6 }}>
+                <Box sx={{paddingX: {xs: 0, sm: 4}, paddingY: 6}}>
                     <Grid container spacing={4} columns={24}>
                         <Grid item xs={24} xl={24} flexDirection='row'>
                             <Stack gap={2} direction='row'>
                                 <Typography variant="h4">房型</Typography>
-                                <Button sx={{ fontSize: 20 }} size='large' variant="contained" onClick={() => setOpenFloorPlan(true)}>查看平面图</Button>
+                                <Button sx={{fontSize: 20}} size='large' variant="contained"
+                                        onClick={() => setOpenFloorPlan(true)}>查看平面图</Button>
                             </Stack>
                         </Grid>
                         {roomList.map((item, index) => (
 
                             <Grid key={item.roomtypeid} item xs={24} md={12} lg={8} xl={6}>
-                                <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
-                                    <RoomCard roomInfo={item} hotelName={hotel_name} imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]} admin={false}></RoomCard>
+                                <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
+                                            variants={cardVariants}>
+                                    <RoomCard roomInfo={item} hotelName={hotel_name}
+                                              imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
+                                              admin={false} needMarkBox={false}></RoomCard>
                                 </motion.div>
                             </Grid>
                         ))}
 
                     </Grid>
                 </Box>
-                <Box sx={{ paddingX: {xs:0,sm:4}, paddingY: 6 }}>
-                    <CommentArea />
+                <Box sx={{paddingX: {xs: 0, sm: 4}, paddingY: 6}}>
+                    <CommentArea/>
                 </Box>
             </Box>
-            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg' sx={{ zIndex: 1000 }} open={openFloorPlan}>
+            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg'
+                    sx={{zIndex: 1000}} open={openFloorPlan}>
                 <DialogTitle>
                     酒店平面图
                     <IconButton onClick={() => setOpenFloorPlan(false)}>
-                        <CloseOutlined />
+                        <CloseOutlined/>
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ display: 'flex', justifyContent: 'center' }}>
+                <DialogContent sx={{display: 'flex', justifyContent: 'center'}}>
                     {/* 根据hotelname给三家酒店写死平面图 */}
-                    <FloorPlanA href1={"www.baidu.com"} href2={"www.baidu.com"} />
+                    <FloorPlanA href1={"www.baidu.com"} href2={"www.baidu.com"}/>
 
                 </DialogContent>
             </Dialog>
