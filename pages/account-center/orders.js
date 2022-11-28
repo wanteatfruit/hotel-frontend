@@ -252,8 +252,8 @@ export default function Orders({id}) {
                 method: 'POST',
                 body: data
             });
-            console.log("HERE", commentReceived)
-            if (commentReceived === "true") {
+            console.log("HERE", commentReceived.status)
+            if (commentReceived.status === 200) {
                 setCommentResponse("我们已收到您的评价！感谢您的支持")
                 setCommentResponseDialogOpen(true)
             } else {

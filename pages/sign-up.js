@@ -56,7 +56,7 @@ export default function SignUp() {
             await router.push({
                 pathname: query['href'],
                 query: {href: query['original_href']}
-            })
+            }, query['href'])
         } else {
             setAlertShown(true)
         }

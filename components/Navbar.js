@@ -158,7 +158,7 @@ export default function NavBar({
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setIsLogoutDialogOpen(false)}>Cancel</Button>
+                        <Button onClick={() => setIsLogoutDialogOpen(false)}>取消</Button>
                         <Button onClick={() => {
                             clearLogInfo()
                             setIsLogoutDialogOpen(false);
