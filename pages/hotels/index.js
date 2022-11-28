@@ -36,11 +36,15 @@ const theme = createTheme({
         fontSize: 15
     },
     palette: {
+        primary:{
+            main:'#2E3B55'
+        },
         secondary: {
             main: '#fff'
         }
     }
 })
+
 
 export default function Hotels({hotel_list, room_list, singlePage}) {
     return (
@@ -59,7 +63,7 @@ function HotelPage({hotel_list, room_list, singlePage}) {
         setTabValue(newValue);
     }
     return (
-        <>
+        <ThemeProvider theme={theme}>
             <Box
                 component="main"
                 sx={{
@@ -147,6 +151,6 @@ function HotelPage({hotel_list, room_list, singlePage}) {
                     </Box>
                 </div>
             </Box>
-        </>
+        </ThemeProvider>
     );
 }
