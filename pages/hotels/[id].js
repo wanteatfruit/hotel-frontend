@@ -1,7 +1,7 @@
 import { useMediaQuery, Box, Button, Dialog, DialogContent, Grid, IconButton, Typography, DialogTitle, Stack } from "@mui/material"
 import Image from "next/image";
-import { useRouter } from "next/router"
-import React from "react";
+import {useRouter} from "next/router"
+import React, {useEffect, useState} from "react";
 import BranchIntro from "../../components/BranchIntroduction";
 import Layout from "../../components/Layout"
 import RoomCard from "../../components/RoomCard";
@@ -33,6 +33,25 @@ export default function HotelDetail() {
     const [roomList, setRoomList] = React.useState([]);
     const [hotelInfo, setHotelInfo] = React.useState({})
     const [openFloorPlan, setOpenFloorPlan] = React.useState(false);
+    const [userID, setUserID] = useState(0)
+    const [markedHotels, setMarkedHotels] = useState([])
+
+    async function getMarked() {
+        let hotelsInfo = ""
+        await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
+            hotelsInfo = response.data
+        });
+        let newList = []
+        for (const hotelsInfoKey in hotelsInfo) {
+            newList.push(hotelsInfo[hotelsInfoKey].hotelID)
+        }
+        setMarkedHotels(newList)
+    }
+
+    useEffect(() => {
+        setUserID(localStorage.getItem("userID"))
+        getMarked()
+    }, [userID])
 
     React.useEffect(() => {
         if (router.isReady) {
@@ -96,9 +115,17 @@ export default function HotelDetail() {
                     mt:'60px',
                 }}
             >
-                <Box sx={{ display: 'flex', paddingY: 4, paddingX: {xs:0,sm:4}, justifyContent: 'center', flexDirection: 'column' }}>
+                <Box sx={{
+                    display: 'flex',
+                    paddingY: 4,
+                    paddingX: {xs: 0, sm: 4},
+                    justifyContent: 'center',
+                    flexDirection: 'column'
+                }}>
                     <Typography paddingBottom={2} variant="h4">开启您的旅程</Typography>
-                    <BranchIntro hotelInfo={hotelInfo} name={hotel_name} url={"https://images.unsplash.com/photo-1608381742187-ea4b48c56630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1224&q=80"} description={'改革开放的起点'} />
+                    <BranchIntro hotelInfo={hotelInfo} name={hotel_name} userID={userID}
+                                 url={"https://images.unsplash.com/photo-1608381742187-ea4b48c56630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1224&q=80"}
+                                 description={'改革开放的起点'} markedHotels={markedHotels}/>
                 </Box>
                 <Box sx={{ paddingX: {xs:0,sm:4}, paddingY: 6 }}>
                     <Grid container spacing={4} columns={24}>
@@ -111,8 +138,11 @@ export default function HotelDetail() {
                         {roomList.map((item, index) => (
 
                             <Grid key={item.roomtypeid} item xs={24} md={12} lg={8} xl={6}>
-                                <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen' variants={cardVariants}>
-                                    <RoomCard roomInfo={item} hotelName={hotel_name} imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]} admin={false}></RoomCard>
+                                <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
+                                            variants={cardVariants}>
+                                    <RoomCard roomInfo={item} hotelName={hotel_name}
+                                              imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
+                                              admin={false} needMarkBox={false}></RoomCard>
                                 </motion.div>
                             </Grid>
                         ))}

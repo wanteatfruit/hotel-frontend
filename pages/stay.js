@@ -25,7 +25,7 @@ import {
 import {Stack} from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
-import React from "react";
+import React, {useState} from "react";
 import RoomCard from "../components/RoomCard";
 import {AddCircleOutline} from "@mui/icons-material";
 import {roomImageUrl} from "../data";
@@ -58,16 +58,54 @@ export default function Stay({hotel_list}) {
     const [priceRange, setPriceRange] = React.useState([270,1000])
     const [guestsNumber, setGuestNum] = React.useState(2);
     const minPriceDiff = 30;
+    const [markedRooms, setMarkedRooms] = useState([])
+    const [markedHotels, setMarkedHotels] = useState([])
+    const [userID, setUserID] = useState(0)
+    const [refreshRooms, setRefreshRooms] = useState(false)
     const guestsNumberMarks = [
         {value: 1, label: '1'},
         {value: 2, label: '2'},
         {value: 3, label: '3'},
         {value: 4, label: '4'},
         {value: 5, label: '5'},
-
     ]
 
+    async function getMarked() {
+        let roomsInfo = ""
+        await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
+            roomsInfo = response.data
+        });
+        let newList = []
+        for (const roomsInfoKey in roomsInfo) {
+            newList.push(roomsInfo[roomsInfoKey].roomTypeID)
+        }
+        setMarkedRooms(newList)
+        console.log("newList, ", newList)
+        // let hotelsInfo = ""
+        // await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
+        //     hotelsInfo = response.data
+        // });
+        // for (const hotelsInfoKey in hotelsInfo) {
+        //     setMarkedHotels([
+        //         ...markedHotels,
+        //         hotelsInfo[hotelsInfoKey].hotelID
+        //     ])
+        // }
+    }
 
+
+    React.useEffect(() => {
+        if (hotel === '') {
+            axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
+                setRoomList(resp.data)
+            })
+            console.log(roomList)
+        }
+        setUserID(localStorage.getItem("userID"))
+        if (userID !== 0) {
+            getMarked()
+        }
+    }, [userID, refreshRooms])
 
     React.useEffect(() => {
         if (hotel !== '') {
@@ -84,7 +122,7 @@ export default function Stay({hotel_list}) {
         axios.get(url).then((resp)=>{
             setRoomList(resp.data)
         })
-        
+
     }
     function handleReset(){
         if (hotel !== '') {
@@ -120,9 +158,9 @@ export default function Stay({hotel_list}) {
 
     return (
 
-        <ThemeProvider theme={theme} >
-            <NavBar />
-                <Grid container spacing={2} columns={16} sx={{ padding: 1, mt:'60px' }}>
+        <ThemeProvider theme={theme}>
+            <NavBar href={"/stay"}/>
+            <Grid container spacing={2} columns={16} sx={{padding: 1}}>
 
                 <Grid item xs={16} sm={3}>
                     <Paper elevation={false} sx={{padding: 2}}>
@@ -204,9 +242,15 @@ export default function Stay({hotel_list}) {
                         {roomList != null ? (
                             roomList.map((item) => (
                                 <Grid key={item.roomtypeid} item xs={12} md={6} lg={4} xl={4} padding={2}>
-                                    <RoomCard hotelName={hotel} admin={false} roomName={item.roomname}
-                                              roomInfo={item}
-                                              imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}></RoomCard>
+                                    <RoomCard hotelID={item.hotelid} hotelName={hotel} admin={false}
+                                              roomName={item.roomname}
+                                              roomInfo={item} roomTypeID={item.roomtypeid}
+                                              imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
+                                              markedRooms={markedRooms}
+                                              userID={userID}
+                                              refreshRooms = {() => setRefreshRooms(!refreshRooms)}
+                                              needMarkBox={true}
+                                    ></RoomCard>
                                 </Grid>
                             ))
                         ) : (
@@ -216,7 +260,7 @@ export default function Stay({hotel_list}) {
                         )}
                     </Grid>
                 </Grid>
-                </Grid>
+            </Grid>
         </ThemeProvider>
     );
 

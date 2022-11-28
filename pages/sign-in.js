@@ -65,9 +65,16 @@ export default function SignIn() {
                 localStorage.setItem("isLoggedIn", "false")
                 localStorage.setItem("adminLoggedIn", "true")
                 localStorage.setItem("adminID", answer.id)
-                router.push({
-                    pathname: href
-                }, href)
+                console.log(localStorage.getItem("adminID"))
+                if (href !== undefined) {
+                    router.push({
+                        pathname: href
+                    }, href)
+                } else {
+                    router.push({
+                        pathname: "/"
+                    }, href)
+                }
             }
         } else {
             await fetch("http://120.25.216.186:8888/login", options)
@@ -80,9 +87,16 @@ export default function SignIn() {
                 localStorage.setItem("sessionKey", answer.token)
                 localStorage.setItem("isLoggedIn", "true")
                 localStorage.setItem("adminLoggedIn", "false")
-                router.push({
-                    pathname: href
-                }, href)
+                console.log("length: ", href !== undefined && href.length > 0)
+                if (href !== undefined && href.length > 0) {
+                    router.push({
+                        pathname: href
+                    }, href)
+                } else {
+                    router.push({
+                        pathname: "/"
+                    }, href)
+                }
             }
         }
     };

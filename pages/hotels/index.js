@@ -7,7 +7,7 @@ import styles from "../../styles/HotelPage.module.css";
 import {Stack} from "@mui/system";
 import HotelCard from "../../components/HotelCard";
 import Slider from "react-slick";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import {hotelImageUrl} from "../../data";
