@@ -178,7 +178,13 @@ export default function BookingPage({ }) {
                                                 {/* <CardHeader title={item.roomname} /> */}
                                                 <CardContent>
                                                     <Typography variant="h4">{item.roomname}</Typography>
-                                                    <Typography variant="h6">{`${item.price}元 / 晚`}</Typography>
+                                                    {item.discount==1 && <Typography variant="h6">{`${item.price}元 / 晚`}</Typography>}
+                                                    {item.discount!=1 && <Stack direction='row'>
+                                                    <Typography variant="h6" sx={{textDecoration:'line-through'}}>{`${item.price}元 / 晚`}</Typography>
+                                                    <Typography variant="h6" sx={{ml:2}}>{`${item.afterEventPrice}元 / 晚`}</Typography>
+
+                                                        </Stack>}
+                                                    {/* <Typography variant="h6">{item.discount==1? `${item.price}元 / 晚`:``}</Typography> */}
                                                 </CardContent>
                                                 <CardContent  sx={{ display:{xs:'none', sm:'block'}, justifyContent: 'flex-end' }}>
                                                     <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>

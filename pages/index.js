@@ -141,6 +141,25 @@ export default function Home({hotel_list, room_list}) {
                 <Stack>
 
                     <Paper sx={{ backgroundColor: 'antiquewhite' }} elevation={0}>
+                    <Stack paddingTop={14} paddingBottom={10} justifyContent='space-evenly'
+                            direction={{ xs: 'column', sm: 'row' }} id="guangzhou">
+                            <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }}
+                                whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.4 }}>
+                                <p className={styles.city}>
+                                    深圳
+                                </p>
+                            </motion.div>
+                            <motion.div viewport={{ once: true }} initial='offscreen' whileInView='onscreen'
+                                variants={cardVariants}>
+                                <Stack paddingX={0} gap={10} direction={{ xs: 'column', sm: 'row' }}>
+                                    {hotel_list.map((item, index) => (item.cityname == "深圳" &&
+                                        <HotelCard hotelName={item.hotelname} key={item.hotelid}
+                                            imageSrc={hotelImageUrl[index]} />
+                                    ))}
+                                </Stack>
+                            </motion.div>
+                        </Stack>
+
                         <Stack paddingTop={14} paddingBottom={10} justifyContent='space-evenly'
                             direction={{ xs: 'column', sm: 'row' }} id="guangzhou">
                             <motion.div viewport={{ once: true }} style={{ display: 'flex' }} initial={{ opacity: 0 }}

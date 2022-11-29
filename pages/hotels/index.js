@@ -24,7 +24,7 @@ export async function getStaticProps() {
     console.log(hotel_list)
     return {
         props: {
-            hotel_list, room_list
+            hotel_list
         },
         revalidate: 10
     }

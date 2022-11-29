@@ -47,14 +47,16 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in user
-import { login, pages, settings } from "../data";
+import { login, pages, roomImageUrl, settings } from "../data";
 import { Stack, width } from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
-import { ChevronLeftOutlined, HotelOutlined, PlaceOutlined, SportsBarOutlined, StormOutlined } from "@mui/icons-material";
+import { AlarmOnOutlined, ChevronLeftOutlined, HotelOutlined, PlaceOutlined, SportsBarOutlined, StormOutlined } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
+import axios from "axios";
+import RoomCard from "./RoomCard";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
     hotel_list,
@@ -72,11 +74,31 @@ export default function NavBar({
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState("false")
     const [adminLoggedIn, setAdminLoggedIn] = useState("false")
+    const [saleDialogOpen, setSaleDialogOpen] = useState(false)
+    const [displaySales, setDisplaySalesOpen] = useState(true);
+    const [eventInfo, setEventInfo] = useState(null);
+    const [saleRoomInfo, setSaleRoomInfo] = useState({roomtypeid:1});
+
 
     useEffect(() => {
         setIsLoggedIn(localStorage.getItem("isLoggedIn"))
         setAdminLoggedIn(localStorage.getItem("adminLoggedIn"))
+        axios.get('http://120.25.216.186:8888/event/haveEvent').then((resp) => {
+            setEventInfo(resp.data)
+        })
+
+        //check for sale
+        // axios.get('http://120.25.216.186:8888/event/haveEvent').then((resp)=>{
+        //     if(resp.data.)
+        // })
     }, [])
+    useEffect(() => {
+        if (eventInfo !== null) {
+            axios.get(`http://120.25.216.186:8888/roomtype?id=${eventInfo.roomtypeid}`).then((resp) => {
+                setSaleRoomInfo(resp.data)
+            })
+        }
+    }, [eventInfo])
     const [mapOpen, setMapOpen] = React.useState(false);
 
     const handleOpenNavMenu = (event) => {
@@ -113,18 +135,20 @@ export default function NavBar({
                     onClose={() => {
                         setChatDialogOpen(false)
                     }}
-                    PaperProps={{
-                        sx: {
-                            position: "fixed",
-                            width: "100%",
-                            height: "100%",
-                            maxWidth: "md",
-                            backgroundColor: "#f1cec2"
-                        }
-                    }}
+                    maxWidth='lg'
+                    // PaperProps={{
+                    //     sx: {
+                    //         position: "fixed",
+                    //         width: "100%",
+                    //         height: "100%",
+                    //         maxWidth: "md",
+                    //         backgroundColor: "#f1cec2"
+                    //     }
+                    // }}
+                    fullWidth
                 >
                     <DialogContent>
-                        <iframe src={"/chat-app.html"} height="95%" width="100%" frameBorder="0"></iframe>
+                        <iframe src={"/chat-app.html"}frameBorder="0"></iframe>
                     </DialogContent>
                 </Dialog>
             </>
@@ -253,6 +277,23 @@ export default function NavBar({
 
     return (
         <>
+
+            <Dialog sx={{borderRadius:5}} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
+                <DialogTitle>
+                酒店名以下房型正在秒杀！
+                    <IconButton onClick={() => setSaleDialogOpen(false)}>
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography></Typography>
+                    <RoomCard admin={false} roomInfo={saleRoomInfo} imageUrl={roomImageUrl[saleRoomInfo.roomtypeid%roomImageUrl.length]} />
+                    <Divider sx={{mt:2}}/>
+                    <Typography>截至{eventInfo === null ? '' : eventInfo.endtime}</Typography>
+                </DialogContent>
+            </Dialog>
+
+
             <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} open={mapOpen} fullWidth
                 maxWidth='lg' sx={{ zIndex: 1000 }}>
                 <DialogTitle>
@@ -306,7 +347,7 @@ export default function NavBar({
                 position="fixed"
                 color="transparent"
                 variant='outlined'
-                sx={{  zIndex: 1000,  backgroundColor:'#fff' }}
+                sx={{ zIndex: 1000, backgroundColor: '#fff', }}
             >
                 {/* <Container maxWidth="xl"> */}
                 <Toolbar sx={{ justifyContent: "space-between" }}>
@@ -343,9 +384,15 @@ export default function NavBar({
                     {/* 小屏只显示logo，在屏幕中心*/}
 
                     {/*大屏显示完整跳转名称*/}
-                    <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                        <Button variant="outlined" sx={{  marginRight: 2 }} href="/" fullWidth size="large"
-                              startIcon={<SportsBarOutlined fontSize="24px" />}>
+                    <Box sx={{ display: { xs: "none", md: "flex" }, }}>
+                        <Button variant="outlined" color='secondary' disableElevation sx={{
+                            fontFamily: 'Roboto', '&:hover': {
+                                backgroundColor: '#0069d9',
+                                borderColor: '#0062cc',
+                                boxShadow: 'none',
+                            }, backgroundColor: '#ff385c', borderRadius: 10
+                        }} href="/" size="large"
+                            startIcon={<SportsBarOutlined fontSize="24px" />}>
                             盛夏小酒
                         </Button>
                         {pages.map((item) => (
@@ -360,12 +407,20 @@ export default function NavBar({
                         ))}
                     </Box>
                     {/*用户图标大小屏都在最右边*/}
+
+
                     <Stack direction='row' gap={1}>
+                        <Tooltip title='秒杀活动'>
+                            <IconButton color='secondary'
+                                size="large" sx={{ backgroundColor: '#ff385c' }} onClick={() => setSaleDialogOpen(true)}>
+                                <AlarmOnOutlined />
+                            </IconButton>
+                        </Tooltip>
                         <Tooltip title='酒店位置'>
-                        <IconButton color="inherit"
-                            size="large" onClick={() => setMapOpen(true)}>
-                            <PlaceOutlined />
-                        </IconButton>
+                            <IconButton color="inherit"
+                                size="large" onClick={() => setMapOpen(true)}>
+                                <PlaceOutlined />
+                            </IconButton>
                         </Tooltip>
                         {getButtons()}
                         {/*drop down menu*/}
@@ -390,7 +445,7 @@ export default function NavBar({
                         </Menu>
 
                         {buttonsMode === 0 && adminLoggedIn === "false" &&
-                            <Button sx={ {px:3,py:0,fontSize:'1rem', backgroundImage:'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )'}} variant="contained" onClick={() => {
+                            <Button sx={{ px: 3, py: 0, fontSize: '1rem', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )' }} variant="contained" onClick={() => {
                                 setBookingOpen(!bookingOpen)
                             }}>预定</Button>
                         }

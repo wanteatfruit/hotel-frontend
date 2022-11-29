@@ -142,7 +142,7 @@ export default function HotelDetail() {
                                             variants={cardVariants}>
                                     <RoomCard roomInfo={item} hotelName={hotel_name}
                                               imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
-                                              admin={false} needMarkBox={false}></RoomCard>
+                                              admin={false} needMarkBox={true} userID={userID}></RoomCard>
                                 </motion.div>
                             </Grid>
                         ))}

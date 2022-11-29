@@ -17,6 +17,7 @@ import {
   Backdrop,
   Select,
   MenuItem,
+  ListSubheader,
 
 } from "@mui/material";
 import { Stack } from "@mui/system";
@@ -29,6 +30,7 @@ import { roomImageUrl } from "../data";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 export default function AdminRooms({ hotel_list }) {
+  console.log(hotel_list)
   const [roomList, setRoomList] = React.useState(null)
   const [openAdd, setOpenAdd] = React.useState(false);
   const [guestNum, setGuestNum] = React.useState()
@@ -36,7 +38,7 @@ export default function AdminRooms({ hotel_list }) {
   const [roomName, setRoomName] = React.useState('')
   const [roomPrice, setRoomPrice] = React.useState()
   const [roomIntro, setRoomIntro] = React.useState([false, false, false])  //get roomtype by hotel
-  const [hotel, setHotel] = React.useState('');
+  const [hotel, setHotel] = React.useState('深圳湾1号');
   const [addToHotel, setAddTo] = React.useState('');
   React.useEffect(() => {
     if (hotel === '') {
@@ -53,7 +55,7 @@ export default function AdminRooms({ hotel_list }) {
         setRoomList(resp.data)
       })
     }
-  }, [hotel,openAdd])
+  }, [hotel, openAdd])
 
   function convertYesNo(bool) {
     if (bool === false) {
@@ -63,17 +65,17 @@ export default function AdminRooms({ hotel_list }) {
   }
 
   function timeout(delay) {
-    return new Promise( res => setTimeout(res, delay) );
+    return new Promise(res => setTimeout(res, delay));
   }
 
-  async function handleRefresh(){
+  async function handleRefresh() {
     await timeout(1)
     if (hotel === '') {
       axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
         setRoomList(resp.data)
       })
     }
-    else{
+    else {
       axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
         setRoomList(resp.data)
       })
@@ -84,15 +86,15 @@ export default function AdminRooms({ hotel_list }) {
   }
 
 
-  async function handleAdd () {
+  async function handleAdd() {
     const intro = `窗户|${convertYesNo(roomIntro[0])},阳台|${convertYesNo(roomIntro[1])},洗衣房|${convertYesNo(roomIntro[2])}`
 
     const newRoom = { roomName: roomName, price: roomPrice, introduction: intro, number: guestNum, remain: remain, hotelName: addToHotel }
     // console.log(newRoom)
-    const resp= await fetch('http://120.25.216.186:8888/roomtype/addRoom',{
-      method:'POST',
-      body:JSON.stringify(newRoom),
-      headers:{
+    const resp = await fetch('http://120.25.216.186:8888/roomtype/addRoom', {
+      method: 'POST',
+      body: JSON.stringify(newRoom),
+      headers: {
         'Content-type': 'application/json'
       }
     })
@@ -117,10 +119,10 @@ export default function AdminRooms({ hotel_list }) {
             >
               <div>
                 <Typography variant="h5">房间信息</Typography>
-                <Button  sx={{ marginTop: 1 }} onClick={() => { setOpenAdd(!openAdd) }} endIcon={<AddCircleOutline />}>
+                <Button sx={{ marginTop: 1 }} onClick={() => { setOpenAdd(!openAdd) }} endIcon={<AddCircleOutline />}>
                   添加房间
                 </Button>
-                <IconButton  sx={{marginLeft:1,marginTop:1}} color="primary" onClick={handleRefresh}>
+                <IconButton sx={{ marginLeft: 1, marginTop: 1 }} color="primary" onClick={handleRefresh}>
                   <RefreshIcon />
                 </IconButton>
               </div>
@@ -129,8 +131,29 @@ export default function AdminRooms({ hotel_list }) {
                 <Select value={hotel} label="分店" onChange={(e) => {
                   setHotel(e.target.value)
                 }}>
+                  <ListSubheader>
+                    {hotel_list[0].cityname}
+                  </ListSubheader>
                   {hotel_list !== undefined && hotel_list.map((item) => (
-                    <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                    item.cityname == "深圳" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                  ))}
+                  <ListSubheader>
+                    广州
+                  </ListSubheader>
+                  {hotel_list !== undefined && hotel_list.map((item) => (
+                    item.cityname == "广州" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                  ))}
+                  <ListSubheader>
+                    上海
+                  </ListSubheader>
+                  {hotel_list !== undefined && hotel_list.map((item) => (
+                    item.cityname == "上海" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                  ))}
+                  <ListSubheader>
+                    重庆
+                  </ListSubheader>
+                  {hotel_list !== undefined && hotel_list.map((item) => (
+                    item.cityname == "重庆" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -155,16 +178,16 @@ export default function AdminRooms({ hotel_list }) {
         <Paper sx={{ width: 'max-content', padding: 2 }} >
           <Typography variant="h4" sx={{ marginBottom: 3 }}>添加房间</Typography>
           <Stack gap={2}>
-          <FormControl  sx={{ width: '100%' }}>
-                <InputLabel >添加到分店</InputLabel>
-                <Select MenuProps={{PaperProps:{sx:{zIndex:100002}}}} value={addToHotel} label="添加到分店" onChange={(e) => {
-                  setAddTo(e.target.value)
-                }}>
-                  {hotel_list !== undefined && hotel_list.map((item) => (
-                    <MenuItem sx={{}} key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel >添加到分店</InputLabel>
+              <Select MenuProps={{ PaperProps: { sx: { zIndex: 100002 } } }} value={addToHotel} label="添加到分店" onChange={(e) => {
+                setAddTo(e.target.value)
+              }}>
+                {hotel_list !== undefined && hotel_list.map((item) => (
+                  <MenuItem sx={{}} key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField value={roomName} onChange={(event) => {
               setRoomName(event.target.value);
             }} label="房间名" required>
@@ -189,7 +212,7 @@ export default function AdminRooms({ hotel_list }) {
             </FormGroup>
           </Stack>
           <Button onClick={() => setOpenAdd(false)}>取消</Button>
-          <Button variant="contained" onClick={() => {handleAdd(); setOpenAdd(false)}}>提交</Button>
+          <Button variant="contained" onClick={() => { handleAdd(); setOpenAdd(false) }}>提交</Button>
 
         </Paper>
       </Backdrop>

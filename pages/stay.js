@@ -20,15 +20,16 @@ import {
     Slider,
     ThemeProvider,
     createTheme,
+    ListSubheader
 
 } from "@mui/material";
-import {Stack} from "@mui/system";
+import { Stack } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import RoomCard from "../components/RoomCard";
-import {AddCircleOutline} from "@mui/icons-material";
-import {roomImageUrl} from "../data";
+import { AddCircleOutline } from "@mui/icons-material";
+import { roomImageUrl } from "../data";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import NavBar from "../components/Navbar";
 
@@ -49,13 +50,13 @@ export async function getStaticProps() {
 }
 
 
-export default function Stay({hotel_list}) {
+export default function Stay({ hotel_list }) {
     const [roomList, setRoomList] = React.useState(null)
     const [openAdd, setOpenAdd] = React.useState(false);
     const [roomName, setRoomName] = React.useState('')
     const [roomIntro, setRoomIntro] = React.useState([true, true, true])  //get roomtype by hotel
     const [hotel, setHotel] = React.useState('汤臣一品');
-    const [priceRange, setPriceRange] = React.useState([270,1000])
+    const [priceRange, setPriceRange] = React.useState([270, 1000])
     const [guestsNumber, setGuestNum] = React.useState(2);
     const minPriceDiff = 30;
     const [markedRooms, setMarkedRooms] = useState([])
@@ -63,16 +64,16 @@ export default function Stay({hotel_list}) {
     const [userID, setUserID] = useState(0)
     const [refreshRooms, setRefreshRooms] = useState(false)
     const guestsNumberMarks = [
-        {value: 1, label: '1'},
-        {value: 2, label: '2'},
-        {value: 3, label: '3'},
-        {value: 4, label: '4'},
-        {value: 5, label: '5'},
+        { value: 1, label: '1' },
+        { value: 2, label: '2' },
+        { value: 3, label: '3' },
+        { value: 4, label: '4' },
+        { value: 5, label: '5' },
     ]
 
     async function getMarked() {
         let roomsInfo = ""
-        await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
+        await axios.get("http://120.25.216.186:8888/roomtypewishlist", { params: { "userId": userID } }).then((response) => {
             roomsInfo = response.data
         });
         let newList = []
@@ -115,16 +116,16 @@ export default function Stay({hotel_list}) {
         }
     }, [hotel, openAdd])
 
-    function handleFilter(){
+    function handleFilter() {
         const intro = `窗户%7C${convertYesNo(roomIntro[0])},阳台%7C${convertYesNo(roomIntro[1])},洗衣房%7C${convertYesNo(roomIntro[2])}`
         const url = `http://120.25.216.186:8888/roomtype/findByParameter?roomName=${roomName}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&guestNum=${guestsNumber}&introduction=${intro}`
         // console.log(url)
-        axios.get(url).then((resp)=>{
+        axios.get(url).then((resp) => {
             setRoomList(resp.data)
         })
 
     }
-    function handleReset(){
+    function handleReset() {
         if (hotel !== '') {
             axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
                 setRoomList(resp.data)
@@ -146,8 +147,8 @@ export default function Stay({hotel_list}) {
             fontSize: 15
         },
         palette: {
-            primary:{
-                main:'#2E3B55'
+            primary: {
+                main: '#2E3B55'
             },
             secondary: {
                 main: '#fff'
@@ -159,11 +160,11 @@ export default function Stay({hotel_list}) {
     return (
 
         <ThemeProvider theme={theme}>
-            <NavBar href={"/stay"}/>
-            <Grid container spacing={2} columns={16} sx={{padding: 1}}>
+            <NavBar href={"/stay"} />
+            <Grid container spacing={2} columns={16} sx={{ padding: 1, marginTop: '60px' }}>
 
                 <Grid item xs={16} sm={3}>
-                    <Paper elevation={false} sx={{padding: 2}}>
+                    <Paper elevation={false} sx={{ padding: 2 }}>
                         <Stack gap={2}>
                             <Typography variant="h5">筛选</Typography>
                             <Typography>
@@ -177,32 +178,32 @@ export default function Stay({hotel_list}) {
                                 价格
                             </Typography>
                             <Slider min={10} max={1000} valueLabelDisplay='on' value={priceRange}
-                                    onChange={(event, newValue, activeThumb) => {
-                                        if (activeThumb == 0) {
-                                            setPriceRange([Math.min(newValue[0], priceRange[1] - minPriceDiff), priceRange[1]])
-                                        } else {
-                                            setPriceRange([priceRange[0], Math.max(newValue[1], priceRange[0] + minPriceDiff)])
-                                        }
-                                    }}>
+                                onChange={(event, newValue, activeThumb) => {
+                                    if (activeThumb == 0) {
+                                        setPriceRange([Math.min(newValue[0], priceRange[1] - minPriceDiff), priceRange[1]])
+                                    } else {
+                                        setPriceRange([priceRange[0], Math.max(newValue[1], priceRange[0] + minPriceDiff)])
+                                    }
+                                }}>
                             </Slider>
                             <Typography>
                                 入住人数
                             </Typography>
                             <Slider min={1} max={5} valueLabelDisplay value={guestsNumber} marks={guestsNumberMarks}
-                                    onChange={(event, newValue) => {
-                                        setGuestNum(newValue);
-                                    }}>
+                                onChange={(event, newValue) => {
+                                    setGuestNum(newValue);
+                                }}>
                             </Slider>
-                            <FormGroup sx={{padding: 0}}>
+                            <FormGroup sx={{ padding: 0 }}>
                                 <FormControlLabel control={<Checkbox checked={roomIntro[0]}
-                                                                     onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])}/>}
-                                                  label="窗户"/>
+                                    onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])} />}
+                                    label="窗户" />
                                 <FormControlLabel control={<Checkbox checked={roomIntro[1]}
-                                                                     onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])}/>}
-                                                  label="阳台"/>
+                                    onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])} />}
+                                    label="阳台" />
                                 <FormControlLabel control={<Checkbox checked={roomIntro[2]}
-                                                                     onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])}/>}
-                                                  label="洗衣房"/>
+                                    onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])} />}
+                                    label="洗衣房" />
                             </FormGroup>
                             <Stack direction='row' justifyContent='space-between'>
                                 <Button fullWidth onClick={handleReset} >重设</Button>
@@ -227,14 +228,36 @@ export default function Stay({hotel_list}) {
                         <div>
                             <Typography variant="h5">房型查询</Typography>
                         </div>
-                        <FormControl variant="standard" sx={{width: '30%'}}>
+                        <FormControl variant="standard" sx={{ width: '30%' }}>
                             <InputLabel>分店</InputLabel>
                             <Select value={hotel} label="分店" onChange={(e) => {
                                 setHotel(e.target.value)
                             }}>
+                                <ListSubheader>
+                                    {hotel_list[0].cityname}
+                                </ListSubheader>
                                 {hotel_list !== undefined && hotel_list.map((item) => (
-                                    <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                    item.cityname == "深圳" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
                                 ))}
+                                <ListSubheader>
+                                    广州
+                                </ListSubheader>
+                                {hotel_list !== undefined && hotel_list.map((item) => (
+                                    item.cityname == "广州" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                ))}
+                                <ListSubheader>
+                                    上海
+                                </ListSubheader>
+                                {hotel_list !== undefined && hotel_list.map((item) => (
+                                    item.cityname == "上海" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                ))}
+                                <ListSubheader>
+                                    重庆
+                                </ListSubheader>
+                                {hotel_list !== undefined && hotel_list.map((item) => (
+                                    item.cityname == "重庆" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                ))}
+
                             </Select>
                         </FormControl>
                     </Stack>
@@ -243,13 +266,13 @@ export default function Stay({hotel_list}) {
                             roomList.map((item) => (
                                 <Grid key={item.roomtypeid} item xs={12} md={6} lg={4} xl={4} padding={2}>
                                     <RoomCard hotelID={item.hotelid} hotelName={hotel} admin={false}
-                                              roomName={item.roomname}
-                                              roomInfo={item} roomTypeID={item.roomtypeid}
-                                              imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
-                                              markedRooms={markedRooms}
-                                              userID={userID}
-                                              refreshRooms = {() => setRefreshRooms(!refreshRooms)}
-                                              needMarkBox={true}
+                                        roomName={item.roomname}
+                                        roomInfo={item} roomTypeID={item.roomtypeid}
+                                        imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
+                                        markedRooms={markedRooms}
+                                        userID={userID}
+                                        refreshRooms={() => setRefreshRooms(!refreshRooms)}
+                                        needMarkBox={true}
                                     ></RoomCard>
                                 </Grid>
                             ))
