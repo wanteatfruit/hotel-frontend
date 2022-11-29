@@ -278,16 +278,19 @@ export default function NavBar({
     return (
         <>
 
-            <Dialog sx={{borderRadius:5}} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
+            <Dialog sx={{borderRadius:5}} fullScreen={fullScreenMap} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
                 <DialogTitle>
-                酒店名以下房型正在秒杀！
+                    
+                    {eventInfo !== null && eventInfo.hotelname}
+                    
+                的一个房型正在秒杀！
                     <IconButton onClick={() => setSaleDialogOpen(false)}>
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
                     <Typography></Typography>
-                    <RoomCard admin={false} roomInfo={saleRoomInfo} imageUrl={roomImageUrl[saleRoomInfo.roomtypeid%roomImageUrl.length]} />
+                    <RoomCard hotelName={eventInfo === null ? '' : eventInfo.hotelname} admin={false} roomInfo={saleRoomInfo} imageUrl={roomImageUrl[saleRoomInfo.roomtypeid%roomImageUrl.length]} />
                     <Divider sx={{mt:2}}/>
                     <Typography>截至{eventInfo === null ? '' : eventInfo.endtime}</Typography>
                 </DialogContent>

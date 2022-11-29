@@ -47,7 +47,7 @@ export default function BookingPage({ }) {
     const hotelName = router.query.id
     const [roomList, setRoomList] = React.useState(null)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
-    const [bookingCost, setBookingCost]  = React.useState(0);
+    const [bookingCost, setBookingCost] = React.useState(0);
     const [roomTypeName, setRoomTypeName] = React.useState(null)
     //get roomtype by hotel
     React.useEffect(() => {
@@ -65,8 +65,8 @@ export default function BookingPage({ }) {
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
         endDate: dayjs().startOf("day").add(7, 'day'),
-        roomName:roomList !== null?roomList[0].roomname:'',
-        roomPrice:0,
+        roomName: roomList !== null ? roomList[0].roomname : '',
+        roomPrice: 0,
         hotelName: hotelName == null ? '' : hotelName.toString(),
         cost: 0
     })
@@ -97,16 +97,16 @@ export default function BookingPage({ }) {
         setBookingCost(cost1)
     }
 
-    async function handleOrder(event){
+    async function handleOrder(event) {
         event.preventDefault()
-        if(localStorage.getItem("isLoggedIn")==="false"){
+        if (localStorage.getItem("isLoggedIn") === "false") {
             alert("请先登录！")
             return
         }
         const uname = localStorage.getItem("username")
         const uid = localStorage.getItem("userID")
         const userInfo = await axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`)
-        if(userInfo.data.money<bookingCost){
+        if (userInfo.data.money < bookingCost) {
             alert("用户余额不足！")
             return
         }
@@ -115,18 +115,18 @@ export default function BookingPage({ }) {
             endDate: bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss'),
             roomType: bookingInfo.roomName,
             hotelName: bookingInfo.hotelName,
-            cost:bookingCost,
-            username:uname
+            cost: bookingCost,
+            username: uname
         }
 
-        const resp = await fetch('http://120.25.216.186:8888/orders/booking',{
-            method:'POST',
-            body:JSON.stringify(orderInfo),
-            headers:{
-              'Content-type': 'application/json'
+        const resp = await fetch('http://120.25.216.186:8888/orders/booking', {
+            method: 'POST',
+            body: JSON.stringify(orderInfo),
+            headers: {
+                'Content-type': 'application/json'
             }
-          })
-          console.log(orderInfo)
+        })
+        console.log(orderInfo)
         router.push("/account-center/account-center")
     }
 
@@ -134,22 +134,22 @@ export default function BookingPage({ }) {
         <>
             <ThemeProvider theme={theme}>
                 <NavBar />
-                <Box sx={{mt:'60px',}}>
+                <Box sx={{ mt: '60px', }}>
                     <div style={{
                         backgroundImage: 'url("https://images.pexels.com/photos/585753/pexels-photo-585753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")',
                         backgroundSize: 'cover',
                         height: '25vh',
                         display: 'flex',
-                        
+
                         alignItems: 'flex-end'
                     }}>
 
-                        <IconButton href="/hotels" sx={{ backgroundColor: 'white', margin: 2, padding: 1 }}>
+                        <IconButton href={`/hotels/${hotelName}`} sx={{ backgroundColor: 'white', margin: 2, padding: 1 }}>
                             <ChevronLeftOutlined fontSize="large"></ChevronLeftOutlined>
                         </IconButton>
                         <Typography variant="h2" sx={{ paddingBottom: 2, color: 'white' }}>{hotelName}</Typography>
                     </div>
-                    <Stepper activeStep={activeStep} sx={{ padding: 2, paddingX:{xs:1, sm:4}}}>
+                    <Stepper activeStep={activeStep} sx={{ padding: 2, paddingX: { xs: 1, sm: 4 } }}>
                         {steps.map((label, index) => {
                             const stepProps = {};
                             return (
@@ -160,11 +160,11 @@ export default function BookingPage({ }) {
                         })}
                     </Stepper>
                     {activeStep === 0 && (
-                        <div style={{paddingBottom:4, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <div style={{ paddingBottom: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                             <List sx={{}}>
                                 {roomList !== null && roomList.map((item, index) => (
                                     <ListItem sx={{}} key={item.roomtypeid}>
-                                        <ListItemButton  selected={selectedRoom === index}
+                                        <ListItemButton selected={selectedRoom === index}
                                             onClick={() => {
                                                 setSelectedRoom(index);
                                                 setBookingInfo({
@@ -174,19 +174,18 @@ export default function BookingPage({ }) {
                                                     roomPrice: item.price
                                                 });
                                             }}>
-                                            <Card variant="outlined" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '50%', paddingLeft:0 }}>
+                                            <Card variant="outlined" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '50%', paddingLeft: 0 }}>
                                                 {/* <CardHeader title={item.roomname} /> */}
                                                 <CardContent>
                                                     <Typography variant="h4">{item.roomname}</Typography>
-                                                    {item.discount==1 && <Typography variant="h6">{`${item.price}元 / 晚`}</Typography>}
-                                                    {item.discount!=1 && <Stack direction='row'>
-                                                    <Typography variant="h6" sx={{textDecoration:'line-through'}}>{`${item.price}元 / 晚`}</Typography>
-                                                    <Typography variant="h6" sx={{ml:2}}>{`${item.afterEventPrice}元 / 晚`}</Typography>
-
-                                                        </Stack>}
+                                                    {item.discount == 1 && <Typography variant="h6">{`${item.price}元 / 晚`}</Typography>}
+                                                    {item.discount != 1 && <Stack direction='row'>
+                                                        <Typography variant="h6" sx={{ textDecoration: 'line-through' }}>{`${item.price}元 / 晚`}</Typography>
+                                                        <Typography variant="h6" sx={{ ml: 2 }}>{`${item.afterEventPrice}元 / 晚`}</Typography>
+                                                    </Stack>}
                                                     {/* <Typography variant="h6">{item.discount==1? `${item.price}元 / 晚`:``}</Typography> */}
                                                 </CardContent>
-                                                <CardContent  sx={{ display:{xs:'none', sm:'block'}, justifyContent: 'flex-end' }}>
+                                                <CardContent sx={{ display: { xs: 'none', sm: 'block' }, justifyContent: 'flex-end' }}>
                                                     <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
                                                         <FormControlLabel control={<Checkbox readOnly
                                                             checked={handleIntroduction(item, 0)}></Checkbox>}
@@ -206,7 +205,7 @@ export default function BookingPage({ }) {
                             </List>
                             <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
                                 <Button sx={{ width: '15vh', marginRight: 4 }} href="/hotels">返回主页</Button>
-                                <Button sx={{ width: '15vh', marginRight: 4 }} variant="outlined" disabled={bookingInfo.roomName===''} onClick={() => {
+                                <Button sx={{ width: '15vh', marginRight: 4 }} variant="outlined" disabled={bookingInfo.roomName === ''} onClick={() => {
                                     setActiveStep(activeStep + 1)
                                 }}>下一步</Button>
                             </div>
@@ -217,13 +216,13 @@ export default function BookingPage({ }) {
                         <div>
                             <Stack gap={5} sx={{
                                 paddingX: '10px',
-                                paddingY:'10px',
+                                paddingY: '10px',
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <Stack direction='row'  gap={2}>
+                                    <Stack direction='row' gap={2}>
 
                                         <DatePicker
                                             label="入住日期"
@@ -278,7 +277,7 @@ export default function BookingPage({ }) {
 
                             </Stack>
 
-                            <div style={{ marginBottom: 20,display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
+                            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
                                 <Button sx={{ width: '15vh', marginRight: 4 }} onClick={() => {
                                     setActiveStep(activeStep - 1)
                                 }}>上一步</Button>
@@ -343,11 +342,11 @@ export default function BookingPage({ }) {
                                     </Card>
                                 </Grid>
                                 <Grid item xs={3} sm={2}>
-                                    <Button type="submit" variant="contained" sx={{width:'100%', height:'100%', fontSize:'2rem'}}>提交订单</Button>
+                                    <Button type="submit" variant="contained" sx={{ width: '100%', height: '100%', fontSize: '2rem' }}>提交订单</Button>
                                 </Grid>
                             </Grid>
-                            <div style={{ display: 'flex', padding: 4, justifyContent:'flex-end' }}>
-                                <Button  variant="outlined" sx={{ width: '15vh', marginRight: 5, marginBottom:4 }} onClick={() => {
+                            <div style={{ display: 'flex', padding: 4, justifyContent: 'flex-end' }}>
+                                <Button variant="outlined" sx={{ width: '15vh', marginRight: 5, marginBottom: 4 }} onClick={() => {
                                     setActiveStep(activeStep - 1)
                                 }}>上一步</Button>
                             </div>

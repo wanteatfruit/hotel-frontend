@@ -20,7 +20,8 @@ import {
     Stack,
     TextField,
     Typography,
-    Chip
+    Chip,
+    Divider
 } from "@mui/material"
 import styles from "../styles/RoomCard.module.css"
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -173,7 +174,7 @@ export default function RoomCard({
 
     return (
         <>
-            <Card  sx={{borderWidth:1,borderRadius:3, borderSpacing:1}}>
+            <Card sx={{ borderWidth: 1, borderRadius: 3, borderSpacing: 1 }}>
                 <CardMedia component='img' loading="eager" src={imageUrl}
                     height="300">
 
@@ -181,30 +182,33 @@ export default function RoomCard({
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ paddingBottom: '0px' }}>
                         <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
-                        {admin == false && onSale == false && <Typography variant="body1">{`${roomInfo.price}RMB / 晚`}</Typography>}
-                        {admin == true && <Typography variant="body1">{`${roomInfo.price}RMB / 晚`}</Typography>}
-                        {admin == false && onSale == true &&
-                            <Stack >
-                                <Typography variant="body1" sx={{ textDecoration: 'line-through' }}>
-                                    {`${roomInfo.price}RMB / 晚`}
-                                </Typography>
-                                <Stack direction='row'>
-                                    <Typography sx={{paddingRight:1}}> {`${roomInfo.afterEventPrice}RMB / 晚`}</Typography>
-                                    <Chip  size="small" color="success" label={'-' + getOff() + '%'}></Chip>
-                                </Stack>
-                            </Stack>
-                        }
+
                         <Typography variant="body1">{`推荐入住${roomInfo.number}人`}</Typography>
 
                     </CardContent>
                     {admin == false &&
-                        <CardContent>
+                        <CardContent sx={{mb:0}}>
                             <FormGroup sx={{ flexDirection: 'row', padding: 0 }}>
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[0]} />} label="窗户" />
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[1]} />} label="阳台" />
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[2]} />} label="洗衣房" />
                             </FormGroup>
+                            <Divider sx={{mb:1}}/>
+                            {admin == false && onSale == false && <Typography textAlign='center' variant="h6">{`${roomInfo.price}RMB / 晚`}</Typography>}
+                            {admin == true && <Typography variant="body1" textAlign='center'>{`${roomInfo.price}RMB / 晚`}</Typography>}
+                            {admin == false && onSale == true &&
+                                <Stack justifyContent='center'>
+                                    <Typography  variant="h6" textAlign='center' sx={{ textDecoration: 'line-through' }}>
+                                        {`${roomInfo.price}RMB / 晚`}
+                                    </Typography>
+                                    <Stack direction='row' justifyContent='center'>
+                                        <Typography variant="h6" textAlign='center' sx={{ paddingRight: 1 }}> {`${roomInfo.afterEventPrice}RMB / 晚`}</Typography>
+                                        <Chip size="medium" color="success" label={'-' + getOff() + '%'}></Chip>
+                                    </Stack>
+                                </Stack>
+                            }
                         </CardContent>
+
                     }
                 </div>
                 {admin == false &&
