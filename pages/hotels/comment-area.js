@@ -18,7 +18,7 @@ export default function CommentArea({hotelID}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     async function getComments() {
-        let response = await axios.get(`http://120.25.216.186:8888/comment/${hotelID}`);
+        let response = await axios.get(`https://mock.apifox.cn/m1/1589145-0-1f650808/comment/1`);
         // await axios.get("http://120.25.216.186:8888/comment", {params: {"id": hotelID}}).then((response) => {
         //     console.log(response.data);
         // }).catch((error) => {

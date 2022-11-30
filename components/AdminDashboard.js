@@ -160,7 +160,7 @@ export default function AdminDashboard({ }) {
             <div style={{ backdropFilter: 'blur(2px)', height: '100%', transform: 'scaleX(-1)' }}>
               <CardHeader title="热门房型" avatar={<CottageOutlined fontSize="large" />} titleTypographyProps={{ variant: 'h5' }}/>
               <CardContent>
-                <Typography variant="h3" sx={{  }}>{hotRoom}</Typography>
+                <Typography variant="h4" sx={{  }}>{hotRoom}</Typography>
               </CardContent>
             </div>
           </StyledCard>
@@ -171,7 +171,7 @@ export default function AdminDashboard({ }) {
             <div style={{ backdropFilter: 'blur(2px)', height: '100%', transform: 'scaleX(-1)', }}>
               <CardHeader title="热门分店" avatar={<LocationCityOutlined fontSize="large" />} titleTypographyProps={{ variant: 'h5' }}></CardHeader>
               <CardContent>
-                <Typography variant="h3">{hotHotel}</Typography>
+                <Typography variant="h4">{hotHotel}</Typography>
               </CardContent>
             </div>
           </StyledCard>
@@ -181,7 +181,7 @@ export default function AdminDashboard({ }) {
             <div style={{ backdropFilter: 'blur(2px)', height: '100%', }}>
               <CardHeader titleTypographyProps={{ variant: 'h5' }} avatar={<DirectionsSubwayOutlined fontSize="large"/>} title="热门城市" sx={{ color: 'white' }}></CardHeader>
               <CardContent>
-                <Typography variant="h3" color="white">
+                <Typography variant="h4" color="white">
                   {hotCity}
                 </Typography>
               </CardContent>

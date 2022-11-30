@@ -268,11 +268,12 @@ export default function Stay({ hotel_list }) {
                                     <RoomCard hotelID={item.hotelid} hotelName={hotel} admin={false}
                                         roomName={item.roomname}
                                         roomInfo={item} roomTypeID={item.roomtypeid}
-                                        imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
+                                        imageUrl={roomImageUrl[item.roomtypeid]}
                                         markedRooms={markedRooms}
                                         userID={userID}
                                         refreshRooms={() => setRefreshRooms(!refreshRooms)}
                                         needMarkBox={true}
+                                        needHotelName={true}
                                     ></RoomCard>
                                 </Grid>
                             ))

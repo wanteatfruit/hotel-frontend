@@ -25,11 +25,13 @@ import {
 } from "@mui/material"
 import styles from "../styles/RoomCard.module.css"
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { ChevronLeftOutlined } from "@mui/icons-material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { CheckBox, ColorLensSharp, DiscountOutlined } from "@mui/icons-material";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
+import PlaceOrder from "./PlaceOrderDrawer";
 
 export default function RoomCard({
     hotelID,
@@ -44,6 +46,7 @@ export default function RoomCard({
     userID,
     refreshRooms,
     needMarkBox,
+    needHotelName
 
 }) {
     const [deleteDialog, setDeleteDialog] = React.useState(false);
@@ -54,7 +57,7 @@ export default function RoomCard({
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
     const [isMarked, setIsMarked] = useState(false)
     const [onSale, setOnSale] = useState(false)
-
+    const [orderDrawer, setOrderDrawer] = useState(false);
     function handleIntroduction() {
         let intro = roomInfo.introduction
         const intro_array = intro.split(",")
@@ -181,24 +184,28 @@ export default function RoomCard({
                 </CardMedia>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ paddingBottom: '0px' }}>
-                        <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
-
+                        {needHotelName==true &&<Stack direction='row' justifyContent='space-between'>
+                            <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
+                            <Chip label={`${hotelName}`} clickable component='a' href={`/hotels/${hotelName}`}></Chip>
+                            </Stack>}
+                        {needHotelName==undefined && <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
+}
                         <Typography variant="body1">{`推荐入住${roomInfo.number}人`}</Typography>
 
                     </CardContent>
                     {admin == false &&
-                        <CardContent sx={{mb:0}}>
+                        <CardContent sx={{ mb: 0 }}>
                             <FormGroup sx={{ flexDirection: 'row', padding: 0 }}>
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[0]} />} label="窗户" />
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[1]} />} label="阳台" />
                                 <FormControlLabel control={<Checkbox readOnly checked={roomIntro[2]} />} label="洗衣房" />
                             </FormGroup>
-                            <Divider sx={{mb:1}}/>
+                            <Divider sx={{ mb: 1 }} />
                             {admin == false && onSale == false && <Typography textAlign='center' variant="h6">{`${roomInfo.price}RMB / 晚`}</Typography>}
                             {admin == true && <Typography variant="body1" textAlign='center'>{`${roomInfo.price}RMB / 晚`}</Typography>}
                             {admin == false && onSale == true &&
                                 <Stack justifyContent='center'>
-                                    <Typography  variant="h6" textAlign='center' sx={{ textDecoration: 'line-through' }}>
+                                    <Typography variant="h6" textAlign='center' sx={{ textDecoration: 'line-through' }}>
                                         {`${roomInfo.price}RMB / 晚`}
                                     </Typography>
                                     <Stack direction='row' justifyContent='center'>
@@ -238,7 +245,7 @@ export default function RoomCard({
                                 }
                                 }>
                                 </IconButton>
-                                <Button variant="contained" href={`/book/${hotelName}`}>订房</Button>
+                                <Button variant="contained"  onClick={() => setOrderDrawer(true)}>订房</Button>
                             </CardActions>
                         </Grid>
                     </Grid>
@@ -291,6 +298,13 @@ export default function RoomCard({
                     <Button onClick={() => { handleDelete(); refresh("广州1号"); setDeleteDialog(false) }}>确定</Button>
                 </DialogActions>
             </Dialog>
+            <PlaceOrder hotelName={hotelName} roomInfo={roomInfo} open={orderDrawer}>
+                <IconButton onClick={() => setOrderDrawer(false)} color="secondary">
+                    <ChevronLeftOutlined fontSize="large" />
+                </IconButton>
+                <Typography variant="h3" color='secondary'>{hotelName}</Typography>
+            </PlaceOrder>
+
 
         </>
     )

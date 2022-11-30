@@ -67,7 +67,7 @@ export default function CommentCard({ comments, meanScore }) {
                 </CardHeader>
                 <CardContent>
                     <Typography>{comments.text}</Typography>
-                    <Rating value={comments.score} max={10} precision={0.5} readOnly />
+                    <Rating value={comments.score} max={5} precision={2} readOnly />
                 </CardContent>
                 <CardActions sx={{ paddingTop: 0, paddingBottom: 2, paddingX: 2, display: { xs: 'none', sm: 'flex' } }}>
                     {comments.picture1 !== null && <Button onClick={handleZoom}   sx={{ backgroundImage: `url(${comments.picture1})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}
