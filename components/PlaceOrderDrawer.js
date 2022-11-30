@@ -1,5 +1,5 @@
 import { ChevronLeftOutlined, ChevronRightRounded, IcecreamOutlined } from "@mui/icons-material";
-import { Drawer, Box, Stack, TextField, Tabs, Button, Tab, Typography, List, ListItem, ListItemButton, ListItemText, IconButton, Slider, createTheme, ThemeProvider, Autocomplete, FormControl, InputLabel, Select, MenuItem, Grid } from "@mui/material";
+import { Dialog,DialogActions, Drawer, Box, Stack, TextField, Tabs, Button, Tab, Typography, List, ListItem, ListItemButton, ListItemText, IconButton, Slider, createTheme, ThemeProvider, Autocomplete, FormControl, InputLabel, Select, MenuItem, Grid, DialogTitle, DialogContent, Chip } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import React from "react";
 // import 'react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -8,10 +8,11 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { branchHotels, roomImageUrl, roomTypes } from "../data";
 import RoomCard from "./RoomCard";
-export default function PlaceOrder({ open, hotelName, roomInfo, children }) {
+export default function PlaceOrder({ open, hotelName, roomInfo, children, specifyRoomNum }) {
     const [selectDateOpen, setSelectDateOpen] = React.useState(false);
     const [bookingCity, setBookingCity] = React.useState(0);
     const [bookingCost, setBookingCost] = React.useState(0);
+    const [confirmDialog, setConfirmDialog] = React.useState(false);
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
         endDate: dayjs().startOf("day").add(7, 'day'),
@@ -20,6 +21,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children }) {
         roomID: roomInfo !== null ? roomInfo.roomtypeid : '',
         guestNum: 2,
         hotelName: hotelName == null ? '' : hotelName.toString(),
+        roomNumber:'504'
     })
     const calculateCost = () => {
         const days = bookingInfo.endDate.diff(bookingInfo.startDate, 'day')
@@ -87,6 +89,18 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children }) {
 
     return (
         <ThemeProvider theme={theme}>
+            <Dialog open={confirmDialog}>
+                <DialogTitle>确定订单</DialogTitle>
+                <DialogContent>
+                    <Typography>入住时间：{bookingInfo.startDate.format('YYYY-MM-DD') }</Typography>
+                    <Typography>离店时间：{bookingInfo.endDate.format('YYYY-MM-DD') }</Typography>
+                    <Typography>￥{bookingCost} 将会从你的账户中扣除</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>setConfirmDialog(false)}>取消</Button>
+                    <Button onClick={(e)=>handleOrder(e)}>确认订单</Button>
+                </DialogActions>
+            </Dialog>
             <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '80vw' }}>
                 <Box sx={{ width: { md: '77vw', xs: '100vw' } }}>
                     <Stack >
@@ -94,10 +108,10 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children }) {
                             {children}
                         </div>
                     </Stack>
-                    <Stack direction={{ xs: 'column', md: 'row' }} gap={8} pl={4} pt={4} alignItems='center' justifyContent='center'>
-                        {/* <div style={{ width: { xs: '90vw', md: '25vw' }, marginTop: 10 }}> */}
+                    <Stack direction={{ xs: 'column', md: 'row' }} gap={8} pl={4} pt={10} alignItems='center' justifyContent='space-evenly'>
+                        <div style={{ marginTop:10 }}>
                             <RoomCard imageUrl={roomImageUrl[roomInfo.roomtypeid]} hotelName={hotelName} roomInfo={roomInfo} />
-                        {/* </div> */}
+                        </div>
                         <Stack mt={3} gap={0} alignItems='center' width={{xs:'90vw', md:'25vw'}}>
                             <Typography gutterBottom textAlign='start' variant='h6'>{`￥${roomInfo.price}/晚`}</Typography>
 
@@ -162,7 +176,8 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children }) {
                                     <MenuItem value={5}>5位</MenuItem>
                                 </Select>
                             </FormControl>
-                            <Button color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button>
+                            <Button onClick={()=>setConfirmDialog(true)} color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button>
+                            {specifyRoomNum==true &&                             <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`您选择了${bookingInfo.roomNumber}号房间`}</Typography>}
                             <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography>
 
                         </Stack>

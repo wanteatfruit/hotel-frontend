@@ -392,10 +392,10 @@ export default function NavBar({
                     <Box sx={{ display: { xs: "none", md: "flex" }, }}>
                         <Button variant="outlined" color='secondary' disableElevation sx={{
                             fontFamily: 'Roboto', '&:hover': {
-                                backgroundColor: '#0069d9',
-                                borderColor: '#0062cc',
+                                backgroundColor: 'var(--color-5)',
+                                borderColor: 'var(--color-5)',
                                 boxShadow: 'none',
-                            }, backgroundColor: '#ff385c', borderRadius: 10
+                            }, backgroundColor: 'var(--color-4)', borderRadius: 10, mr:1
                         }} href="/" size="large"
                             startIcon={<SportsBarOutlined fontSize="24px" />}>
                             盛夏小酒
@@ -415,13 +415,14 @@ export default function NavBar({
 
 
                     <Stack direction='row' gap={1}>
-                        <IconButton onClick={()=>setOrderOpen(true)}>
-                            <ImportContacts />
-                        </IconButton>
                         <Tooltip title='秒杀活动'>
                             <IconButton color='secondary'
-                                size="large" sx={{ backgroundColor: '#ff385c' }} onClick={() => setSaleDialogOpen(true)}>
-                                <AlarmOnOutlined />
+                                size='large' sx={{backgroundColor: 'var(--color-4)','&:hover': {
+                                    backgroundColor: 'var(--color-5)',
+                                    borderColor: 'var(--color-5)',
+                                    boxShadow: 'none',
+                                } }} onClick={() => setSaleDialogOpen(true)}>
+                                <AlarmOnOutlined fontSize="inherit" />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='酒店位置'>
@@ -460,13 +461,6 @@ export default function NavBar({
                     </Stack>
                 </Toolbar>
             </AppBar>
-            {/* <PlaceOrder open={orderOpen} hotelName={eventInfo!==null?eventInfo.hotelname:''} roomInfo={saleRoomInfo}>
-            <IconButton onClick={() => setOrderOpen(false)} color="secondary">
-                    <ChevronLeftOutlined fontSize="large" />
-                </IconButton>
-                <Typography variant="h3" color='secondary'>{eventInfo!==null?eventInfo.hotelname:''}</Typography>
-                
-            </PlaceOrder> */}
             {LogoutDialog()}
             {ChatDialog()}
         </>

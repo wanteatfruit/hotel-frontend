@@ -46,6 +46,7 @@ export default function RoomCard({
     userID,
     refreshRooms,
     needMarkBox,
+    needHotelName
 
 }) {
     const [deleteDialog, setDeleteDialog] = React.useState(false);
@@ -183,8 +184,12 @@ export default function RoomCard({
                 </CardMedia>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <CardContent sx={{ paddingBottom: '0px' }}>
-                        <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
-
+                        {needHotelName==true &&<Stack direction='row' justifyContent='space-between'>
+                            <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
+                            <Chip label={`${hotelName}`} clickable component='a' href={`/hotels/${hotelName}`}></Chip>
+                            </Stack>}
+                        {needHotelName==undefined && <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
+}
                         <Typography variant="body1">{`推荐入住${roomInfo.number}人`}</Typography>
 
                     </CardContent>

@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400&family=Noto+Serif+SC&display=swap');:root{
   --ticket-height:180px;
   --ticket-width:375px;
+  
   --ticket-pic-width:275px;
   --ticket-bg-primary : ghostwhite;
   --font-secondary: 'Noto Serif SC', serif;

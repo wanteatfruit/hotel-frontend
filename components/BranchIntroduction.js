@@ -9,6 +9,7 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
+    Stack,
     Typography
 } from "@mui/material";
 import {fullScreenHotelImageUrl} from "../data";
@@ -34,7 +35,7 @@ export default function BranchIntro({
     let x = Math.floor((Math.random() * 5));
     const [intro, setIntro] = React.useState(['', '', ''])
     const [isMarked, setIsMarked] = useState(false)
-
+     console.log(hotelInfo)                                   
     useEffect(() => {
         if (markedHotels.indexOf(hotelInfo.hotelid) !== -1) {
             setIsMarked(true)
@@ -90,26 +91,27 @@ export default function BranchIntro({
         // refreshRooms()
     }
 
-    const pic_url = fullScreenHotelImageUrl[x]
+    const pic_url = fullScreenHotelImageUrl[hotelInfo.hotelid-1]
     return (
-        <Card sx={{display: 'flex', width: '98%'}} elevation={5}>
+        <Card sx={{display: 'flex', width: '98%', borderRadius:5}} elevation={1}>
             <Box sx={{display: 'flex', flexDirection: {xs: 'column', sm: 'column', md: 'row'}, width: 'max-content'}}>
                 <CardMedia component='img' src={pic_url} sx={{width: {md: '60%', sm: '100%'}}}/>
-                <CardContent>
+                <CardContent sx={{justifyContent:'space-between'}}>
                     <Typography variant="h4">{hotelInfo.hotelname}</Typography>
                     <hr/>
+                    <div>
                     <List>
                         <ListItem disableGutters>
                             <ListItemAvatar>
-                                <Avatar>
+                                <Avatar sx={{backgroundColor:'var(--color-1)'}}>
                                     <LocationCityRoundedIcon/>
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText primary={hotelInfo.cityname}/>
                         </ListItem>
                         <ListItem disableGutters>
-                            <ListItemAvatar>
-                                <Avatar>
+                            <ListItemAvatar >
+                                <Avatar sx={{backgroundColor:'var(--color-2)'}}>
                                     <BeachAccessOutlinedIcon/>
                                 </Avatar>
                             </ListItemAvatar>
@@ -117,7 +119,7 @@ export default function BranchIntro({
                         </ListItem>
                         <ListItem disableGutters>
                             <ListItemAvatar>
-                                <Avatar>
+                                <Avatar sx={{backgroundColor:'var(--color-3)'}}>
                                     <HomeRoundedIcon/>
                                 </Avatar>
                             </ListItemAvatar>
@@ -125,7 +127,7 @@ export default function BranchIntro({
                         </ListItem>
                         <ListItem disableGutters>
                             <ListItemAvatar>
-                                <Avatar>
+                                <Avatar sx={{backgroundColor:'var(--color-4)'}}>
                                     <PhoneInTalkRoundedIcon/>
                                 </Avatar>
                             </ListItemAvatar>
@@ -133,15 +135,22 @@ export default function BranchIntro({
                         </ListItem>
                         <ListItem disableGutters>
                             <ListItemAvatar>
-                                <Avatar>
+                                <Avatar sx={{backgroundColor:'var(--color-5)'}}>
                                     <AlternateEmailRoundedIcon/>
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText primary={hotelInfo.email}/>
                         </ListItem>
                     </List>
+                    </div>
+                    <Stack direction='row'>
+                    <Typography textAlign='center' sx={{pt:1}}>收藏</Typography>
+                    <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
+                        MarkHotel(event.target.checked)
+                    }}/>
+                    </Stack>
                 </CardContent>
-                <Grid
+                {/* <Grid
                     sx={{
                         justifyContent: 'flex-end',
                         alignItems: "end",
@@ -153,7 +162,7 @@ export default function BranchIntro({
                     <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
                         MarkHotel(event.target.checked)
                     }}/>
-                </Grid>
+                </Grid> */}
             </Box>
         </Card>
     )
