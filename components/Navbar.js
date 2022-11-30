@@ -460,13 +460,13 @@ export default function NavBar({
                     </Stack>
                 </Toolbar>
             </AppBar>
-            <PlaceOrder open={orderOpen} hotelName={eventInfo!==null?eventInfo.hotelname:''} roomInfo={saleRoomInfo}>
+            {/* <PlaceOrder open={orderOpen} hotelName={eventInfo!==null?eventInfo.hotelname:''} roomInfo={saleRoomInfo}>
             <IconButton onClick={() => setOrderOpen(false)} color="secondary">
                     <ChevronLeftOutlined fontSize="large" />
                 </IconButton>
                 <Typography variant="h3" color='secondary'>{eventInfo!==null?eventInfo.hotelname:''}</Typography>
                 
-            </PlaceOrder>
+            </PlaceOrder> */}
             {LogoutDialog()}
             {ChatDialog()}
         </>
