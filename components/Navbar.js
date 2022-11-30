@@ -50,12 +50,13 @@ import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in 
 import { login, pages, roomImageUrl, settings } from "../data";
 import { Stack, width } from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
-import { AlarmOnOutlined, ChevronLeftOutlined, HotelOutlined, PlaceOutlined, SportsBarOutlined, StormOutlined } from "@mui/icons-material";
+import { AlarmOnOutlined, ChevronLeftOutlined, HotelOutlined, ImportContacts, PlaceOutlined, SportsBarOutlined, StormOutlined } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import PlaceOrder from "./PlaceOrderDrawer";
 import RoomCard from "./RoomCard";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
@@ -78,6 +79,7 @@ export default function NavBar({
     const [displaySales, setDisplaySalesOpen] = useState(true);
     const [eventInfo, setEventInfo] = useState(null);
     const [saleRoomInfo, setSaleRoomInfo] = useState({roomtypeid:1});
+    const [orderOpen, setOrderOpen] = useState(false) //change it to other pages later
 
 
     useEffect(() => {
@@ -413,6 +415,9 @@ export default function NavBar({
 
 
                     <Stack direction='row' gap={1}>
+                        <IconButton onClick={()=>setOrderOpen(true)}>
+                            <ImportContacts />
+                        </IconButton>
                         <Tooltip title='秒杀活动'>
                             <IconButton color='secondary'
                                 size="large" sx={{ backgroundColor: '#ff385c' }} onClick={() => setSaleDialogOpen(true)}>
@@ -455,6 +460,13 @@ export default function NavBar({
                     </Stack>
                 </Toolbar>
             </AppBar>
+            <PlaceOrder open={orderOpen} hotelName={eventInfo!==null?eventInfo.hotelname:''} roomInfo={saleRoomInfo}>
+            <IconButton onClick={() => setOrderOpen(false)} color="secondary">
+                    <ChevronLeftOutlined fontSize="large" />
+                </IconButton>
+                <Typography variant="h3" color='secondary'>{eventInfo!==null?eventInfo.hotelname:''}</Typography>
+                
+            </PlaceOrder>
             {LogoutDialog()}
             {ChatDialog()}
         </>
