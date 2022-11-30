@@ -101,15 +101,15 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
                     <Button onClick={(e)=>handleOrder(e)}>确认订单</Button>
                 </DialogActions>
             </Dialog>
-            <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '80vw' }}>
+            <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '80vw',zIndex:1000000 }}>
                 <Box sx={{ width: { md: '77vw', xs: '100vw' } }}>
                     <Stack >
                         <div style={{ backgroundImage: 'url("https://images.pexels.com/photos/887723/pexels-photo-887723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")', backgroundSize: 'cover', height: '30vh', display: 'flex', alignItems: 'flex-end' }}>
                             {children}
                         </div>
                     </Stack>
-                    <Stack direction={{ xs: 'column', md: 'row' }} gap={8} pl={4} pt={10} alignItems='center' justifyContent='space-evenly'>
-                        <div style={{ marginTop:10 }}>
+                    <Stack direction={{ xs: 'column', md: 'row' }} gap={8} pl={2}  pt={6} alignItems='center' justifyContent='space-evenly'>
+                        <div style={{ marginTop:10, maxWidth:{xs:'80vw',sm:'25vw'}, minWidth:{xs:'80vw',sm:'25vw'} }}>
                             <RoomCard imageUrl={roomImageUrl[roomInfo.roomtypeid]} hotelName={hotelName} roomInfo={roomInfo} />
                         </div>
                         <Stack mt={3} gap={0} alignItems='center' width={{xs:'90vw', md:'25vw'}}>
