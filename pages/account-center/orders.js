@@ -562,12 +562,12 @@ export default function Orders({id}) {
                                     </Typography>
                                 </CardContent>
                                 <CardActions sx={{columnGap: "0.5em"}}>
-                                    <Button size="medium" variant={"outlined"} className={Styles.Button}
+                                    <Button size="medium" variant={"contained"} className={Styles.Button}
                                             onClick={() => {
                                                 setInfoDialogOpen(true);
                                                 setRoomOnDialog(room);
                                             }}>详情</Button>
-                                    <Button size="medium" variant={"outlined"} className={Styles.Button}
+                                    <Button size="medium" variant={"contained"} className={Styles.Button}
                                             onClick={() => {
                                                 setCommentDialogOpen(true)
                                                 setRoomOnDialog(room)

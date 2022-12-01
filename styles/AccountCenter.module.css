@@ -1,11 +1,11 @@
 .Button {
     background-color: #f67280;
     color: white;
+    border-radius: 5px;
 }
 
-.Button:hover,
-.Button:focus,
-.Button:active{
+.Button:hover{
     background-color: white;
     color: #f67280;
+    border-radius: 5px;
 }

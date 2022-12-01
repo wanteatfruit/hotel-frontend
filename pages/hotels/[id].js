@@ -156,7 +156,7 @@ export default function HotelDetail() {
                         <Grid item xs={24} xl={24} flexDirection='row'>
                             <Stack gap={2} direction='row'>
                                 <Typography variant="h4">房型</Typography>
-                                <Button sx={{fontSize: 20}} size='large' variant="contained"
+                                <Button className={styles.Button} sx={{fontSize: 20}} size='large' variant="contained"
                                         onClick={() => setOpenFloorPlan(true)}>查看平面图</Button>
                             </Stack>
                         </Grid>

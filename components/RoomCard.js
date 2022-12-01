@@ -245,7 +245,7 @@ export default function RoomCard({
                                 }
                                 }>
                                 </IconButton>
-                                <Button variant="contained"  onClick={() => setOrderDrawer(true)}>订房</Button>
+                                <Button className={styles.Button} variant="contained"  onClick={() => setOrderDrawer(true)}>订房</Button>
                             </CardActions>
                         </Grid>
                     </Grid>

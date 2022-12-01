@@ -79,3 +79,15 @@
 .introContent{
     font-size: xx-large;
 }
+
+.Button {
+    background-color: #f67280;
+    color: white;
+    border-radius: 5px;
+}
+
+.Button:hover{
+    background-color: white;
+    color: #f67280;
+    border-radius: 5px;
+}

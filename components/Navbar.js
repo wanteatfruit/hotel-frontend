@@ -393,9 +393,8 @@ export default function NavBar({
                     <Box sx={{display: {xs: "none", md: "flex"},}}>
                         <Button variant="outlined" color='secondary' disableElevation sx={{
                             fontFamily: 'Roboto', '&:hover': {
-                                backgroundColor: 'var(--color-5)',
-                                borderColor: 'var(--color-5)',
-                                boxShadow: 'none',
+                                backgroundColor: "white",
+                                color: "#f67280"
                             }, backgroundColor: 'var(--color-4)', borderRadius: 10, mr: 1
                         }} href="/" size="large"
                                 startIcon={<SportsBarOutlined fontSize="24px"/>}>
@@ -422,9 +421,8 @@ export default function NavBar({
 
                                             size='large' sx={{
                                     backgroundColor: 'var(--color-4)', '&:hover': {
-                                        backgroundColor: 'var(--color-5)',
-                                        borderColor: 'var(--color-5)',
-                                        boxShadow: 'none',
+                                        backgroundColor: "white",
+                                        color: "#f67280"
                                     }
                                 }} onClick={() => setSaleDialogOpen(true)}>
                                     <AlarmOnOutlined fontSize="inherit"/>
