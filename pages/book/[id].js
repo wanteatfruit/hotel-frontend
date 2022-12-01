@@ -247,17 +247,19 @@ export default function BookingPage({ }) {
 
             <ThemeProvider theme={theme}>
                 <Dialog open={loadingDialog} maxWidth='lg' onClose={() => setLoadingDialog(false)} sx={{ zIndex: 100000001 }} >
-                    <DialogContent>
+                    <DialogContent  sx={{ justifyContent: 'center', p: 8 }}>
                         {query === 'success' ? (
                             <Typography variant="h6">{orderReply}</Typography>
                         ) : (<CircularProgress />)}
 
                     </DialogContent>
                     {query === 'success' &&
-                        <Stack direction='row'>
-                            <Button href={'/account-center/account-center'}>用户中心</Button>
+                        <DialogActions>
+
+                            <Button href={'/account-center/account-center'}>前往用户中心</Button>
                             <Button onClick={() => { setLoadingDialog(false); handleClickQuery() }}>确定</Button>
-                        </Stack>}
+
+                        </DialogActions>}
                 </Dialog>
 
                 <NavBar />
