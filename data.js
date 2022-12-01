@@ -61,13 +61,13 @@ export const roomImageUrl = [
 ]
 
 export const hotelImageUrl = [
-    "https://images.pexels.com/photos/1580112/pexels-photo-1580112.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/2041556/pexels-photo-2041556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    "https://images.pexels.com/photos/1560065/pexels-photo-1560065.jpeg?cs=srgb&dl=pexels-bianca-1560065.jpg&fm=jpg",
-    "https://images.pexels.com/photos/3467153/pexels-photo-3467153.jpeg?cs=srgb&dl=pexels-rick-han-3467153.jpg&fm=jpg",
+    "https://images.pexels.com/photos/1802255/pexels-photo-1802255.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/14080833/pexels-photo-14080833.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "https://images.pexels.com/photos/326691/pexels-photo-326691.jpeg?cs=srgb&dl=pexels-pixabay-326691.jpg&fm=jpg",
-    "https://images.pexels.com/photos/70441/pexels-photo-70441.jpeg?cs=srgb&dl=pexels-amar-saleem-70441.jpg&fm=jpg",
-    "https://images.pexels.com/photos/4023389/pexels-photo-4023389.jpeg?cs=srgb&dl=pexels-zachary-debottis-4023389.jpg&fm=jpg",
+    "https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/1560065/pexels-photo-1560065.jpeg?cs=srgb&dl=pexels-bianca-1560065.jpg&fm=jpg",
+    "https://images.pexels.com/photos/1616118/pexels-photo-1616118.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    "https://images.pexels.com/photos/3467153/pexels-photo-3467153.jpeg?cs=srgb&dl=pexels-rick-han-3467153.jpg&fm=jpg",
     "https://images.pexels.com/photos/14333252/pexels-photo-14333252.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
 ]
 
