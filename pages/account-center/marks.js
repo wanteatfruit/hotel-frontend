@@ -29,6 +29,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import BalconyIcon from "@mui/icons-material/Balcony";
 import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
 import { hotelImageUrl, roomImageUrl } from "../../data";
+import Styles from "../../styles/AccountCenter.module.css"
 
 
 export default function Orders({ id }) {
@@ -250,7 +251,7 @@ export default function Orders({ id }) {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="medium" onClick={() => {
+                                <Button className={Styles.Button} size="medium" onClick={() => {
                                     router.push({
                                         pathname: "/hotels/" + hotel.hotelName,
                                     })
@@ -283,14 +284,15 @@ export default function Orders({ id }) {
                                     {room.roomTypeName}
                                 </Typography>
                             </CardContent>
-                            <CardActions>
-                                <Button size="medium" onClick={() => {
+                            <CardActions sx={{columnGap: "1em"}}>
+                                <Button className={Styles.Button} size="medium" onClick={() => {
                                     setInfoDialogOpen(true);
                                     setRoomOnDialog(room);
                                 }}>详情</Button>
                                 <div>
                                     <Button
                                         id="basic-button"
+                                        className={Styles.Button}
                                         aria-controls={modifyMenuOpen ? 'basic-menu' : undefined}
                                         aria-haspopup="true"
                                         aria-expanded={modifyMenuOpen ? 'true' : undefined}

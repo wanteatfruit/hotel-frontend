@@ -1,0 +1,11 @@
+.Button {
+    background-color: #f67280;
+    color: white;
+}
+
+.Button:hover,
+.Button:focus,
+.Button:active{
+    background-color: white;
+    color: #f67280;
+}

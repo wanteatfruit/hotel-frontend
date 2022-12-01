@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import axios from "axios"
 import {useEffect, useState} from "react";
 import {AccountCircleOutlined, Phone} from '@mui/icons-material';
+import Styles from "../../styles/AccountCenter.module.css"
 
 const drawerWidth = 240;
 styled(MuiAppBar, {
@@ -56,7 +57,7 @@ export default function Account({id}) {
                 <List disablePadding>
                     <ListItem>
                         <ListItemAvatar>
-                            <Avatar>
+                            <Avatar sx={{backgroundColor: "var(--color-4)"}}>
                                 <AccountCircleOutlined/>
                             </Avatar>
                         </ListItemAvatar>
@@ -67,7 +68,7 @@ export default function Account({id}) {
                     <Divider/>
                     <ListItem>
                         <ListItemAvatar>
-                            <Avatar>
+                            <Avatar sx={{backgroundColor: "var(--color-4)"}}>
                                 <Phone></Phone>
                             </Avatar>
                         </ListItemAvatar>
@@ -95,7 +96,7 @@ export default function Account({id}) {
                     }}
                     passHref
                 >
-                    <Button variant="contained" color="secondary">充值</Button>
+                    <Button className={Styles.Button}><Typography>充值</Typography></Button>
                 </Link>
             </React.Fragment>
         );
@@ -118,7 +119,7 @@ export default function Account({id}) {
                         }}
                         passHref
                     >
-                        <Button variant="contained" color="secondary">积分商城</Button>
+                        <Button className={Styles.Button}><Typography>积分商城</Typography></Button>
                     </Link>
                 </div>
             </React.Fragment>
@@ -134,7 +135,7 @@ export default function Account({id}) {
 
         return (
             <Container maxWidth="lg" sx={{mt: 8}}>
-                <Grid container spacing={3}>
+                <Grid container spacing={3} sx={{backgroundColor: "white"}}>
                     <Grid item xs={12}>
                         <Card>
                             <CardHeader title='个人信息'></CardHeader>
@@ -153,7 +154,7 @@ export default function Account({id}) {
                         </Card>
                     </Grid>
                     {/* Credits */}
-                    <Grid item xs={12} md={4} lg={3}>
+                    <Grid item xs={12} md={4} lg={3} sx={{marginBottom:"1em"}}>
                         <Card>
                             <CardHeader title='积分'/>
                             <CardContent>

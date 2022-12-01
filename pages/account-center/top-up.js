@@ -18,6 +18,7 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import {createTheme, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, ThemeProvider} from "@mui/material";
 import Link from "next/link";
+import Styles from "../../styles/AccountCenter.module.css"
 
 
 const tiers = [
@@ -159,7 +160,7 @@ export default function TopUp() {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setResponseDialogOpen(false)} autoFocus>
+                        <Button className={Styles.Button} onClick={() => setResponseDialogOpen(false)} autoFocus>
                             好的
                         </Button>
                     </DialogActions>
@@ -213,7 +214,7 @@ export default function TopUp() {
                     href={{
                         pathname: "/account-center/account-center"
                     }}>
-                    <Button variant={"outlined"}>返回</Button>
+                    <Button className={Styles.Button}>返回</Button>
                 </Link>
             </Grid>
             <Container disableGutters maxWidth="sm" component="main" sx={{pt: 8, pb: 6}}>
@@ -283,7 +284,7 @@ export default function TopUp() {
                                     </ul>
                                 </CardContent>
                                 <CardActions>
-                                    <Button fullWidth variant={tier.buttonVariant}
+                                    <Button className={Styles.Button} fullWidth variant={tier.buttonVariant}
                                             onClick={() => specialOfferOnClick(tier.amount)}>
                                         {tier.buttonText}
                                     </Button>
@@ -304,7 +305,7 @@ export default function TopUp() {
                     </Grid>
                     <br/>
                     <Grid xs={2} sm={2} md={2}>
-                        <Button type="submit" variant="contained"><Typography>确认</Typography></Button>
+                        <Button className={Styles.Button} type="submit"><Typography>确认</Typography></Button>
                     </Grid>
                 </Grid>
             </Container>

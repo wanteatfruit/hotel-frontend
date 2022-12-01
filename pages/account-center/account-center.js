@@ -106,16 +106,13 @@ export default function AccountCenter() {
                     }}/>
             <main>
 
-                <Box sx={{display: {md:'flex',xs:'none'}, marginTop:'62px'}}>
+                <Box sx={{display: {md:'flex',xs:'none'}, marginTop:'40px', borderColor: "red", borderWidth: "5px", backgroundColor: "white"}}>
                 <DrawerLeft setDrawerItem={setDrawerItem}></DrawerLeft>
                     {ChatDialog()}
                     <Box
                         component="main"
                         sx={{
-                            backgroundColor: (theme) =>
-                                theme.palette.mode === 'light'
-                                    ? theme.palette.grey[100]
-                                    : theme.palette.grey[900],
+                            backgroundColor: "white",
                             flexGrow: 1,
                             minHeight:'100vh',
                             pb:6,
