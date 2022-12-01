@@ -252,7 +252,6 @@ export default function Orders({id}) {
                 method: 'POST',
                 body: data
             });
-            console.log("HERE", commentReceived.status)
             if (commentReceived.status === 200) {
                 setCommentResponse("我们已收到您的评价！感谢您的支持")
                 setCommentResponseDialogOpen(true)
@@ -483,20 +482,12 @@ export default function Orders({id}) {
                     'Content-Type': 'application/json'
                 }
             };
-            // const options = {
-            //     method: "PUT",
-            //     body: JSON.stringify(body),
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     }
-            // }
-            // await fetch("http://120.25.216.186:8888/orders/modifyOrderTime", options)
-            //     .then((response) => response.json()).then(data => console.log(data))
             const resp = await axios.put('http://120.25.216.186:8888/orders/modifyordertime', body, customConfig);
             const answer = resp.data
             console.log("answer: ", answer)
             let modifySucceeded = answer.modifySucceeded
             let moneyChange = answer.moneyChange
+            let noRoom = answer.noRoom
             if (modifySucceeded) {
                 if (moneyChange < 0) {
                     setModifyResponse("修改住房时间成功！酒店已额外收取您房费 " + (-moneyChange) + " 元")
@@ -505,7 +496,12 @@ export default function Orders({id}) {
                 }
                 setRefresh(!refresh)
             } else {
-                setModifyResponse("修改住房时间失败!您的账户余额不足以支付额外收取的房费 " + (-moneyChange) + " 元")
+                if (noRoom) {
+                    setModifyResponse("修改住房时间失败!该时间段内酒店没有空房，请电话咨询")
+                } else {
+                    setModifyResponse("修改住房时间失败!您的账户余额不足以支付额外收取的房费 " + (-moneyChange) + " 元")
+                }
+
             }
             setModifyDialogOpen(false)
             setModifyResponseDialogOpen(true)
@@ -551,7 +547,7 @@ export default function Orders({id}) {
                                     component="img"
                                     height='300px'
                                     image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
-                                    alt="random"
+                                    alt="Room Image"
                                 />
                                 <CardContent sx={{}}>
                                     <Typography gutterBottom variant="h5" component="h2">
@@ -561,7 +557,7 @@ export default function Orders({id}) {
                                         {room.rommTypeName}
                                     </Typography>
                                     <Typography>
-                                        {room.time.split(" ")[0]}
+                                        离店时间 {room.checkouttime.split(" ")[0]}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
@@ -589,7 +585,7 @@ export default function Orders({id}) {
                                     component="img"
                                     height='300px'
                                     image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
-                                    alt="random"
+                                    alt="Room Image"
                                 />
                                 <CardContent sx={{flexGrow: 1}}>
                                     <Typography gutterBottom variant="h5" component="h2">
@@ -599,7 +595,13 @@ export default function Orders({id}) {
                                         {room.rommTypeName}
                                     </Typography>
                                     <Typography>
-                                        {room.time.split(" ")[0]}
+                                        房号 {room.roomid}
+                                    </Typography>
+                                    <Typography>
+                                        入住时间 {room.checkintime.split(" ")[0]}
+                                    </Typography>
+                                    <Typography>
+                                        离店时间 {room.checkouttime.split(" ")[0]}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>

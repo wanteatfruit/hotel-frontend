@@ -26,7 +26,7 @@ import {
 import { Stack } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import RoomCard from "../components/RoomCard";
 import { AddCircleOutline } from "@mui/icons-material";
 import { roomImageUrl } from "../data";
@@ -73,7 +73,7 @@ export default function Stay({ hotel_list }) {
 
     async function getMarked() {
         let roomsInfo = ""
-        await axios.get("http://120.25.216.186:8888/roomtypewishlist", { params: { "userId": userID } }).then((response) => {
+        await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
             roomsInfo = response.data
         });
         let newList = []
@@ -81,17 +81,6 @@ export default function Stay({ hotel_list }) {
             newList.push(roomsInfo[roomsInfoKey].roomTypeID)
         }
         setMarkedRooms(newList)
-        console.log("newList, ", newList)
-        // let hotelsInfo = ""
-        // await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
-        //     hotelsInfo = response.data
-        // });
-        // for (const hotelsInfoKey in hotelsInfo) {
-        //     setMarkedHotels([
-        //         ...markedHotels,
-        //         hotelsInfo[hotelsInfoKey].hotelID
-        //     ])
-        // }
     }
 
 
@@ -102,11 +91,14 @@ export default function Stay({ hotel_list }) {
             })
             console.log(roomList)
         }
-        setUserID(localStorage.getItem("userID"))
-        if (userID !== 0) {
+        if (userID !== "0") {
             getMarked()
         }
-    }, [userID, refreshRooms])
+    }, [userID])
+
+    useEffect(() => {
+        setUserID(localStorage.getItem("userID"))
+    })
 
     React.useEffect(() => {
         if (hotel !== '') {
@@ -160,9 +152,8 @@ export default function Stay({ hotel_list }) {
     return (
 
         <ThemeProvider theme={theme}>
-            <NavBar href={"/stay"} />
-            <Grid container spacing={2} columns={16} sx={{ padding: 1, marginTop: '60px' }}>
-
+            <NavBar href={"/stay"} refreshUserInfo={() => {setUserID(0)}}/>
+            <Grid container spacing={2} columns={16} sx={{padding: 1, marginTop: '60px'}}>
                 <Grid item xs={16} sm={3}>
                     <Paper elevation={false} sx={{ padding: 2 }}>
                         <Stack gap={2}>

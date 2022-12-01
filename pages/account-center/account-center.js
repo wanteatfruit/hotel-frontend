@@ -13,19 +13,18 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import NavBar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import {ThemeProvider} from "@emotion/react";
 import * as React from "react";
 
 export default function AccountCenter() {
-    const router = useRouter()
     const [drawerItem, setDrawerItem] = useState(0);
-    const [id, setID] = useState(-1)
+    const [id, setID] = useState(0)
     const [chatDialogOpen, setChatDialogOpen] = useState(false)
+    let refresh = 0
 
     useEffect(() => {
         setID(localStorage.getItem("userID"))
-    }, [])
+    }, [refresh === 0])
 
     function accountContent() {
         return <Account id={id}/>;
@@ -100,6 +99,7 @@ export default function AccountCenter() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
+            {refresh += 1}
             <NavBar isLoggedIn='true' buttonsMode={1}
                     openChatDialog={() => {
                         setChatDialogOpen(true)

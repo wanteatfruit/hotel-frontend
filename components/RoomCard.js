@@ -34,21 +34,20 @@ import Grid from "@mui/material/Grid";
 import PlaceOrder from "./PlaceOrderDrawer";
 
 export default function RoomCard({
-    hotelID,
-    roomTypeID,
-    imageUrl,
-    description,
-    hotelName,
-    admin,
-    roomInfo,
-    refresh,
-    markedRooms,
-    userID,
-    refreshRooms,
-    needMarkBox,
-    needHotelName
-
-}) {
+                                     hotelID,
+                                     roomTypeID,
+                                     imageUrl,
+                                     description,
+                                     hotelName,
+                                     admin,
+                                     roomInfo,
+                                     refresh,
+                                     markedRooms,
+                                     userID,
+                                     needMarkBox,
+                                     needHotelName,
+                                     refreshRooms
+                                 }) {
     const [deleteDialog, setDeleteDialog] = React.useState(false);
     const [changeInfo, setchangeInfo] = React.useState(false)
     const [guestNum, setGuestNum] = React.useState(roomInfo === undefined ? "" : roomInfo.number)
@@ -120,7 +119,8 @@ export default function RoomCard({
 
     async function MarkRoom(isChecked) {
         setIsMarked(isChecked)
-        const body = { "userID": Number(userID), "roomTypeID": roomTypeID, "hotelID": hotelID };
+        console.log("check: ", roomTypeID)
+        const body = {"userID": Number(userID), "roomTypeID": roomTypeID, "hotelID": hotelID};
         const options = {
             method: "PUT",
             body: JSON.stringify(body),
@@ -147,7 +147,7 @@ export default function RoomCard({
 
 
     function MarkBox() {
-        if (needMarkBox) {
+        if (needMarkBox && userID !== "0") {
             return (
                 <Grid
                     sx={{
@@ -161,7 +161,7 @@ export default function RoomCard({
                     <Typography>收藏</Typography>
                     <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
                         MarkRoom(event.target.checked)
-                    }} />
+                    }}/>
                 </Grid>
             )
         } else {

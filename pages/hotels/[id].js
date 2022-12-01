@@ -1,4 +1,15 @@
-import { useMediaQuery, Box, Button, Dialog, DialogContent, Grid, IconButton, Typography, DialogTitle, Stack } from "@mui/material"
+import {
+    useMediaQuery,
+    Box,
+    Button,
+    Dialog,
+    DialogContent,
+    Grid,
+    IconButton,
+    Typography,
+    DialogTitle,
+    Stack
+} from "@mui/material"
 import Image from "next/image";
 import {useRouter} from "next/router"
 import React, {useEffect, useState} from "react";
@@ -7,15 +18,15 @@ import Layout from "../../components/Layout"
 import RoomCard from "../../components/RoomCard";
 import styles from "../../styles/HotelPage.module.css";
 import axios from "axios";
-import { roomImageUrl } from "../../data";
+import {roomImageUrl} from "../../data";
 import CommentArea from "./comment-area";
 import FloorPlanA from "../../components/floor-plan-a";
 import FloorPlanB from "../../components/floor-plan-b";
 import FloorPlanC from "../../components/floor-plan-c";
-import { CloseOutlined } from "@mui/icons-material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {CloseOutlined} from "@mui/icons-material";
+import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../../components/Navbar";
-import { motion } from "framer-motion";
+import {motion} from "framer-motion";
 
 // export async function getStaticPaths() { //确定酒店名字后写死
 //     return {
@@ -35,13 +46,23 @@ export default function HotelDetail() {
     const [openFloorPlan, setOpenFloorPlan] = React.useState(false);
     const [userID, setUserID] = useState(0)
     const [markedHotels, setMarkedHotels] = useState([])
+    const [markedRooms, setMarkedRooms] = useState([])
 
     async function getMarked() {
+        let roomsInfo = ""
+        await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
+            roomsInfo = response.data
+        });
+        let newList = []
+        for (const roomsInfoKey in roomsInfo) {
+            newList.push(roomsInfo[roomsInfoKey].roomTypeID)
+        }
+        setMarkedRooms(newList)
         let hotelsInfo = ""
         await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
             hotelsInfo = response.data
         });
-        let newList = []
+        newList = []
         for (const hotelsInfoKey in hotelsInfo) {
             newList.push(hotelsInfo[hotelsInfoKey].hotelID)
         }
@@ -50,7 +71,12 @@ export default function HotelDetail() {
 
     useEffect(() => {
         setUserID(localStorage.getItem("userID"))
-        getMarked()
+    })
+
+    useEffect(() => {
+        if (userID !== "0") {
+            getMarked()
+        }
     }, [userID])
 
     React.useEffect(() => {
@@ -74,8 +100,8 @@ export default function HotelDetail() {
             fontSize: 15
         },
         palette: {
-            primary:{
-                main:'#2E3B55'
+            primary: {
+                main: '#2E3B55'
             },
             secondary: {
                 main: '#fff'
@@ -102,8 +128,10 @@ export default function HotelDetail() {
     const fullScreenMap = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
-        <ThemeProvider theme={theme} >
-            <NavBar />
+        <ThemeProvider theme={theme}>
+            <NavBar href={"/hotels/" + hotel_name} refreshUserInfo={() => {
+                setUserID(0)
+            }}/>
             <Box
                 component="main"
                 sx={{
@@ -112,7 +140,7 @@ export default function HotelDetail() {
                     height: "max-content",
                     overflow: "hidden",
                     paddingX: 5,
-                    mt:'60px',
+                    mt: '60px',
                 }}
             >
                 <Box sx={{
@@ -124,14 +152,15 @@ export default function HotelDetail() {
                 }}>
                     <Typography paddingBottom={2} variant="h4">开启您的旅程</Typography>
                     <BranchIntro hotelInfo={hotelInfo} name={hotel_name} userID={userID}
-                                  markedHotels={markedHotels}/>
+                                 markedHotels={markedHotels}/>
                 </Box>
-                <Box sx={{ paddingX: {xs:0,sm:4}, paddingY: 6 }}>
+                <Box sx={{paddingX: {xs: 0, sm: 4}, paddingY: 6}}>
                     <Grid container spacing={4} columns={24}>
                         <Grid item xs={24} xl={24} flexDirection='row'>
                             <Stack gap={2} direction='row'>
                                 <Typography variant="h4">房型</Typography>
-                                <Button sx={{ fontSize: 20 }} size='large' variant="contained" onClick={() => setOpenFloorPlan(true)}>查看平面图</Button>
+                                <Button sx={{fontSize: 20}} size='large' variant="contained"
+                                        onClick={() => setOpenFloorPlan(true)}>查看平面图</Button>
                             </Stack>
                         </Grid>
                         {roomList.map((item, index) => (
@@ -139,31 +168,33 @@ export default function HotelDetail() {
                             <Grid key={item.roomtypeid} item xs={24} md={12} lg={8} xl={6}>
                                 <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
                                             variants={cardVariants}>
-                                    <RoomCard roomInfo={item} hotelName={hotel_name}
-                                              imageUrl={roomImageUrl[item.roomtypeid]}
-                                              admin={false}></RoomCard>
+                                    <RoomCard roomInfo={item} hotelName={hotel_name} hotelID={item.hotelid}
+                                              admin={false} needMarkBox={true} userID={userID} markedRooms={markedRooms}
+                                              imageUrl={roomImageUrl[item.roomtypeid]} roomTypeID={item.roomtypeid}></RoomCard>
+
                                 </motion.div>
                             </Grid>
                         ))}
 
                     </Grid>
                 </Box>
-                <Box sx={{ paddingX: {xs:0,sm:4}, paddingY: 6 }}>
-                    <CommentArea hotelID={hotel_name} />
+                <Box sx={{paddingX: {xs: 0, sm: 4}, paddingY: 6}}>
+                    <CommentArea hotelID={hotel_name}/>
                 </Box>
             </Box>
-            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg' sx={{ zIndex: 1000 }} open={openFloorPlan}>
+            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg'
+                    sx={{zIndex: 1000}} open={openFloorPlan}>
                 <DialogTitle>
                     酒店平面图
                     <IconButton onClick={() => setOpenFloorPlan(false)}>
-                        <CloseOutlined />
+                        <CloseOutlined/>
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ display: 'flex', justifyContent: 'center' }}>
+                <DialogContent sx={{display: 'flex', justifyContent: 'center'}}>
                     {/* 根据hotelname给三家酒店写死平面图 */}
-                    {hotel_name==='深圳湾1号' && <FloorPlanA href1={book_url} href2={book_url} />}
-                    {hotel_name==='广州1号' && <FloorPlanC href1={book_url} href2={book_url} />}
-                    {hotel_name==='汤臣一品' && <FloorPlanB href1={book_url} href2={book_url} />}
+                    {hotel_name === '深圳湾1号' && <FloorPlanA href1={book_url} href2={book_url}/>}
+                    {hotel_name === '广州1号' && <FloorPlanC href1={book_url} href2={book_url}/>}
+                    {hotel_name === '汤臣一品' && <FloorPlanB href1={book_url} href2={book_url}/>}
 
                 </DialogContent>
             </Dialog>

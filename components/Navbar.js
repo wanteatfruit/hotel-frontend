@@ -63,7 +63,8 @@ export default function NavBar({
     hotel_list,
     room_list,
     buttonsMode,
-    href
+    href,
+    refreshUserInfo
 }) {
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -128,7 +129,7 @@ export default function NavBar({
             query: { href: href },
         })
     }
-
+``
     function ChatDialog() {
         return (
             <>
@@ -150,7 +151,7 @@ export default function NavBar({
                     fullWidth
                 >
                     <DialogContent>
-                        <iframe src={"/chat-app.html"}frameBorder="0"></iframe>
+                        <iframe src={"/chat-app.html"} frameBorder="0"></iframe>
                     </DialogContent>
                 </Dialog>
             </>
@@ -159,12 +160,13 @@ export default function NavBar({
 
     function clearLogInfo() {
         localStorage.setItem("username", "")
-        localStorage.setItem("userID", 0)
+        localStorage.setItem("userID", "0")
         localStorage.setItem("sessionKey", "")
         localStorage.setItem("isLoggedIn", "false")
         localStorage.setItem("adminLoggedIn", "false")
         setIsLoggedIn("false")
         setAdminLoggedIn("false")
+        refreshUserInfo()
     }
 
     function LogoutDialog() {
