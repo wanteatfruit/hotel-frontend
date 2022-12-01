@@ -79,7 +79,7 @@ export default function NavBar({
     const [saleDialogOpen, setSaleDialogOpen] = useState(false)
     const [displaySales, setDisplaySalesOpen] = useState(true);
     const [eventInfo, setEventInfo] = useState(null);
-    const [saleRoomInfo, setSaleRoomInfo] = useState({roomtypeid:1});
+    const [saleRoomInfo, setSaleRoomInfo] = useState({ roomtypeid: 1 });
     const [orderOpen, setOrderOpen] = useState(false) //change it to other pages later
 
 
@@ -129,7 +129,7 @@ export default function NavBar({
             query: { href: href },
         })
     }
-``
+    ``
     function ChatDialog() {
         return (
             <>
@@ -282,23 +282,6 @@ export default function NavBar({
     return (
         <>
 
-            <Dialog sx={{borderRadius:5}} fullScreen={fullScreenMap} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
-                <DialogTitle>
-                    
-                    {eventInfo !== null && eventInfo.hotelname}
-                    
-                的一个房型正在秒杀！
-                    <IconButton onClick={() => setSaleDialogOpen(false)}>
-                        <CloseIcon />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent>
-                    <Typography></Typography>
-                    <RoomCard hotelName={eventInfo === null ? '' : eventInfo.hotelname} admin={false} roomInfo={saleRoomInfo} imageUrl={roomImageUrl[saleRoomInfo.roomtypeid%roomImageUrl.length]} />
-                    <Divider sx={{mt:2}}/>
-                    <Typography>截至{eventInfo === null ? '' : eventInfo.endtime}</Typography>
-                </DialogContent>
-            </Dialog>
 
 
             <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} open={mapOpen} fullWidth
@@ -397,7 +380,7 @@ export default function NavBar({
                                 backgroundColor: 'var(--color-5)',
                                 borderColor: 'var(--color-5)',
                                 boxShadow: 'none',
-                            }, backgroundColor: 'var(--color-4)', borderRadius: 10, mr:1
+                            }, backgroundColor: 'var(--color-4)', borderRadius: 10, mr: 1
                         }} href="/" size="large"
                             startIcon={<SportsBarOutlined fontSize="24px" />}>
                             盛夏小酒
@@ -419,11 +402,13 @@ export default function NavBar({
                     <Stack direction='row' gap={1}>
                         <Tooltip title='秒杀活动'>
                             <IconButton color='secondary'
-                                size='large' sx={{backgroundColor: 'var(--color-4)','&:hover': {
-                                    backgroundColor: 'var(--color-5)',
-                                    borderColor: 'var(--color-5)',
-                                    boxShadow: 'none',
-                                } }} onClick={() => setSaleDialogOpen(true)}>
+                                size='large' sx={{
+                                    backgroundColor: 'var(--color-4)', '&:hover': {
+                                        backgroundColor: 'var(--color-5)',
+                                        borderColor: 'var(--color-5)',
+                                        boxShadow: 'none',
+                                    }
+                                }} onClick={() => setSaleDialogOpen(true)}>
                                 <AlarmOnOutlined fontSize="inherit" />
                             </IconButton>
                         </Tooltip>
@@ -454,17 +439,37 @@ export default function NavBar({
                                     </MenuItem>
                                 ))}
                         </Menu>
-
+                        {/* 
                         {buttonsMode === 0 && adminLoggedIn === "false" &&
                             <Button sx={{ px: 3, py: 0, fontSize: '1rem', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )' }} variant="contained" onClick={() => {
                                 setBookingOpen(!bookingOpen)
                             }}>预定</Button>
-                        }
+                        } */}
                     </Stack>
                 </Toolbar>
             </AppBar>
             {LogoutDialog()}
             {ChatDialog()}
+            <Dialog sx={{ borderRadius: 5,zIndex:10 }} fullScreen={fullScreenMap} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
+                <DialogTitle>
+                    {eventInfo !== null &&
+                        <Link style={{ textDecoration: 'underline' }} href={`/hotels/${eventInfo.hotelname}`}>
+                            {eventInfo.hotelname}
+                        </Link>
+                    }
+                    的一个房型正在秒杀！
+                    <IconButton onClick={() => setSaleDialogOpen(false)}>
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography></Typography>
+                    <RoomCard hotelName={eventInfo === null ? '' : eventInfo.hotelname} admin={false} roomInfo={saleRoomInfo} imageUrl={roomImageUrl[saleRoomInfo.roomtypeid % roomImageUrl.length]} />
+                    <Divider sx={{ mt: 2 }} />
+                    <Typography>截至{eventInfo === null ? '' : eventInfo.endtime}</Typography>
+                </DialogContent>
+            </Dialog>
+
         </>
 
 

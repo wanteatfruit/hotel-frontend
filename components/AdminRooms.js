@@ -119,9 +119,9 @@ export default function AdminRooms({ hotel_list }) {
             >
               <div>
                 <Typography variant="h5">房间信息</Typography>
-                <Button sx={{ marginTop: 1 }} onClick={() => { setOpenAdd(!openAdd) }} endIcon={<AddCircleOutline />}>
+                {/* <Button sx={{ marginTop: 1 }} onClick={() => { setOpenAdd(!openAdd) }} endIcon={<AddCircleOutline />}>
                   添加房间
-                </Button>
+                </Button> */}
                 <IconButton sx={{ marginLeft: 1, marginTop: 1 }} color="primary" onClick={handleRefresh}>
                   <RefreshIcon />
                 </IconButton>
