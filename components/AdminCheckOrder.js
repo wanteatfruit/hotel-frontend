@@ -99,6 +99,8 @@ export default function AdminCheckOrder({hotel_list}) {
                     {hotel_list.map((item)=>(
                       <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
                     ))}
+                                        <MenuItem value="">任意分店</MenuItem>
+
                   </Select>
                 </FormControl>
 
@@ -119,7 +121,7 @@ export default function AdminCheckOrder({hotel_list}) {
                     <MenuItem value="广州">广州</MenuItem>
                     <MenuItem value="重庆">重庆</MenuItem>
                     <MenuItem value="上海">上海</MenuItem>
-                    <MenuItem value="">无</MenuItem>
+                    <MenuItem value="">任意城市</MenuItem>
                   </Select>
                 </FormControl>
                 <Button onClick={handleSubmit} variant="contained">

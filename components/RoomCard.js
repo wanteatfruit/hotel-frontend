@@ -254,8 +254,8 @@ export default function RoomCard({
                     <CardActions sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         <div>
                             <Button onClick={() => setchangeInfo(!changeInfo)} >修改信息</Button>
-                            <Button onClick={() => { setDeleteDialog(true); }}
-                            >删除房间</Button>
+                            {/* <Button onClick={() => { setDeleteDialog(true); }}
+                            >删除房间</Button> */}
                         </div>
 
                     </CardActions>

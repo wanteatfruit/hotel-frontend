@@ -30,7 +30,6 @@ import { roomImageUrl } from "../data";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 export default function AdminRooms({ hotel_list }) {
-  console.log(hotel_list)
   const [roomList, setRoomList] = React.useState(null)
   const [openAdd, setOpenAdd] = React.useState(false);
   const [guestNum, setGuestNum] = React.useState()
@@ -40,6 +39,13 @@ export default function AdminRooms({ hotel_list }) {
   const [roomIntro, setRoomIntro] = React.useState([false, false, false])  //get roomtype by hotel
   const [hotel, setHotel] = React.useState('深圳湾1号');
   const [addToHotel, setAddTo] = React.useState('');
+  const roomColumns = [
+    { field: 'hotelname', headerName: '分店', width: 120 },
+    { field: 'roomtypeid', headerName: '房型ID', width: 90 },
+    { field: 'roomname', headerName: '房型名', width: 120 },
+    { field: 'price', headerName: '价格', width: 90 },
+    { field: 'introduction', headerName: '杂项', width: 150 },
+  ]
   React.useEffect(() => {
     if (hotel === '') {
       axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
@@ -119,12 +125,13 @@ export default function AdminRooms({ hotel_list }) {
             >
               <div>
                 <Typography variant="h5">房间信息</Typography>
-                <Button sx={{ marginTop: 1 }} onClick={() => { setOpenAdd(!openAdd) }} endIcon={<AddCircleOutline />}>
+                {/* <Button sx={{ marginTop: 1 }} onClick={() => { setOpenAdd(!openAdd) }} endIcon={<AddCircleOutline />}>
                   添加房间
-                </Button>
-                <IconButton sx={{ marginLeft: 1, marginTop: 1 }} color="primary" onClick={handleRefresh}>
+                </Button> */}
+                <Button  sx={{ marginTop: 1 }}  endIcon={<RefreshIcon />} onClick={()=>handleRefresh}>刷新</Button>
+                {/* <IconButton sx={{ marginLeft: 1, marginTop: 1 }} color="primary" onClick={handleRefresh}>
                   <RefreshIcon />
-                </IconButton>
+                </IconButton> */}
               </div>
               <FormControl variant="standard" sx={{ width: '30%' }}>
                 <InputLabel >分店</InputLabel>
