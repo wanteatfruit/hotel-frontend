@@ -165,7 +165,5 @@ export default function Account({id}) {
             </Container>
         );
     }
-
-
     return <DashboardContent/>;
 }

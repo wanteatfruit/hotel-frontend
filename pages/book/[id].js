@@ -51,6 +51,7 @@ const steps = ['入住信息', '确认订单'];
 
 export default function BookingPage({ }) {
     const router = useRouter()
+    const [emptyRooms, setEmptyRooms] = React.useState([])
     const hotelName = router.query.id
     const timerRef = React.useRef();
     const book_url = router.asPath.toString()
@@ -109,6 +110,7 @@ export default function BookingPage({ }) {
             axios.get(`http://10.26.111.227:8888/roomtype/hotel?hotelName=${hotelName}`).then((resp) => {
                 setRoomList(resp.data)
             })
+            setRoomNumber(room_num)
             // console.log(roomList)
 
         }
@@ -122,25 +124,7 @@ export default function BookingPage({ }) {
             console.log(bookingInfo)
         }
     }, [roomList])
-    const startDateRenderer = (date, selectedDates, pickerDayProps) => {
-        let validDates = []
-        const today = dayjs().startOf('day')
-        validDates.push(today)
-        for (const key in emptyRooms) {
-            if (Object.hasOwnProperty.call(emptyRooms, key)) {
-                const element = emptyRooms[key];
-                if (element == 1) { // dont have room
-                    const newDay = today.add(key, 'days')
-                    validDates.push(newDay)
-                }
-            }
-        }
-        if (validDates.includes(date)) {
-            return <PickersDay {...pickerDayProps} />
-        }
-        return <PickersDay disabled {...pickerDayProps} />
 
-    }
 
 
     console.log(bookingInfo)
@@ -153,25 +137,26 @@ export default function BookingPage({ }) {
             setBookingInfo({ ...bookingInfo, roomName: roomList[1].roomname, roomPrice: roomList[1].price })
         }
         else if (roomNumber <= 309 && roomNumber >= 305) {
-            setBookingInfo({ ...bookingInfo, roomName: roomList[0].roomname, roomPrice: roomList[0].price })
+            setBookingInfo({ ...bookingInfo, roomName: "总统套房", roomPrice: 800 })
         }
         else if (roomNumber <= 304 && roomNumber >= 302) {
-            setBookingInfo({ ...bookingInfo, roomName: roomList[1].roomname, roomPrice: roomList[1].price })
+            setBookingInfo({ ...bookingInfo, roomName: "海景房", roomPrice: 400 })
         }
         else if (roomNumber == 301) {
-            setBookingInfo({ ...bookingInfo, roomName: roomList[2].roomname, roomPrice: roomList[2].price })
+            setBookingInfo({ ...bookingInfo, roomName: "山景房", roomPrice: 350 })
         }
         else if (roomNumber <= 414 && roomNumber >= 409) {
-            setBookingInfo({ ...bookingInfo, roomName: roomList[0].roomname, roomPrice: roomList[0].price })
+            setBookingInfo({ ...bookingInfo, roomName: "山景房", roomPrice: 450 })
+            console.log("reset")
         }
         else if (roomNumber <= 408 && roomNumber >= 405) {
-            setBookingInfo({ ...bookingInfo, roomName: roomList[1].roomname, roomPrice: roomList[1].price })
+            setBookingInfo({ ...bookingInfo, roomName: "总统套房", roomPrice: 1000 })
         }
         else if (roomNumber <= 404 && roomNumber >= 401) {
-            setBookingInfo({ ...bookingInfo, roomName: roomList[2].roomname, roomPrice: roomList[2].price })
+            setBookingInfo({ ...bookingInfo, roomName: "海景房", roomPrice: 450 })
         }
         else {
-            setBookingInfo({ ...bookingInfo, roomName: roomList[0].roomname, roomPrice: roomList[0].price })
+            setBookingInfo({ ...bookingInfo})
 
         }
     }
@@ -308,7 +293,7 @@ export default function BookingPage({ }) {
                                                 maxDate={dayjs().startOf('day').add(29, 'days')}
                                                 inputFormat="YYYY/MM/DD"
                                                 value={bookingInfo.startDate}
-                                                renderDay={startDateRenderer}
+
                                                 onChange={(newDate) => {
                                                     setBookingInfo({ ...bookingInfo, startDate: newDate })
                                                 }}
