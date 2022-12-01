@@ -82,6 +82,7 @@ export default function Orders({id}) {
             }
         }
         setRoomInfo(roomInfoDict)
+        console.log("testingjh: ", roomInfoDict)
     }
 
     useEffect(() => {

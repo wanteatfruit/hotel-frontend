@@ -38,16 +38,15 @@ export default function Account({id}) {
 
     const [userInfo, setUserInfo] = useState({})
 
-    async function getData() {
-        await axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": id}}).then((response) => {
+
+
+    useEffect(() => {
+        axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": id}}).then((response) => {
             setUserInfo(response.data);
+            console.log(response.data)
         }).catch((error) => {
             console.log("userID: ", id)
         });
-    }
-
-    useEffect(() => {
-        getData()
     }, [id]);
 
 

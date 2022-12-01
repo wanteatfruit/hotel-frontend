@@ -42,7 +42,7 @@ export default function HotelDetail() {
     const [roomList, setRoomList] = React.useState([]);
     const [hotelInfo, setHotelInfo] = React.useState({})
     const [openFloorPlan, setOpenFloorPlan] = React.useState(false);
-    const [userID, setUserID] = useState(0)
+    const [userID, setUserID] = useState("0")
     const [markedHotels, setMarkedHotels] = useState([])
     const [markedRooms, setMarkedRooms] = useState([])
     async function getMarked() {
@@ -50,6 +50,7 @@ export default function HotelDetail() {
         await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
             roomsInfo = response.data
         });
+        console.log("userid: ", userID)
         let newList = []
         for (const roomsInfoKey in roomsInfo) {
             newList.push(roomsInfo[roomsInfoKey].roomTypeID)
@@ -58,24 +59,45 @@ export default function HotelDetail() {
         let hotelsInfo = ""
         await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
             hotelsInfo = response.data
+            console.log(response.data)
         });
-        newList = []
+        let newList1 = []
         for (const hotelsInfoKey in hotelsInfo) {
-            newList.push(hotelsInfo[hotelsInfoKey].hotelID)
+            newList1.push(hotelsInfo[hotelsInfoKey].hotelID)
         }
-        console.log("newlist: ", newList)
-        setMarkedHotels(newList)
+        console.log("newlist: ", newList1)
+        setMarkedHotels(newList1)
     }
 
     useEffect(() => {
         setUserID(localStorage.getItem("userID"))
-    })
+        console.log("here: ", localStorage.getItem("userID"))
+    },[])
 
     useEffect(() => {
         if (userID !== "0") {
             getMarked()
+            // let roomsInfo = ""
+            // axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
+            //     roomsInfo = response.data
+            //     let newList = []
+            //     for (const roomsInfoKey in roomsInfo) {
+            //         newList.push(roomsInfo[roomsInfoKey].roomTypeID)
+            //     }
+            //     setMarkedRooms(newList)
+            // });
+            // console.log("userid: ", userID)
+            //
+            //
+            // let hotelsInfo = ""
+            // axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
+            //     hotelsInfo = response.data
+            //     console.log(response.data)
+            // });
+
         }
-    }, [])
+
+    }, [userID])
 
     React.useEffect(() => {
         if (router.isReady) {

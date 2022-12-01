@@ -42,7 +42,7 @@ export default function BranchIntro({
         } else {
             setIsMarked(false)
         }
-    }, [markedHotels, userID])
+    }, [markedHotels, userID, hotelInfo.hotelid])
 
     function handleIntroduction(info) {
         if (info === undefined) {
