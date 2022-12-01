@@ -63,6 +63,7 @@ export default function HotelDetail() {
         for (const hotelsInfoKey in hotelsInfo) {
             newList.push(hotelsInfo[hotelsInfoKey].hotelID)
         }
+        console.log("newlist: ", newList)
         setMarkedHotels(newList)
     }
 
@@ -74,7 +75,7 @@ export default function HotelDetail() {
         if (userID !== "0") {
             getMarked()
         }
-    }, [userID])
+    }, [])
 
     React.useEffect(() => {
         if (router.isReady) {
