@@ -41,7 +41,7 @@ import {
     Slide,
     ThemeProvider,
     useTheme,
-    createTheme
+    createTheme, Paper
 
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -154,14 +154,16 @@ export default function NavBar({
                     //         width: "100%",
                     //         height: "100%",
                     //         maxWidth: "md",
-                    //         backgroundColor: "#f1cec2"
+                    //         backgroundColor: "transparent"
                     //     }
                     // }}
-                    fullWidth
+                    // fullWidth
                 >
-                    <DialogContent>
-                        <iframe src={"/chat-app.html"} frameBorder="0"></iframe>
-                    </DialogContent>
+                    <Paper width={"100%"} elevation={6} square>
+                        <DialogContent>
+                            <iframe src={"/chat-app.html"} frameBorder="0"></iframe>
+                        </DialogContent>
+                    </Paper>
                 </Dialog>
             </>
         )
