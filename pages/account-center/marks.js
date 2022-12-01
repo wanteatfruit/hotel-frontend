@@ -298,7 +298,7 @@ export default function Orders({ id }) {
                                         aria-expanded={modifyMenuOpen ? 'true' : undefined}
                                         onClick={() => {
                                             router.push({
-                                                pathname: "/book/" + room.hotelName,
+                                                pathname: "/hotels/" + room.hotelName,
                                             })
                                         }}
                                     >
