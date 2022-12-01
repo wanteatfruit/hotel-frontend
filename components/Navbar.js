@@ -400,7 +400,8 @@ export default function NavBar({
 
 
                     <Stack direction='row' gap={1}>
-                        <Tooltip title='秒杀活动'>
+                        {adminLoggedIn!=true && <>
+                            <Tooltip title='秒杀活动'>
                             <IconButton color='secondary'
                                 size='large' sx={{
                                     backgroundColor: 'var(--color-4)', '&:hover': {
@@ -417,7 +418,8 @@ export default function NavBar({
                                 size="large" onClick={() => setMapOpen(true)}>
                                 <PlaceOutlined />
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip></>}
+
                         {getButtons()}
                         {/*drop down menu*/}
                         <Menu
@@ -450,7 +452,7 @@ export default function NavBar({
             </AppBar>
             {LogoutDialog()}
             {ChatDialog()}
-            <Dialog sx={{ borderRadius: 5,zIndex:10 }} fullScreen={fullScreenMap} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
+            <Dialog sx={{ borderRadius: 5,zIndex:1001 }} fullScreen={fullScreenMap} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
                 <DialogTitle>
                     {eventInfo !== null &&
                         <Link style={{ textDecoration: 'underline' }} href={`/hotels/${eventInfo.hotelname}`}>

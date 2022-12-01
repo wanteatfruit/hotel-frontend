@@ -137,7 +137,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
                     <Button onClick={(e)=>handleOrder(e)}>确认订单</Button>
                 </DialogActions>
             </Dialog>
-            <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '80vw',zIndex:100 }}>
+            <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '80vw',zIndex:1003 }}>
                 <Box sx={{ width: { md: '77vw', xs: '100vw' } }}>
                     <Stack >
                         <div style={{ backgroundImage: 'url("https://images.pexels.com/photos/887723/pexels-photo-887723.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")', backgroundSize: 'cover', height: '30vh', display: 'flex', alignItems: 'flex-end' }}>
@@ -212,14 +212,14 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
                                 </Select>
                             </FormControl>
                             <Button onClick={()=>{
-                                if( handleInvalidDate()=false){
+                                if( handleInvalidDate()==false){
                                     return
                                 }
                                 setConfirmDialog(true)
                                 
                             }} color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button>
                             {specifyRoomNum==true && <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`您选择了${bookingInfo.roomNumber}号房间`}</Typography>}
-                            <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography>
+                            {/* <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography> */}
 
                         </Stack>
 

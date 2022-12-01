@@ -252,7 +252,7 @@ export default function AdminDashboard({ }) {
             <CardContent sx={{ height: '35vh', p: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart width={400} height={400}>
-                  <Pie isAnimationActive={false} activeIndex={pieCityIndex} activeShape={renderActiveShape} innerRadius={70} onMouseEnter={onPieCityEnter} nameKey='city' dataKey='sales' data={salesByCity} cx='50%' cy='50%' outerRadius={100} fill='#8884d8'>
+                  <Pie isAnimationActive={false} activeIndex={pieCityIndex} activeShape={renderActiveShape} innerRadius={65} onMouseEnter={onPieCityEnter} nameKey='city' dataKey='sales' data={salesByCity} cx='50%' cy='50%' outerRadius={90} fill='#8884d8'>
 
                   </Pie>
                 </PieChart>
@@ -266,7 +266,7 @@ export default function AdminDashboard({ }) {
             <CardContent sx={{ height: '35vh', p: 0 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie  isAnimationActive={false} activeIndex={pieHotelIndex} activeShape={renderActiveShape} innerRadius={70} onMouseEnter={onPieHotelEnter} nameKey='city' dataKey='sales' data={salesByHotel} cx='50%' cy='50%' outerRadius={100} fill='#8884d8'>
+                  <Pie  isAnimationActive={false} activeIndex={pieHotelIndex} activeShape={renderActiveShape} innerRadius={65} onMouseEnter={onPieHotelEnter} nameKey='city' dataKey='sales' data={salesByHotel} cx='50%' cy='50%' outerRadius={90} fill='#8884d8'>
 
                   </Pie>
                 </PieChart>
