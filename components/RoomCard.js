@@ -298,7 +298,7 @@ export default function RoomCard({
                     <Button onClick={() => { handleDelete(); refresh("广州1号"); setDeleteDialog(false) }}>确定</Button>
                 </DialogActions>
             </Dialog>
-            <PlaceOrder hotelName={hotelName} roomInfo={roomInfo} open={orderDrawer}>
+            <PlaceOrder onSale={onSale} hotelName={hotelName} roomInfo={roomInfo} open={orderDrawer}>
                 <IconButton onClick={() => setOrderDrawer(false)} color="secondary">
                     <ChevronLeftOutlined fontSize="large" />
                 </IconButton>

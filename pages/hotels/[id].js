@@ -45,8 +45,6 @@ export default function HotelDetail() {
     const [userID, setUserID] = useState(0)
     const [markedHotels, setMarkedHotels] = useState([])
     const [markedRooms, setMarkedRooms] = useState([])
-
-
     async function getMarked() {
         let roomsInfo = ""
         await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
