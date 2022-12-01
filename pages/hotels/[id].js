@@ -168,9 +168,9 @@ export default function HotelDetail() {
                             <Grid key={item.roomtypeid} item xs={24} md={12} lg={8} xl={6}>
                                 <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
                                             variants={cardVariants}>
-                                    <RoomCard roomInfo={item} hotelName={hotel_name}
+                                    <RoomCard roomInfo={item} hotelName={hotel_name} hotelID={item.hotelid}
                                               admin={false} needMarkBox={true} userID={userID} markedRooms={markedRooms}
-                                              imageUrl={roomImageUrl[item.roomtypeid]}></RoomCard>
+                                              imageUrl={roomImageUrl[item.roomtypeid]} roomTypeID={item.roomtypeid}></RoomCard>
 
                                 </motion.div>
                             </Grid>

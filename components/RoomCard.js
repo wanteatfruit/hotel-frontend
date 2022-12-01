@@ -119,6 +119,7 @@ export default function RoomCard({
 
     async function MarkRoom(isChecked) {
         setIsMarked(isChecked)
+        console.log("check: ", roomTypeID)
         const body = {"userID": Number(userID), "roomTypeID": roomTypeID, "hotelID": hotelID};
         const options = {
             method: "PUT",

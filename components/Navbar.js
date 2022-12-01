@@ -129,7 +129,7 @@ export default function NavBar({
             query: { href: href },
         })
     }
-
+``
     function ChatDialog() {
         return (
             <>
@@ -151,7 +151,7 @@ export default function NavBar({
                     fullWidth
                 >
                     <DialogContent>
-                        <iframe src={"/chat-app.html"}frameBorder="0"></iframe>
+                        <iframe src={"/chat-app.html"} frameBorder="0"></iframe>
                     </DialogContent>
                 </Dialog>
             </>

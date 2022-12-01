@@ -141,13 +141,12 @@ export default function BranchIntro({
                             </ListItem>
                         </List>
                     </div>
-                    <Stack direction='row'>
-                        {userID !== "0" && <Typography textAlign='center' sx={{pt: 1}}>收藏</Typography>
-                            && <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
-                                MarkHotel(event.target.checked)
-                            }}/>
-                        }
-                    </Stack>
+                    {userID !== "0" && <Stack direction='row'>
+                        <Typography textAlign='center' sx={{pt: 1}}>收藏</Typography>
+                        <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
+                            MarkHotel(event.target.checked)
+                        }}/>
+                    </Stack>}
                 </CardContent>
                 {/*{userID !== "0" && <Grid*/}
                 {/*    sx={{*/}
