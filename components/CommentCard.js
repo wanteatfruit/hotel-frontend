@@ -54,9 +54,7 @@ export default function CommentCard({ comments, meanScore }) {
         setZoomPic1(true);
     }
 
-
-
-
+    const video_url = "url(" + comments.video + ")"
     return (
         <>
             <Card elevation={false} sx={{ borderRadius: 0 }}>
@@ -73,7 +71,7 @@ export default function CommentCard({ comments, meanScore }) {
                     {comments.picture1 !== null && <Button onClick={handleZoom}   sx={{ backgroundImage: `url(${comments.picture1})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}
                     {comments.picture2 !== null && <Button onClick={()=>setZoomPic2(true)} sx={{ backgroundImage: `url(${comments.picture2})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}
                     {comments.picture3 !== null && <Button onClick={()=>setZoomPic3(true)} sx={{ backgroundImage: `url(${comments.picture3})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}
-                    <video style={{ marginLeft: 10 }} src="/videos/1.mp4" height='120' controls ></video>
+                    {comments.video !== null && <video style={{ marginLeft: 10 }} src={`${comments.video}`} height='120' controls ></video>}
                 </CardActions>
                 <CardActions sx={{ paddingY: 0, display: { xs: 'flex', sm: 'none' }, flexDirection: 'column' }}>
                     <ExpandMore expand={expanded} onClick={handleExpandClick}>
