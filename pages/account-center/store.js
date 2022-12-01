@@ -27,6 +27,7 @@ import axios from "axios";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {giftImageUrl, roomImageUrl} from "../../data";
+import Styles from "../../styles/AccountCenter.module.css";
 
 export default function Store() {
     const [giftList, setGiftList] = useState([])
@@ -118,7 +119,7 @@ export default function Store() {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => setResponseDialogOpen(false)} autoFocus>
+                        <Button sx={{color: "#f67280"}} onClick={() => setResponseDialogOpen(false)} autoFocus>
                             好的
                         </Button>
                     </DialogActions>
@@ -262,6 +263,7 @@ export default function Store() {
                                         {getPhoneTextField()}
                                         <Button
                                             type="submit"
+                                            className={Styles.Button}
                                             fullWidth
                                             variant="contained"
                                             sx={{mt: 3, mb: 2}}
@@ -300,7 +302,7 @@ export default function Store() {
                     href={{
                         pathname: "/account-center/account-center"
                     }}>
-                    <Button variant={"outlined"}>返回</Button>
+                    <Button className={Styles.Button} variant={"contained"}>返回</Button>
                 </Link>
             </Grid>
             <Box
@@ -354,7 +356,7 @@ export default function Store() {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small" onClick={() => {
+                                    <Button className={Styles.Button} size="small" onClick={() => {
                                         setPurchaseDialogOpen(true);
                                         setGiftOnDialog(gift)
                                     }}>购买</Button>

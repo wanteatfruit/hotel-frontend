@@ -54,26 +54,24 @@ export default function CommentCard({ comments, meanScore }) {
         setZoomPic1(true);
     }
 
-
-
-
+    const video_url = "url(" + comments.video + ")"
     return (
         <>
             <Card elevation={false} sx={{ borderRadius: 0 }}>
                 <CardHeader sx={{ paddingBottom: 0 }} avatar={
                     <Avatar variant="rounded" src={getCommentScore(comments.score)}></Avatar>
-                } title={comments.roomType} subheader={comments.commentTime.substring(0, 7)}>
+                } title={comments.roomtypename} subheader={comments.commenttime.substring(0, 7)}>
 
                 </CardHeader>
                 <CardContent>
-                    <Typography>{comments.text}</Typography>
-                    <Rating value={comments.score} max={5} precision={2} readOnly />
+                    <Typography>{comments.words}</Typography>
+                    <Rating value={comments.score/2} max={5} precision={1} readOnly />
                 </CardContent>
                 <CardActions sx={{ paddingTop: 0, paddingBottom: 2, paddingX: 2, display: { xs: 'none', sm: 'flex' } }}>
                     {comments.picture1 !== null && <Button onClick={handleZoom}   sx={{ backgroundImage: `url(${comments.picture1})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}
                     {comments.picture2 !== null && <Button onClick={()=>setZoomPic2(true)} sx={{ backgroundImage: `url(${comments.picture2})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}
                     {comments.picture3 !== null && <Button onClick={()=>setZoomPic3(true)} sx={{ backgroundImage: `url(${comments.picture3})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}
-                    <video style={{ marginLeft: 10 }} src="/videos/1.mp4" height='120' controls ></video>
+                    {comments.video !== null && <video style={{ marginLeft: 10 }} src={`${comments.video}`} height='120' controls ></video>}
                 </CardActions>
                 <CardActions sx={{ paddingY: 0, display: { xs: 'flex', sm: 'none' }, flexDirection: 'column' }}>
                     <ExpandMore expand={expanded} onClick={handleExpandClick}>

@@ -36,6 +36,7 @@ import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import {Stack} from "@mui/system";
 import {Rating} from "@mui/lab";
+import Styles from "../../styles/AccountCenter.module.css";
 
 
 export default function Orders({id}) {
@@ -238,7 +239,7 @@ export default function Orders({id}) {
 
         async function uploadOnClick() {
             let data = new FormData()
-            data.append("score", ratingValue*2)
+            data.append("score", ratingValue * 2)
             for (let i = 0; i < uploadedImageFiles.length; i++) {
                 data.append("picture" + (i + 1).toString(), uploadedImageFiles[i], uploadedImageFiles[i].name)
             }
@@ -345,7 +346,7 @@ export default function Orders({id}) {
                                     <VideoCallIcon/>
                                 </IconButton>
                             </Grid>
-                            <Grid><Typography>You can upload three photos and one video</Typography></Grid>
+                            <Grid><Typography>您可以最多上传三张照片和一个视频</Typography></Grid>
                             {showUploadedImages()}
                             {showUploadedVideo()}
                         </Grid>
@@ -560,15 +561,17 @@ export default function Orders({id}) {
                                         离店时间 {room.checkouttime.split(" ")[0]}
                                     </Typography>
                                 </CardContent>
-                                <CardActions>
-                                    <Button size="medium" onClick={() => {
-                                        setInfoDialogOpen(true);
-                                        setRoomOnDialog(room);
-                                    }}>详情</Button>
-                                    <Button size="medium" onClick={() => {
-                                        setCommentDialogOpen(true)
-                                        setRoomOnDialog(room)
-                                    }}>评价</Button>
+                                <CardActions sx={{columnGap: "0.5em"}}>
+                                    <Button size="medium" variant={"contained"} className={Styles.Button}
+                                            onClick={() => {
+                                                setInfoDialogOpen(true);
+                                                setRoomOnDialog(room);
+                                            }}>详情</Button>
+                                    <Button size="medium" variant={"contained"} className={Styles.Button}
+                                            onClick={() => {
+                                                setCommentDialogOpen(true)
+                                                setRoomOnDialog(room)
+                                            }}>评价</Button>
                                 </CardActions>
                             </Card>
                         </Grid>
@@ -604,14 +607,15 @@ export default function Orders({id}) {
                                         离店时间 {room.checkouttime.split(" ")[0]}
                                     </Typography>
                                 </CardContent>
-                                <CardActions>
-                                    <Button size="medium" onClick={() => {
+                                <CardActions sx={{columnGap: "1em"}}>
+                                    <Button size="medium" className={Styles.Button} onClick={() => {
                                         setInfoDialogOpen(true);
                                         setRoomOnDialog(room);
                                     }}>详情</Button>
                                     <div>
                                         <Button
                                             id="basic-button"
+                                            className={Styles.Button}
                                             aria-controls={modifyMenuOpen ? 'basic-menu' : undefined}
                                             aria-haspopup="true"
                                             aria-expanded={modifyMenuOpen ? 'true' : undefined}

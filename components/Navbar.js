@@ -66,6 +66,7 @@ import {useState} from "react";
 import axios from "axios";
 import PlaceOrder from "./PlaceOrderDrawer";
 import RoomCard from "./RoomCard";
+import Head from "next/head";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
                                    hotel_list,
@@ -88,7 +89,7 @@ export default function NavBar({
     const [displaySales, setDisplaySalesOpen] = useState(true);
     const [eventInfo, setEventInfo] = useState(null);
 
-    const [saleRoomInfo, setSaleRoomInfo] = useState({ roomtypeid: 1 });
+    const [saleRoomInfo, setSaleRoomInfo] = useState({roomtypeid: 1});
 
     const [orderOpen, setOrderOpen] = useState(false) //change it to other pages later
 
@@ -291,9 +292,9 @@ export default function NavBar({
 
     return (
         <>
-
-
-
+            <Head>
+                <script src="//code.tidio.co/c8br3phbbn5owe5rxjvlzwo6q6bviulc.js" async></script>
+            </Head>
             <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} open={mapOpen} fullWidth
                     maxWidth='lg' sx={{zIndex: 1000}}>
                 <DialogTitle>
@@ -387,9 +388,8 @@ export default function NavBar({
                     <Box sx={{display: {xs: "none", md: "flex"},}}>
                         <Button variant="outlined" color='secondary' disableElevation sx={{
                             fontFamily: 'Roboto', '&:hover': {
-                                backgroundColor: 'var(--color-5)',
-                                borderColor: 'var(--color-5)',
-                                boxShadow: 'none',
+                                backgroundColor: "white",
+                                color: "#f67280"
                             }, backgroundColor: 'var(--color-4)', borderRadius: 10, mr: 1
                         }} href="/" size="large"
                                 startIcon={<SportsBarOutlined fontSize="24px"/>}>
@@ -410,26 +410,25 @@ export default function NavBar({
 
 
                     <Stack direction='row' gap={1}>
-                        {adminLoggedIn!=true && <>
+                        {adminLoggedIn != true && <>
                             <Tooltip title='秒杀活动'>
-                            <IconButton color='secondary'
+                                <IconButton color='secondary'
 
-                                size='large' sx={{
+                                            size='large' sx={{
                                     backgroundColor: 'var(--color-4)', '&:hover': {
-                                        backgroundColor: 'var(--color-5)',
-                                        borderColor: 'var(--color-5)',
-                                        boxShadow: 'none',
+                                        backgroundColor: "white",
+                                        color: "#f67280"
                                     }
                                 }} onClick={() => setSaleDialogOpen(true)}>
-                                <AlarmOnOutlined fontSize="inherit" />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title='酒店位置'>
-                            <IconButton color="inherit"
-                                        size="large" onClick={() => setMapOpen(true)}>
-                                <PlaceOutlined/>
-                            </IconButton>
-                        </Tooltip></>}
+                                    <AlarmOnOutlined fontSize="inherit"/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title='酒店位置'>
+                                <IconButton color="inherit"
+                                            size="large" onClick={() => setMapOpen(true)}>
+                                    <PlaceOutlined/>
+                                </IconButton>
+                            </Tooltip></>}
 
                         {getButtons()}
                         {/*drop down menu*/}
@@ -468,22 +467,25 @@ export default function NavBar({
             </AppBar>
             {LogoutDialog()}
             {ChatDialog()}
-            <Dialog sx={{ borderRadius: 5,zIndex:1001 }} fullScreen={fullScreenMap} open={saleDialogOpen} maxWidth='lg' onClose={() => setSaleDialogOpen(false)}>
+            <Dialog sx={{borderRadius: 5, zIndex: 1001}} fullScreen={fullScreenMap} open={saleDialogOpen} maxWidth='lg'
+                    onClose={() => setSaleDialogOpen(false)}>
                 <DialogTitle>
                     {eventInfo !== null &&
-                        <Link style={{ textDecoration: 'underline' }} href={`/hotels/${eventInfo.hotelname}`}>
+                        <Link style={{textDecoration: 'underline'}} href={`/hotels/${eventInfo.hotelname}`}>
                             {eventInfo.hotelname}
                         </Link>
                     }
                     的一个房型正在秒杀！
                     <IconButton onClick={() => setSaleDialogOpen(false)}>
-                        <CloseIcon />
+                        <CloseIcon/>
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
                     <Typography></Typography>
-                    <RoomCard hotelName={eventInfo === null ? '' : eventInfo.hotelname} admin={false} roomInfo={saleRoomInfo} imageUrl={roomImageUrl[saleRoomInfo.roomtypeid % roomImageUrl.length]} />
-                    <Divider sx={{ mt: 2 }} />
+                    <RoomCard hotelName={eventInfo === null ? '' : eventInfo.hotelname} admin={false}
+                              roomInfo={saleRoomInfo}
+                              imageUrl={roomImageUrl[saleRoomInfo.roomtypeid % roomImageUrl.length]}/>
+                    <Divider sx={{mt: 2}}/>
                     <Typography>截至{eventInfo === null ? '' : eventInfo.endtime}</Typography>
                 </DialogContent>
             </Dialog>

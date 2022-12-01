@@ -1,16 +1,16 @@
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import Image from "next/future/image";
 import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
-import { Divider, IconButton, Tooltip } from "@mui/material";
-import { Stack } from "@mui/system";
+import {Divider, IconButton, Tooltip} from "@mui/material";
+import {Stack} from "@mui/system";
 import CommentCard from "../../components/CommentCard";
-import { QuestionMark, QuestionMarkOutlined, StarOutline } from "@mui/icons-material";
+import {QuestionMark, QuestionMarkOutlined, StarOutline} from "@mui/icons-material";
 
-export default function CommentArea({hotelID}) {
+export default function CommentArea({hotelName}) {
     const [allComments, setAllComments] = useState([])
     const [meanScore, setMeanScore] = useState(0)
     const [reviewTag, setReviewTag] = useState('');
@@ -18,13 +18,15 @@ export default function CommentArea({hotelID}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     async function getComments() {
-        let response = await axios.get(`https://mock.apifox.cn/m1/1589145-0-1f650808/comment/1`);
-        // await axios.get("http://120.25.216.186:8888/comment", {params: {"id": hotelID}}).then((response) => {
-        //     console.log(response.data);
-        // }).catch((error) => {
-        //     console.log("userID: ", id)
-        // });
-        let comments = response.data
+        if(hotelName===null || hotelName===undefined ||hotelName===''){
+            return
+        }
+        let comments = {}
+        await axios.get(`http://10.26.111.227:8888/comment/${hotelName}`,).then((response) => {
+            comments = response.data
+        }).catch((error) => {
+            console.log("error")
+        });
         setAllComments(comments)
         let total = 0
         if (comments.length === 0) {
@@ -43,13 +45,11 @@ export default function CommentArea({hotelID}) {
         if (meanScore >= 8) {
             setReviewTag("好评如潮")
             reviewTag = "好评如潮"
-        }
-        else if (meanScore >= 6) {
+        } else if (meanScore >= 6) {
             setReviewTag("多半好评")
             reviewTag = "多半好评"
 
-        }
-        else {
+        } else {
             setReviewTag("褒贬不一")
             reviewTag = "褒贬不一"
         }
@@ -58,7 +58,7 @@ export default function CommentArea({hotelID}) {
 
     useEffect(() => {
         getComments()
-    }, [])
+    }, [hotelName])
 
     function getCommentScore(score) {
         let image = null
@@ -89,25 +89,25 @@ export default function CommentArea({hotelID}) {
 
     return (
         <>
-            <Paper elevation={false}>
+            {allComments !== [] && <Paper elevation={false}>
                 <Grid container columns={24} spacing={2} columnSpacing={4}>
                     <Grid item xs={24} sm={24}>
                         <Typography variant="h5">
-                            <StarOutline sx={{marginBottom:-0.5}} />
+                            <StarOutline sx={{marginBottom: -0.5}}/>
                             {`${meanScore} · ${allComments.length}条评价`}
                         </Typography>
-                        <Divider sx={{pt:2}} variant="middle"/>
+                        <Divider sx={{pt: 2}} variant="middle"/>
                     </Grid>
                     <Grid item xs={24} sm={24}>
                         <Stack>
                             {allComments.map((item, index) => (
-                                <CommentCard key={index} comments={item} />
+                                <CommentCard key={index} comments={item}/>
                             ))}
                         </Stack>
                     </Grid>
-
                 </Grid>
-            </Paper>
+            </Paper>}
+            {allComments === [] && <Typography>暂无评论</Typography>}
         </>
     )
 }
