@@ -37,6 +37,7 @@ export default function HotelDetail() {
     const router = useRouter()
     const hotel_name = router.query.id
     const book_url = `book/${hotel_name}`
+    console.log(hotel_name)
     //id为酒店名，动态路径
     const [roomList, setRoomList] = React.useState([]);
     const [hotelInfo, setHotelInfo] = React.useState({})
@@ -44,6 +45,7 @@ export default function HotelDetail() {
     const [userID, setUserID] = useState(0)
     const [markedHotels, setMarkedHotels] = useState([])
     const [markedRooms, setMarkedRooms] = useState([])
+
 
     async function getMarked() {
         let roomsInfo = ""
@@ -180,7 +182,7 @@ export default function HotelDetail() {
                     <CommentArea hotelID={hotel_name}/>
                 </Box>
             </Box>
-            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg'
+            <Dialog keepMounted fullScreen={fullScreenMap} fullWidth maxWidth='lg'
                     sx={{zIndex: 1000}} open={openFloorPlan}>
                 <DialogTitle>
                     酒店平面图

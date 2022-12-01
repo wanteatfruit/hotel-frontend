@@ -1,7 +1,13 @@
 import Layout from "../../components/Layout";
 import { CheckBox, ChevronLeftOutlined, ChevronRightRounded, IcecreamOutlined } from "@mui/icons-material";
 import {
+    Dialog,
+    DialogActions,
+    DialogContent,
     Drawer,
+    FormControl,
+    Select,
+    MenuItem,
     Box,
     Stack,
     TextField,
@@ -27,9 +33,10 @@ import {
     FormGroup,
     FormControlLabel,
     Rating,
-    CardActionArea
+    CardActionArea,
+    CircularProgress
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider, zhCN } from "@mui/x-date-pickers";
 import React from "react";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -40,37 +47,126 @@ import handleIntroduction from "../../utils/utils";
 import NavBar from "../../components/Navbar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const steps = ['选择房间', '入住信息', '确认订单'];
+const steps = ['入住信息', '确认订单'];
 
 export default function BookingPage({ }) {
     const router = useRouter()
     const hotelName = router.query.id
+    const timerRef = React.useRef();
+    const book_url = router.asPath.toString()
+    const room_num = parseInt(book_url.substring(book_url.lastIndexOf('=') + 1))
     const [roomList, setRoomList] = React.useState(null)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
     const [bookingCost, setBookingCost] = React.useState(0);
     const [roomTypeName, setRoomTypeName] = React.useState(null)
-    //get roomtype by hotel
-    React.useEffect(() => {
-        if (router.isReady) {
-            axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotelName}`).then((resp) => {
-                setRoomList(resp.data)
-            })
-            console.log(roomList)
-            setBookingInfo
-        }
-    }, [router.isReady])
-
-
     const [selectedRoom, setSelectedRoom] = React.useState(0)
+    const [loadingDialog, setLoadingDialog] = React.useState(false);
+    const [roomNumber, setRoomNumber] = React.useState(101)
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
         endDate: dayjs().startOf("day").add(7, 'day'),
         roomName: roomList !== null ? roomList[0].roomname : '',
         roomPrice: 0,
         hotelName: hotelName == null ? '' : hotelName.toString(),
-        cost: 0
+        cost: 0,
+        guestNum:2
     })
+    React.useEffect(
+        () => () => {
+            clearTimeout(timerRef.current);
+        },
+        [],
+    );
+
+    const handleClickQuery = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+        }
+
+        if (query !== 'idle') {
+            setQuery('idle');
+            return;
+        }
+
+        setQuery('progress');
+        timerRef.current = window.setTimeout(() => {
+            setQuery('success');
+        }, 1000);
+    };
+    const [query, setQuery] = React.useState('idle');
+
+    //get roomtype by hotel
+    React.useEffect(() => {
+        if (router.isReady) {
+            axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotelName}`).then((resp) => {
+                setRoomList(resp.data)
+            })
+            // console.log(roomList)
+
+        }
+    }, [router.isReady])
+    React.useEffect(() => {
+        setBookingInfo({ ...bookingInfo, hotelName: hotelName })
+        if (roomList != null) {
+            setRoomNumber(room_num);
+            console.log(roomNumber)
+            decideRoom()
+            console.log(bookingInfo)
+        }
+    }, [roomList])
+    const startDateRenderer=(date,selectedDates, pickerDayProps)=>{
+        let validDates = []
+        const today = dayjs().startOf('day')
+        validDates.push(today)
+        for (const key in emptyRooms) {
+            if (Object.hasOwnProperty.call(emptyRooms, key)) {
+                const element = emptyRooms[key];
+                if(element==1){ // dont have room
+                    const newDay = today.add(key,'days')
+                    validDates.push(newDay)
+                }
+            }
+        }
+        if(validDates.includes(date)){
+            return <PickersDay {...pickerDayProps} />
+        }
+        return <PickersDay disabled {...pickerDayProps} />
+
+    }
+
+
     console.log(bookingInfo)
+
+    const decideRoom = () => {
+        if (roomNumber <= 206 && roomNumber >= 203) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[0].roomname, roomPrice: roomList[0].price })
+        }
+        else if (roomNumber <= 202 && roomNumber >= 201) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[1].roomname, roomPrice: roomList[1].price })
+        }
+        else if (roomNumber <= 309 && roomNumber >= 305) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[0].roomname, roomPrice: roomList[0].price })
+        }
+        else if (roomNumber <= 304 && roomNumber >= 302) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[1].roomname, roomPrice: roomList[1].price })
+        }
+        else if (roomNumber == 301) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[2].roomname, roomPrice: roomList[2].price })
+        }
+        else if (roomNumber <= 414 && roomNumber >= 409) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[0].roomname, roomPrice: roomList[0].price })
+        }
+        else if (roomNumber <= 408 && roomNumber >= 405) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[1].roomname, roomPrice: roomList[1].price })
+        }
+        else if (roomNumber <= 404 && roomNumber >= 401) {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[2].roomname, roomPrice: roomList[2].price })
+        }
+        else {
+            setBookingInfo({ ...bookingInfo, roomName: roomList[0].roomname, roomPrice: roomList[0].price })
+
+        }
+    }
 
     const theme = createTheme({
         palette: {
@@ -97,8 +193,7 @@ export default function BookingPage({ }) {
         setBookingCost(cost1)
     }
 
-    async function handleOrder(event) {
-        event.preventDefault()
+    async function handleOrder() {
         if (localStorage.getItem("isLoggedIn") === "false") {
             alert("请先登录！")
             return
@@ -114,25 +209,41 @@ export default function BookingPage({ }) {
             startDate: bookingInfo.startDate.format('YYYY-MM-DD HH:mm:ss'),
             endDate: bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss'),
             roomType: bookingInfo.roomName,
-            hotelName: bookingInfo.hotelName,
+            hotelName: hotelName,
             cost: bookingCost,
-            username: uname
+            username: uname,
+            location:roomNumber.toString()
         }
 
-        const resp = await fetch('http://120.25.216.186:8888/orders/booking', {
+        const resp = await fetch('http://10.26.111.227:8888/orders/bookroom', {
             method: 'POST',
             body: JSON.stringify(orderInfo),
             headers: {
                 'Content-type': 'application/json'
             }
         })
-        console.log(orderInfo)
-        router.push("/account-center/account-center")
+        let clone = resp.clone()
+        console.log(clone)
     }
 
     return (
         <>
+
             <ThemeProvider theme={theme}>
+            <Dialog open={loadingDialog} maxWidth='lg'  onClose={() => setLoadingDialog(false)} sx={{ zIndex: 100000001 }} >
+                <DialogContent>
+                    {query === 'success' ? (
+                        <Typography>订房成功！</Typography>
+                    ) : (<CircularProgress />)}
+
+                </DialogContent>
+                {query === 'success' &&
+                    <Stack direction='row'>
+                        <Button href={'/account-center/account-center'}>用户中心</Button>
+                        <Button onClick={() => { setLoadingDialog(false); handleClickQuery() }}>确定</Button>
+                    </Stack>}
+            </Dialog>
+
                 <NavBar />
                 <Box sx={{ mt: '60px', }}>
                     <div style={{
@@ -159,60 +270,8 @@ export default function BookingPage({ }) {
                             )
                         })}
                     </Stepper>
-                    {activeStep === 0 && (
-                        <div style={{ paddingBottom: 4, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                            <List sx={{}}>
-                                {roomList !== null && roomList.map((item, index) => (
-                                    <ListItem sx={{}} key={item.roomtypeid}>
-                                        <ListItemButton selected={selectedRoom === index}
-                                            onClick={() => {
-                                                setSelectedRoom(index);
-                                                setBookingInfo({
-                                                    ...bookingInfo,
-                                                    hotelName: hotelName,
-                                                    roomName: item.roomname,
-                                                    roomPrice: item.price
-                                                });
-                                            }}>
-                                            <Card variant="outlined" sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', height: '50%', paddingLeft: 0 }}>
-                                                {/* <CardHeader title={item.roomname} /> */}
-                                                <CardContent>
-                                                    <Typography variant="h4">{item.roomname}</Typography>
-                                                    {item.discount == 1 && <Typography variant="h6">{`${item.price}元 / 晚`}</Typography>}
-                                                    {item.discount != 1 && <Stack direction='row'>
-                                                        <Typography variant="h6" sx={{ textDecoration: 'line-through' }}>{`${item.price}元 / 晚`}</Typography>
-                                                        <Typography variant="h6" sx={{ ml: 2 }}>{`${item.afterEventPrice}元 / 晚`}</Typography>
-                                                    </Stack>}
-                                                    {/* <Typography variant="h6">{item.discount==1? `${item.price}元 / 晚`:``}</Typography> */}
-                                                </CardContent>
-                                                <CardContent sx={{ display: { xs: 'none', sm: 'block' }, justifyContent: 'flex-end' }}>
-                                                    <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
-                                                        <FormControlLabel control={<Checkbox readOnly
-                                                            checked={handleIntroduction(item, 0)}></Checkbox>}
-                                                            label="窗户" />
-                                                        <FormControlLabel control={<Checkbox readOnly
-                                                            checked={handleIntroduction(item, 1)}></Checkbox>}
-                                                            label="阳台" />
-                                                        <FormControlLabel control={<Checkbox readOnly
-                                                            checked={handleIntroduction(item, 2)}></Checkbox>}
-                                                            label="洗衣房" />
-                                                    </FormGroup>
-                                                </CardContent>
-                                            </Card>
-                                        </ListItemButton>
-                                    </ListItem>
-                                ))}
-                            </List>
-                            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end', padding: 4 }}>
-                                <Button sx={{ width: '15vh', marginRight: 4 }} href="/hotels">返回主页</Button>
-                                <Button sx={{ width: '15vh', marginRight: 4 }} variant="outlined" disabled={bookingInfo.roomName === ''} onClick={() => {
-                                    setActiveStep(activeStep + 1)
-                                }}>下一步</Button>
-                            </div>
-                        </div>
 
-                    )}
-                    {activeStep === 1 && (
+                    {activeStep === 0 && (
                         <div>
                             <Stack gap={5} sx={{
                                 paddingX: '10px',
@@ -221,7 +280,82 @@ export default function BookingPage({ }) {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Stack mt={3} gap={0} alignItems='center' width={{xs:'90vw', md:'50vw'}}>
+                            <Typography gutterBottom textAlign='start' variant='h6'>{`￥${bookingInfo.roomPrice}/晚`}</Typography>
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={zhCN} >
+                                <Stack mt={2} marginBottom={0} direction='row' gap={0} justifyContent='center' >
+                                    <DatePicker
+                                        label='入住日期'
+                                        minDate={dayjs().startOf("day")}
+                                        maxDate={dayjs().startOf('day').add(29,'days')}
+                                        inputFormat="YYYY/MM/DD"
+                                        value={bookingInfo.startDate}
+                                        renderDay={startDateRenderer}
+                                        onChange={(newDate) => {
+                                            setBookingInfo({ ...bookingInfo, startDate: newDate })
+                                        }}
+                                        renderInput={({ inputRef, inputProps, InputProps }) => (
+                                            <TextField
+                                                label="入住日期"
+                                                {...inputProps}
+                                                ref={inputRef}
+                                                InputProps={{ sx: { mb: 0, borderTopLeftRadius: 15, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0, borderRightStyle: 'none' }, endAdornment: InputProps.endAdornment }}
+                                                required
+                                                margin="none"
+                                                onKeyDown={(e) => e.preventDefault()}
+                                            />
+                                        )}
+                                    >
+                                    </DatePicker>
+                                    <DatePicker
+                                        label="离开日期"
+                                        value={bookingInfo.endDate}
+                                        minDate={bookingInfo.startDate.add(1, 'day')}
+                                        maxDate={dayjs().startOf('day').add(30,'days')}
+                                        inputFormat="YYYY/MM/DD"
+                                        
+                                        onChange={(newDate) => {
+                                            setBookingInfo({ ...bookingInfo, endDate: newDate })
+                                        }}
+                                        renderInput={({ inputRef, inputProps, InputProps }) => (
+                                            <TextField
+                                                {...inputProps}
+                                                label='离开日期'
+                                                ref={inputRef}
+                                                InputProps={{ sx: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 15, borderBottomRightRadius: 0, borderLeftColor: '#fff' }, endAdornment: InputProps.endAdornment }}
+                                                placeholder='离开日期'
+                                                required
+
+                                                onKeyDown={(e) => e.preventDefault()}
+                                            />
+                                        )}
+                                    >
+                                    </DatePicker>
+                                </Stack>
+                            </LocalizationProvider>
+                            <FormControl>
+
+                                <Select placeholder="入住人数" sx={{ width: {xs:'90vw', md:'41.5vw'}, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderTopRightRadius: 0 }} value={bookingInfo.guestNum} onChange={(e) => setBookingInfo({ ...bookingInfo, guestNum: e.target.value })}>
+                                    <MenuItem value={1}>1位</MenuItem>
+                                    <MenuItem value={2}>2位</MenuItem>
+                                    <MenuItem value={3}>3位</MenuItem>
+                                    <MenuItem value={4}>4位</MenuItem>
+                                    <MenuItem value={5}>5位</MenuItem>
+                                </Select>
+                            </FormControl>
+                            {/* <Button onClick={()=>{
+                                if( handleInvalidDate()==false){
+                                    return
+                                }
+                                setConfirmDialog(true)
+                                
+                            }} color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button> */}
+                            {<Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`您选择了${roomNumber}号房间`}</Typography>}
+                            {/* <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography> */}
+
+                        </Stack>
+
+                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <Stack direction='row' gap={2}>
 
                                         <DatePicker
@@ -263,17 +397,7 @@ export default function BookingPage({ }) {
 
                                         </DatePicker>
                                     </Stack>
-                                </LocalizationProvider>
-                                {/* <Stack paddingX={2} sx={{ width: {xs:'100%', sm:'50%'}}}>
-                                    <Typography gutterBottom>入住人数</Typography>
-                                    <Slider sx={{width:'80%'}} value={bookingInfo.guestsNumber}
-                                        onChange={(event, newNumber) => setBookingInfo({
-                                            ...bookingInfo,
-                                            guestsNumber: newNumber
-                                        })} valueLabelDisplay='auto' step={1} marks={guestsNumberMarks} min={1}
-                                        max={5} />
-                                </Stack> */}
-
+                                </LocalizationProvider> */}
 
                             </Stack>
 
@@ -287,7 +411,7 @@ export default function BookingPage({ }) {
                             </div>
                         </div>
                     )}
-                    {activeStep === 2 && (
+                    {activeStep === 1 && (
                         <form onSubmit={handleOrder} >
                             <Grid container columns={6} spacing={2} padding={6}>
                                 <Grid item xs={3} sm={2}>
@@ -295,7 +419,7 @@ export default function BookingPage({ }) {
                                         <CardHeader title="入住酒店"></CardHeader>
                                         <CardContent>
                                             <Typography variant="h6">
-                                                {bookingInfo.hotelName}
+                                                {hotelName}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -342,13 +466,24 @@ export default function BookingPage({ }) {
                                     </Card>
                                 </Grid>
                                 <Grid item xs={3} sm={2}>
-                                    <Button type="submit" variant="contained" sx={{ width: '100%', height: '100%', fontSize: '2rem' }}>提交订单</Button>
+                                <Card sx={{ flexDirection: 'row' }}>
+                                        <CardHeader title="房间号"></CardHeader>
+                                        <CardContent>
+                                            <Typography variant="h6">
+                                                {roomNumber}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+ 
+                                    {/* <Button type="submit" variant="contained" sx={{ width: '100%', height: '100%', fontSize: '2rem' }}>提交订单</Button> */}
                                 </Grid>
                             </Grid>
                             <div style={{ display: 'flex', padding: 4, justifyContent: 'flex-end' }}>
-                                <Button variant="outlined" sx={{ width: '15vh', marginRight: 5, marginBottom: 4 }} onClick={() => {
+                                <Button variant="outlined" sx={{ width: '20vh', marginRight: 5, marginBottom: 4 }} onClick={() => {
                                     setActiveStep(activeStep - 1)
                                 }}>上一步</Button>
+                                <Button onClick={()=>{setLoadingDialog(true); handleOrder(); handleClickQuery()}} variant="contained" sx={{bgcolor:'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', width: '20vh', marginRight: 5, marginBottom: 4 }}>提交订单</Button>
+
                             </div>
                         </form>
                     )}

@@ -99,12 +99,7 @@ export default function NavBar({
         axios.get('http://120.25.216.186:8888/event/haveEvent').then((resp) => {
             setEventInfo(resp.data)
         })
-
-        //check for sale
-        // axios.get('http://120.25.216.186:8888/event/haveEvent').then((resp)=>{
-        //     if(resp.data.)
-        // })
-    }, [])
+    }, [saleDialogOpen])
     useEffect(() => {
         if (eventInfo !== null) {
             axios.get(`http://120.25.216.186:8888/roomtype?id=${eventInfo.roomtypeid}`).then((resp) => {

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <style>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+        <style>
         svg {
             background-color: rgb(255, 255, 255);
             height: 80vh;
@@ -330,7 +330,7 @@
                         <div xmlns="http://www.w3.org/1999/xhtml"
                              style="display: flex; align-items: unsafe flex-start; justify-content: unsafe center; width: 129px; height: 1px; padding-top: 306px; margin-left: 162px;">
                             <div style="box-sizing: border-box; font-size: 0; text-align: center; ">
-                                <a id="room1" class="room1" target="_parent">
+                                <a id="room1" class="room1" href="/hotels/" target="_parent">
                                     <div style="display: inline-block; font-size: 40px; font-family: &quot;Acme&quot;, &quot;VP Default&quot;;  line-height: 1.2; pointer-events: all; font-weight: bold; word-break: break-word; white-space: normal; word-wrap: normal; ">
                                         <div ani="">201</div>
                                     </div>
@@ -396,7 +396,8 @@
     </switch>
 </svg>
 <script>
-    $("#room1").attr("href", "book/深圳湾1号?id=201")
+    document.getElementById("room2").href="book/深圳湾1号?id=202"
+    $("#room1").attr("href", "hotels/深圳湾1号?id=201")
     $("#room2").attr("href", "book/深圳湾1号?id=202")
     $("#room3").attr("href", "book/深圳湾1号?id=203")
     $("#room4").attr("href", "book/深圳湾1号?id=204")
