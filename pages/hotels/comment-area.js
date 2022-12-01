@@ -18,6 +18,9 @@ export default function CommentArea({hotelName}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
 
     async function getComments() {
+        if(hotelName===null || hotelName===undefined ||hotelName===''){
+            return
+        }
         let comments = {}
         await axios.get(`http://10.26.111.227:8888/comment/${hotelName}`,).then((response) => {
             comments = response.data
@@ -55,7 +58,7 @@ export default function CommentArea({hotelName}) {
 
     useEffect(() => {
         getComments()
-    }, [])
+    }, [hotelName])
 
     function getCommentScore(score) {
         let image = null
@@ -86,7 +89,7 @@ export default function CommentArea({hotelName}) {
 
     return (
         <>
-            <Paper elevation={false}>
+            {allComments !== [] && <Paper elevation={false}>
                 <Grid container columns={24} spacing={2} columnSpacing={4}>
                     <Grid item xs={24} sm={24}>
                         <Typography variant="h5">
@@ -102,9 +105,9 @@ export default function CommentArea({hotelName}) {
                             ))}
                         </Stack>
                     </Grid>
-
                 </Grid>
-            </Paper>
+            </Paper>}
+            {allComments === [] && <Typography>暂无评论</Typography>}
         </>
     )
 }
