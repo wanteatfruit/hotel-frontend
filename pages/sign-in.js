@@ -53,7 +53,7 @@ export default function SignIn() {
         }
         let answer = {}
         if (adminLogin) {
-            await fetch("http://120.25.216.186:8888/login/manager", options)
+            await fetch("http://10.26.111.227:8888/login/manager", options)
                 .then((response) => response.json()).then(data => answer = data)
             console.log("answer: ", answer)
             if (answer.id === 0) {
@@ -77,7 +77,7 @@ export default function SignIn() {
                 }
             }
         } else {
-            await fetch("http://120.25.216.186:8888/login", options)
+            await fetch("http://10.26.111.227:8888/login", options)
                 .then((response) => response.json()).then(data => answer = data)
             if (answer.id === 0) {
                 setResponseDialogOpen(true)

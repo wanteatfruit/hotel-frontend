@@ -11,7 +11,7 @@ import CommentCard from "../../components/CommentCard";
 import {QuestionMark, QuestionMarkOutlined, StarOutline} from "@mui/icons-material";
 
 export default function CommentArea({hotelName}) {
-    const [allComments, setAllComments] = useState([])
+    const [allComments, setAllComments] = useState('')
     const [meanScore, setMeanScore] = useState(0)
     const [reviewTag, setReviewTag] = useState('');
 
@@ -27,7 +27,9 @@ export default function CommentArea({hotelName}) {
         }).catch((error) => {
             console.log("error")
         });
-        setAllComments(comments)
+        if(comments!==[]){
+            setAllComments(comments)
+        }
         let total = 0
         if (comments.length === 0) {
             setMeanScore("无评论")
@@ -89,7 +91,7 @@ export default function CommentArea({hotelName}) {
 
     return (
         <>
-            {allComments !== [] && <Paper elevation={false}>
+            {allComments !== '' && <Paper elevation={false}>
                 <Grid container columns={24} spacing={2} columnSpacing={4}>
                     <Grid item xs={24} sm={24}>
                         <Typography variant="h5">
@@ -107,7 +109,7 @@ export default function CommentArea({hotelName}) {
                     </Grid>
                 </Grid>
             </Paper>}
-            {allComments === [] && <Typography>暂无评论</Typography>}
+            {allComments === '' && <Typography>暂无评论</Typography>}
         </>
     )
 }

@@ -17,9 +17,9 @@ import Footer from "../../components/Footer";
 import {ThemeProvider} from "@emotion/react";
 
 export async function getStaticProps() {
-    const hotel_response = await axios.get('http://120.25.216.186:8888/hotel/getAll');
+    const hotel_response = await axios.get('http://10.26.111.227:8888/hotel/getAll');
     const hotel_list = hotel_response.data
-    const room_respose = await axios.get('http://120.25.216.186:8888/roomtype/getAll');
+    const room_respose = await axios.get('http://10.26.111.227:8888/roomtype/getAll');
     const room_list = room_respose.data
     console.log(hotel_list)
     return {

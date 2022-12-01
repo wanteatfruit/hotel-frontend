@@ -48,7 +48,7 @@ export default function AdminRooms({ hotel_list }) {
   ]
   React.useEffect(() => {
     if (hotel === '') {
-      axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
+      axios.get("http://10.26.111.227:8888/roomtype/getAll").then((resp) => {
         setRoomList(resp.data)
       })
       console.log(roomList)
@@ -57,7 +57,7 @@ export default function AdminRooms({ hotel_list }) {
 
   React.useEffect(() => {
     if (hotel !== '') {
-      axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
+      axios.get(`http://10.26.111.227:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
         setRoomList(resp.data)
       })
     }
@@ -75,14 +75,15 @@ export default function AdminRooms({ hotel_list }) {
   }
 
   async function handleRefresh() {
+    // window.location.reload();
     await timeout(1)
     if (hotel === '') {
-      axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
+      axios.get("http://10.26.111.227:8888/roomtype/getAll").then((resp) => {
         setRoomList(resp.data)
       })
     }
     else {
-      axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
+      axios.get(`http://10.26.111.227:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
         setRoomList(resp.data)
       })
     }
@@ -97,7 +98,7 @@ export default function AdminRooms({ hotel_list }) {
 
     const newRoom = { roomName: roomName, price: roomPrice, introduction: intro, number: guestNum, remain: remain, hotelName: addToHotel }
     // console.log(newRoom)
-    const resp = await fetch('http://120.25.216.186:8888/roomtype/addRoom', {
+    const resp = await fetch('http://10.26.111.227:8888/roomtype/addRoom', {
       method: 'POST',
       body: JSON.stringify(newRoom),
       headers: {
@@ -169,7 +170,7 @@ export default function AdminRooms({ hotel_list }) {
               {roomList != null ? (
                 roomList.map((item) => (
                   <Grid key={item.roomtypeid} item xs={12} md={6} lg={6} xl={4} padding={2}>
-                    <RoomCard refresh={handleRefresh} admin roomName={item.roomname} roomInfo={item} imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}></RoomCard>
+                    <RoomCard refresh={handleRefresh} admin={true} roomName={item.roomname} roomInfo={item} imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}></RoomCard>
                   </Grid>
                 ))
               ) : (

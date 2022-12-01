@@ -12,7 +12,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {
     Dialog, DialogActions,
     DialogContent, DialogContentText,
@@ -22,17 +22,17 @@ import ListItem from "@mui/material/ListItem";
 import List from "@mui/material/List";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import WindowIcon from "@mui/icons-material/Window";
 import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
 import BalconyIcon from "@mui/icons-material/Balcony";
 import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
-import { hotelImageUrl, roomImageUrl } from "../../data";
+import {hotelImageUrl, roomImageUrl} from "../../data";
 import Styles from "../../styles/AccountCenter.module.css"
 
 
-export default function Orders({ id }) {
+export default function Orders({id}) {
     const [mode, setMode] = useState(0)
     const [infoDialogOpen, setInfoDialogOpen] = useState(false)
     const [modifyDialogOpen, setModifyDialogOpen] = useState(false)
@@ -46,7 +46,7 @@ export default function Orders({ id }) {
 
     async function getRoomsAndHotels() {
         let _rooms = []
-        await axios.get("http://120.25.216.186:8888/roomtypewishlist", { params: { "userId": id } }).then((response) => {
+        await axios.get("http://10.26.111.227:8888/roomtypewishlist", {params: {"userId": id}}).then((response) => {
             _rooms = response.data
         });
         console.log("rooms: ", _rooms)
@@ -55,14 +55,14 @@ export default function Orders({ id }) {
         for (const idx in _rooms) {
             console.log("roomid: ", _rooms[idx].roomTypeID)
             if (!(_rooms[idx].roomTypeID in roomInfoDict)) {
-                await axios.get("http://120.25.216.186:8888/roomtype", { params: { "id": _rooms[idx].roomTypeID } }).then((response) => {
+                await axios.get("http://10.26.111.227:8888/roomtype", {params: {"id": _rooms[idx].roomTypeID}}).then((response) => {
                     roomInfoDict[_rooms[idx].roomTypeID] = response.data
                 });
             }
         }
         setRoomInfo(roomInfoDict)
         let _hotels = []
-        await axios.get("http://120.25.216.186:8888/hotelwishlist", { params: { "userId": id } }).then((response) => {
+        await axios.get("http://10.26.111.227:8888/hotelwishlist", {params: {"userId": id}}).then((response) => {
             _hotels = response.data
         });
         setHotels(_hotels)
@@ -81,31 +81,31 @@ export default function Orders({ id }) {
         let windowItem = ''
         if (intro[0].substring(intro[0].length - 1) === "有") {
             windowItem = <>
-                <Typography>有窗</Typography><WindowIcon /><DoneOutlineIcon />
+                <Typography>有窗</Typography><WindowIcon/><DoneOutlineIcon/>
             </>
         } else {
             windowItem = <>
-                <Typography>无窗</Typography><WindowIcon /><CancelIcon />
+                <Typography>无窗</Typography><WindowIcon/><CancelIcon/>
             </>
         }
         let balconyItem = ''
         if (intro[1].substring(intro[1].length - 1) === "有") {
             balconyItem = <>
-                <Typography>有阳台</Typography><BalconyIcon /><DoneOutlineIcon />
+                <Typography>有阳台</Typography><BalconyIcon/><DoneOutlineIcon/>
             </>
         } else {
             balconyItem = <>
-                <Typography>无阳台</Typography><BalconyIcon /><CancelIcon />
+                <Typography>无阳台</Typography><BalconyIcon/><CancelIcon/>
             </>
         }
         let laundryItem = ''
         if (intro[2].substring(intro[2].length - 1) === "有") {
             laundryItem = <>
-                <Typography>有洗衣房</Typography><LocalLaundryServiceIcon /><DoneOutlineIcon />
+                <Typography>有洗衣房</Typography><LocalLaundryServiceIcon/><DoneOutlineIcon/>
             </>
         } else {
             laundryItem = <>
-                <Typography>无洗衣房</Typography><LocalLaundryServiceIcon /><CancelIcon />
+                <Typography>无洗衣房</Typography><LocalLaundryServiceIcon/><CancelIcon/>
             </>
         }
 
@@ -118,21 +118,21 @@ export default function Orders({ id }) {
                             <Typography>{nameItem}</Typography>
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {windowItem}
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {balconyItem}
                         </Grid>
                     </ListItem>
-                    <Divider sx={{ my: gapHeight }} />
+                    <Divider sx={{my: gapHeight}}/>
                     <ListItem>
-                        <Grid container sx={{ width: "100%", display: "flex", flexDirection: "row", columnGap: "1em" }}>
+                        <Grid container sx={{width: "100%", display: "flex", flexDirection: "row", columnGap: "1em"}}>
                             {laundryItem}
                         </Grid>
                     </ListItem>
@@ -145,49 +145,6 @@ export default function Orders({ id }) {
         return "https://source.unsplash.com/random"
     }
 
-    function roomInfoDialog() {
-        const gapHeight = 2;
-        const image_url = "url(" + roomImageUrl[roomOnDialog.roomTypeID % roomImageUrl.length] + ")"
-        return (
-            <>
-                <Dialog
-                    open={infoDialogOpen}
-                    maxWidth='lg'
-                    onClose={() => {
-                        setInfoDialogOpen(false)
-                    }}
-                    PaperProps={{ sx: { position: "fixed", width: "100%", height: "100%" } }}
-                >
-                    <DialogContent>
-                        <Grid container component="main" sx={{ height: '100%' }}>
-                            <Grid
-                                sx={{
-                                    width: "50%",
-                                    height: "100%",
-                                    backgroundImage: image_url,
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundColor: (t) =>
-                                        t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                }}
-                            />
-                            <Grid item width={"47%"} component={Paper} elevation={6} square>
-                                <Grid container marginBottom={10} marginLeft={"5%"}>
-                                    {getListItemContent()}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => {
-                            setInfoDialogOpen(false)
-                        }}>关闭</Button>
-                    </DialogActions>
-                </Dialog>
-            </>
-        )
-    }
 
     function commentDialog() {
         return (
@@ -237,7 +194,7 @@ export default function Orders({ id }) {
                 <>
                     <Grid item key={hotel.hotelName} xs={12} sm={6} md={4}>
                         <Card
-                            sx={{ display: 'flex', flexDirection: 'column' }}
+                            sx={{display: 'flex', flexDirection: 'column'}}
                         >
                             <CardMedia
                                 component="img"
@@ -245,7 +202,7 @@ export default function Orders({ id }) {
                                 image={hotelImageUrl[hotel.hotelID % hotelImageUrl.length]}
                                 alt="random"
                             />
-                            <CardContent sx={{ flexGrow: 1 }}>
+                            <CardContent sx={{flexGrow: 1}}>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     {hotel.hotelName}
                                 </Typography>
@@ -268,7 +225,7 @@ export default function Orders({ id }) {
                 <>
                     <Grid item key={room.hotelName} xs={12} sm={6} md={4}>
                         <Card
-                            sx={{ display: 'flex', flexDirection: 'column' }}
+                            sx={{display: 'flex', flexDirection: 'column'}}
                         >
                             <CardMedia
                                 component="img"
@@ -276,7 +233,7 @@ export default function Orders({ id }) {
                                 image={roomImageUrl[room.roomTypeID % roomImageUrl.length]}
                                 alt="random"
                             />
-                            <CardContent sx={{ flexGrow: 1 }}>
+                            <CardContent sx={{flexGrow: 1}}>
                                 <Typography gutterBottom variant="h5" component="h2">
                                     {room.hotelName}
                                 </Typography>
@@ -285,10 +242,6 @@ export default function Orders({ id }) {
                                 </Typography>
                             </CardContent>
                             <CardActions sx={{columnGap: "1em"}}>
-                                <Button className={Styles.Button} size="medium" onClick={() => {
-                                    setInfoDialogOpen(true);
-                                    setRoomOnDialog(room);
-                                }}>详情</Button>
                                 <div>
                                     <Button
                                         id="basic-button"
@@ -298,7 +251,7 @@ export default function Orders({ id }) {
                                         aria-expanded={modifyMenuOpen ? 'true' : undefined}
                                         onClick={() => {
                                             router.push({
-                                                pathname: "/book/" + room.hotelName,
+                                                pathname: "/hotels/" + room.hotelName,
                                             })
                                         }}
                                     >
@@ -314,7 +267,6 @@ export default function Orders({ id }) {
 
         return (
             <>
-                {roomInfoDialog()}
                 {commentDialog()}
                 <Grid container spacing={4}>
                     {mode === 0 && rooms.map((room) => (
@@ -329,7 +281,7 @@ export default function Orders({ id }) {
     }
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Container maxWidth="lg" sx={{mt: 4}}>
             <FormControl>
                 <FormLabel id="demo-row-radio-buttons-group-label">
                     <Typography variant='h4'>收藏</Typography>
@@ -340,15 +292,15 @@ export default function Orders({ id }) {
                     name="row-radio-buttons-group"
                     defaultValue={'房间'}
                 >
-                    <FormControlLabel value="房间" control={<Radio />} label="房间" onClick={() => {
+                    <FormControlLabel value="房间" control={<Radio/>} label="房间" onClick={() => {
                         setMode(0)
-                    }} />
-                    <FormControlLabel value="酒店" control={<Radio />} label="酒店" onClick={() => {
+                    }}/>
+                    <FormControlLabel value="酒店" control={<Radio/>} label="酒店" onClick={() => {
                         setMode(1)
-                    }} />
+                    }}/>
                 </RadioGroup>
             </FormControl>
-            <br /><br />
+            <br/><br/>
             {getAlbum()}
         </Container>
     );

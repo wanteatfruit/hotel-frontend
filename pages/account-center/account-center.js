@@ -24,7 +24,7 @@ export default function AccountCenter() {
 
     useEffect(() => {
         setID(localStorage.getItem("userID"))
-    }, [refresh === 0])
+    }, [])
 
     function accountContent() {
         return <Account id={id}/>;

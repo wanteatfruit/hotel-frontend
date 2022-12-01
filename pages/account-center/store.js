@@ -51,10 +51,10 @@ export default function Store() {
     );
 
     async function GetData() {
-        await axios.get("http://120.25.216.186:8888/gift/findAll").then((response) => {
+        await axios.get("http://10.26.111.227:8888/gift/findAll").then((response) => {
             setGiftList(response.data)
         });
-        await axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": userID}}).then((response) => {
+        await axios.get("http://10.26.111.227:8888/customer/getbyid", {params: {"id": userID}}).then((response) => {
             setUserCredits(response.data.credits);
         });
     }
@@ -88,7 +88,7 @@ export default function Store() {
             }
             console.log("body: ", body)
             let paySucceed = ""
-            await axios.post('http://120.25.216.186:8888/giftorder/creategiftorder', body)
+            await axios.post('http://10.26.111.227:8888/giftorder/creategiftorder', body)
                 .then(response => paySucceed = response.data);
             console.log("response, ", paySucceed)
             if (paySucceed.toString() === "true") {

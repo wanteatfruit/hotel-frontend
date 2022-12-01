@@ -63,12 +63,12 @@ export default function Orders({id}) {
     async function getRooms() {
         let _rooms = []
         if (mode) {
-            await axios.get("http://120.25.216.186:8888/orders/finished-orders", {params: {"userID": id}}).then((response) => {
+            await axios.get("http://10.26.111.227:8888/orders/finished-orders", {params: {"userID": id}}).then((response) => {
                 _rooms = response.data
             });
             setRooms(_rooms);
         } else {
-            await axios.get("http://120.25.216.186:8888/orders/ongoing-orders", {params: {"userID": id}}).then((response) => {
+            await axios.get("http://10.26.111.227:8888/orders/ongoing-orders", {params: {"userID": id}}).then((response) => {
                 _rooms = response.data
             });
             setRooms(_rooms);
@@ -76,12 +76,13 @@ export default function Orders({id}) {
         let roomInfoDict = {}
         for (const idx in _rooms) {
             if (!(_rooms[idx].roomTypeID in roomInfoDict)) {
-                await axios.get("http://120.25.216.186:8888/roomtype", {params: {"id": _rooms[idx].roomTypeID}}).then((response) => {
+                await axios.get("http://10.26.111.227:8888/roomtype", {params: {"id": _rooms[idx].roomTypeID}}).then((response) => {
                     roomInfoDict[_rooms[idx].roomTypeID] = response.data
                 });
             }
         }
         setRoomInfo(roomInfoDict)
+        console.log("testingjh: ", roomInfoDict)
     }
 
     useEffect(() => {
@@ -157,48 +158,6 @@ export default function Orders({id}) {
         )
     }
 
-    function RoomInfoDialog() {
-        const gapHeight = 2;
-        const image_url = "url(" + roomImageUrl[roomOnDialog.roomTypeID % roomImageUrl.length] + ")"
-        return (
-            <>
-                <Dialog
-                    open={infoDialogOpen}
-                    onClose={() => {
-                        setInfoDialogOpen(false)
-                    }}
-                    PaperProps={{sx: {position: "fixed", width: "100%", height: "100%", maxWidth: "md"}}}
-                >
-                    <DialogContent>
-                        <Grid container component="main" sx={{height: '100%'}}>
-                            <Grid
-                                sx={{
-                                    width: "50%",
-                                    height: "100%",
-                                    backgroundImage: image_url,
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundColor: (t) =>
-                                        t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                }}
-                            />
-                            <Grid item width={"47%"} component={Paper} elevation={6} square>
-                                <Grid container marginBottom={10} marginLeft={"5%"}>
-                                    {getListItemContent()}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => {
-                            setInfoDialogOpen(false)
-                        }}>关闭</Button>
-                    </DialogActions>
-                </Dialog>
-            </>
-        )
-    }
 
     function CommentDialog() {
         function showUploadedImages() {
@@ -483,7 +442,7 @@ export default function Orders({id}) {
                     'Content-Type': 'application/json'
                 }
             };
-            const resp = await axios.put('http://120.25.216.186:8888/orders/modifyordertime', body, customConfig);
+            const resp = await axios.put('http://10.26.111.227:8888/orders/modifyordertime', body, customConfig);
             const answer = resp.data
             console.log("answer: ", answer)
             let modifySucceeded = answer.modifySucceeded
@@ -564,11 +523,6 @@ export default function Orders({id}) {
                                 <CardActions sx={{columnGap: "0.5em"}}>
                                     <Button size="medium" variant={"contained"} className={Styles.Button}
                                             onClick={() => {
-                                                setInfoDialogOpen(true);
-                                                setRoomOnDialog(room);
-                                            }}>详情</Button>
-                                    <Button size="medium" variant={"contained"} className={Styles.Button}
-                                            onClick={() => {
                                                 setCommentDialogOpen(true)
                                                 setRoomOnDialog(room)
                                             }}>评价</Button>
@@ -608,10 +562,6 @@ export default function Orders({id}) {
                                     </Typography>
                                 </CardContent>
                                 <CardActions sx={{columnGap: "1em"}}>
-                                    <Button size="medium" className={Styles.Button} onClick={() => {
-                                        setInfoDialogOpen(true);
-                                        setRoomOnDialog(room);
-                                    }}>详情</Button>
                                     <div>
                                         <Button
                                             id="basic-button"
@@ -640,7 +590,7 @@ export default function Orders({id}) {
                                             }}>修改入住时间</MenuItem>
                                             <MenuItem onClick={async () => {
                                                 const body = {"id": roomOnDialog.orderID};
-                                                await axios.post('http://120.25.216.186:8888/orders/delete', body, {
+                                                await axios.post('http://10.26.111.227:8888/orders/delete', body, {
                                                     headers: {
                                                         'Content-Type': 'application/x-www-form-urlencoded'
                                                     }
@@ -675,7 +625,6 @@ export default function Orders({id}) {
             <>
                 {ModifyResponseDialog()}
                 {ModifyDialog()}
-                {RoomInfoDialog()}
                 {CommentDialog()}
                 {ResponseDialog()}
                 <Grid container spacing={2}>

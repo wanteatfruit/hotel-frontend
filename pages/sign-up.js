@@ -50,7 +50,7 @@ export default function SignUp() {
             }
         };
         let response = ''
-        await fetch("http://120.25.216.186:8888/customer/createcustomer", options)
+        await fetch("http://10.26.111.227:8888/customer/createcustomer", options)
             .then((response) => response.text()).then(data => response = data)
         if (response === "true") {
             await router.push({
