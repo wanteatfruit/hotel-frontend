@@ -1,6 +1,6 @@
 import { ChevronLeftOutlined, ChevronRightRounded, IcecreamOutlined } from "@mui/icons-material";
 import { Dialog,DialogActions, Drawer, Box, Stack, TextField, Tabs, Button, Tab, Typography, List, ListItem, ListItemButton, ListItemText, IconButton, Slider, createTheme, ThemeProvider, Autocomplete, FormControl, InputLabel, Select, MenuItem, Grid, DialogTitle, DialogContent, Chip } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider, PickersDay, zhCN } from "@mui/x-date-pickers";
 import React from "react";
 // import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 // import DatePicker from 'react-modern-calendar-datepicker';
@@ -32,6 +32,27 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
         const cost1 = days * pricePerDay
         setBookingCost(cost1)
     }
+
+    const startDateRenderer=(date,selectedDates, pickerDayProps)=>{
+        let validDates = []
+        const today = dayjs().startOf('day')
+        validDates.push(today)
+        for (const key in emptyRooms) {
+            if (Object.hasOwnProperty.call(emptyRooms, key)) {
+                const element = emptyRooms[key];
+                if(element==1){ // dont have room
+                    const newDay = today.add(key,'days')
+                    validDates.push(newDay)
+                }
+            }
+        }
+        if(validDates.includes(date)){
+            return <PickersDay {...pickerDayProps} />
+        }
+        return <PickersDay disabled {...pickerDayProps} />
+
+    }
+
     React.useEffect(() => {
 
         calculateCost()
@@ -39,7 +60,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
     }, [bookingInfo.startDate, bookingInfo.endDate])
 
     React.useEffect(()=>{
-        axios.get(`http://120.25.216.186:8888/roomtype/haveRoom?${roomInfo.roomtypeid}`).then((resp)=>{
+        axios.get(`http://120.25.216.186:8888/roomtype/haveRoom?roomtypeid=${roomInfo.roomtypeid}`).then((resp)=>{
             setEmptyRooms(resp.data)
         })
     })
@@ -58,8 +79,16 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
         }
     })
 
+    function handleInvalidDate(){
+        if (bookingCost<0){
+            alert("请重新选择日期！")
+            return false
+        }
+    }
+
     async function handleOrder(event) {
         event.preventDefault()
+        
         if (localStorage.getItem("isLoggedIn") === "false") {
             alert("请先登录！")
             return
@@ -121,13 +150,15 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
                         </div>
                         <Stack mt={3} gap={0} alignItems='center' width={{xs:'90vw', md:'25vw'}}>
                             <Typography gutterBottom textAlign='start' variant='h6'>{`￥${roomInfo.price}/晚`}</Typography>
-                            <LocalizationProvider dateAdapter={AdapterDayjs} >
+                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={zhCN} >
                                 <Stack mt={2} marginBottom={0} direction='row' gap={0} justifyContent='center' >
                                     <DatePicker
                                         label='入住日期'
                                         minDate={dayjs().startOf("day")}
+                                        maxDate={dayjs().startOf('day').add(29,'days')}
                                         inputFormat="YYYY/MM/DD"
                                         value={bookingInfo.startDate}
+                                        renderDay={startDateRenderer}
                                         onChange={(newDate) => {
                                             setBookingInfo({ ...bookingInfo, startDate: newDate })
                                         }}
@@ -148,7 +179,9 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
                                         label="离开日期"
                                         value={bookingInfo.endDate}
                                         minDate={bookingInfo.startDate.add(1, 'day')}
+                                        maxDate={dayjs().startOf('day').add(30,'days')}
                                         inputFormat="YYYY/MM/DD"
+                                        
                                         onChange={(newDate) => {
                                             setBookingInfo({ ...bookingInfo, endDate: newDate })
                                         }}
@@ -178,7 +211,13 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, specif
                                     <MenuItem value={5}>5位</MenuItem>
                                 </Select>
                             </FormControl>
-                            <Button onClick={()=>setConfirmDialog(true)} color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button>
+                            <Button onClick={()=>{
+                                if( handleInvalidDate()=false){
+                                    return
+                                }
+                                setConfirmDialog(true)
+                                
+                            }} color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button>
                             {specifyRoomNum==true && <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`您选择了${bookingInfo.roomNumber}号房间`}</Typography>}
                             <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography>
 
