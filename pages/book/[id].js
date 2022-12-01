@@ -106,7 +106,7 @@ export default function BookingPage({ }) {
     //get roomtype by hotel
     React.useEffect(() => {
         if (router.isReady) {
-            axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotelName}`).then((resp) => {
+            axios.get(`http://10.26.111.227:8888/roomtype/hotel?hotelName=${hotelName}`).then((resp) => {
                 setRoomList(resp.data)
             })
             // console.log(roomList)
@@ -208,7 +208,7 @@ export default function BookingPage({ }) {
         }
         const uname = localStorage.getItem("username")
         const uid = localStorage.getItem("userID")
-        axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`).then((resp) => {
+        axios.get(`http://10.26.111.227:8888/customer/getbyid?id=${uid}`).then((resp) => {
             if (resp.data.money < bookingCost) {
                 alert("用户余额不足！")
                 return false

@@ -41,7 +41,7 @@ export default function Account({id}) {
 
 
     useEffect(() => {
-        axios.get("http://120.25.216.186:8888/customer/getbyid", {params: {"id": id}}).then((response) => {
+        axios.get("http://10.26.111.227:8888/customer/getbyid", {params: {"id": id}}).then((response) => {
             setUserInfo(response.data);
             console.log(response.data)
         }).catch((error) => {

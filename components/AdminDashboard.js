@@ -31,32 +31,32 @@ export default function AdminDashboard({ }) {
 
     const fetchData = async () => {
       await axios.get(
-        "http://120.25.216.186:8888/manager/hotCity"
+        "http://10.26.111.227:8888/manager/hotCity"
       ).then((resp) => setHotCity(resp.data));
       console.log()
       await axios.get(
-        "http://120.25.216.186:8888/manager/hotHotel"
+        "http://10.26.111.227:8888/manager/hotHotel"
       ).then((resp) => setHotHotel(resp.data));
       await axios.get(
-        "http://120.25.216.186:8888/manager/hotRoomType"
+        "http://10.26.111.227:8888/manager/hotRoomType"
       ).then((resp) => setHotRoom(resp.data));
       await axios.get(
-        "http://120.25.216.186:8888/manager/orderedRoomNums"
+        "http://10.26.111.227:8888/manager/orderedRoomNums"
       ).then((resp) => setOrderCnt(resp.data));
       await axios.get(
-        "http://120.25.216.186:8888/manager/currentCustomer"
+        "http://10.26.111.227:8888/manager/currentCustomer"
       ).then((resp) => setCustCnt(resp.data));
       await axios.get(
-        "http://120.25.216.186:8888/manager/salesByCity"
+        "http://10.26.111.227:8888/manager/salesByCity"
       ).then((resp) => { setSalesByCity(resp.data) })
       await axios.get(
-        "http://120.25.216.186:8888/manager/salesByHotel"
+        "http://10.26.111.227:8888/manager/salesByHotel"
       ).then((resp) => setSalesByHotel(resp.data))
       await axios.get(
-        "http://120.25.216.186:8888/manager/customer-time?city="
+        "http://10.26.111.227:8888/manager/customer-time?city="
       ).then((resp) => setTimeCustomers(resp.data))
       await axios.get(
-        "http://120.25.216.186:8888/manager/sales?city="
+        "http://10.26.111.227:8888/manager/sales?city="
       ).then((resp) => setTimeSales(resp.data))
     }
     // console.log(salesByCity)
@@ -196,35 +196,35 @@ export default function AdminDashboard({ }) {
             <ToggleButtonGroup size='small' color="primary" sx={{paddingBottom:'20px'}}>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/customer-time?city="
+                        "http://10.26.111.227:8888/manager/customer-time?city="
                       ).then((resp) => setTimeCustomers(resp.data))
                 }}>
                   全部
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/customer-time?city=深圳"
+                        "http://10.26.111.227:8888/manager/customer-time?city=深圳"
                       ).then((resp) => setTimeCustomers(resp.data))
                 }}>
                   深圳
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/customer-time?city=广州"
+                        "http://10.26.111.227:8888/manager/customer-time?city=广州"
                       ).then((resp) => setTimeCustomers(resp.data))
                 }}>
                   广州
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/customer-time?city=上海"
+                        "http://10.26.111.227:8888/manager/customer-time?city=上海"
                       ).then((resp) => setTimeCustomers(resp.data))
                 }}>
                   上海
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/customer-time?city=重庆"
+                        "http://10.26.111.227:8888/manager/customer-time?city=重庆"
                       ).then((resp) => setTimeCustomers(resp.data))
                 }}>
                   重庆
@@ -283,35 +283,35 @@ export default function AdminDashboard({ }) {
             <ToggleButtonGroup size='small' color="primary" sx={{paddingBottom:'20px'}}>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/sales?city="
+                        "http://10.26.111.227:8888/manager/sales?city="
                       ).then((resp) => setTimeSales(resp.data))
                 }}>
                   全部
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/sales?city=深圳"
+                        "http://10.26.111.227:8888/manager/sales?city=深圳"
                       ).then((resp) => setTimeSales(resp.data))
                 }}>
                   深圳
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/sales?city=广州"
+                        "http://10.26.111.227:8888/manager/sales?city=广州"
                       ).then((resp) => setTimeSales(resp.data))
                 }}>
                   广州
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/sales?city=上海"
+                        "http://10.26.111.227:8888/manager/sales?city=上海"
                       ).then((resp) => setTimeSales(resp.data))
                 }}>
                   上海
                 </ToggleButton>
                 <ToggleButton onClick={async ()=>{
                       await axios.get(
-                        "http://120.25.216.186:8888/manager/sales?city=重庆"
+                        "http://10.26.111.227:8888/manager/sales?city=重庆"
                       ).then((resp) => setTimeSales(resp.data))
                 }}>
                   重庆

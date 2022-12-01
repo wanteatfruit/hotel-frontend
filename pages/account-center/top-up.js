@@ -88,7 +88,7 @@ export default function TopUp() {
             "money": amount.toString()
         }
         let res = false
-        await axios.post('http://120.25.216.186:8888/customer/money', body, {
+        await axios.post('http://10.26.111.227:8888/customer/money', body, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -99,7 +99,7 @@ export default function TopUp() {
                 "id": userID,
                 "credits": credits.toString()
             }
-            await axios.post('http://120.25.216.186:8888/customer/credits', body, {
+            await axios.post('http://10.26.111.227:8888/customer/credits', body, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -125,7 +125,7 @@ export default function TopUp() {
                 "money": amount
             }
             let res = false
-            await axios.post('http://120.25.216.186:8888/customer/money', body, {
+            await axios.post('http://10.26.111.227:8888/customer/money', body, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

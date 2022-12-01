@@ -35,9 +35,9 @@ import NavBar from "../components/Navbar";
 
 export async function getStaticProps() {
 
-    const hotel_response = await axios.get('http://120.25.216.186:8888/hotel/getAll');
+    const hotel_response = await axios.get('http://10.26.111.227:8888/hotel/getAll');
     const hotel_list = hotel_response.data
-    const room_respose = await axios.get('http://120.25.216.186:8888/roomtype/getAll');
+    const room_respose = await axios.get('http://10.26.111.227:8888/roomtype/getAll');
     const room_list = room_respose.data
     return {
         props: {
@@ -73,7 +73,7 @@ export default function Stay({ hotel_list }) {
 
     async function getMarked() {
         let roomsInfo = ""
-        await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
+        await axios.get("http://10.26.111.227:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
             roomsInfo = response.data
         });
         let newList = []
@@ -86,7 +86,7 @@ export default function Stay({ hotel_list }) {
 
     React.useEffect(() => {
         if (hotel === '') {
-            axios.get("http://120.25.216.186:8888/roomtype/getAll").then((resp) => {
+            axios.get("http://10.26.111.227:8888/roomtype/getAll").then((resp) => {
                 setRoomList(resp.data)
             })
             console.log(roomList)
@@ -102,7 +102,7 @@ export default function Stay({ hotel_list }) {
 
     React.useEffect(() => {
         if (hotel !== '') {
-            axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
+            axios.get(`http://10.26.111.227:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
                 setRoomList(resp.data)
             })
         }
@@ -110,7 +110,7 @@ export default function Stay({ hotel_list }) {
 
     function handleFilter() {
         const intro = `窗户%7C${convertYesNo(roomIntro[0])},阳台%7C${convertYesNo(roomIntro[1])},洗衣房%7C${convertYesNo(roomIntro[2])}`
-        const url = `http://120.25.216.186:8888/roomtype/findByParameter?roomName=${roomName}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&guestNum=${guestsNumber}&introduction=${intro}`
+        const url = `http://10.26.111.227:8888/roomtype/findByParameter?roomName=${roomName}&minPrice=${priceRange[0]}&maxPrice=${priceRange[1]}&guestNum=${guestsNumber}&introduction=${intro}`
         // console.log(url)
         axios.get(url).then((resp) => {
             setRoomList(resp.data)
@@ -119,7 +119,7 @@ export default function Stay({ hotel_list }) {
     }
     function handleReset() {
         if (hotel !== '') {
-            axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
+            axios.get(`http://10.26.111.227:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
                 setRoomList(resp.data)
             })
         }

@@ -57,7 +57,7 @@
             new BMapGL.Size(60, 60)
         );
         let hotels = null;
-        await fetch("http://120.25.216.186:8888/hotel/getAll")
+        await fetch("http://10.26.111.227:8888/hotel/getAll")
             .then((response) => response.json())
             .then((data) => (hotels = data));
         let count = 0;

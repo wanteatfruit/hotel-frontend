@@ -97,13 +97,13 @@ export default function NavBar({
     useEffect(() => {
         setIsLoggedIn(localStorage.getItem("isLoggedIn"))
         setAdminLoggedIn(localStorage.getItem("adminLoggedIn"))
-        axios.get('http://120.25.216.186:8888/event/haveEvent').then((resp) => {
+        axios.get('http://10.26.111.227:8888/event/haveEvent').then((resp) => {
             setEventInfo(resp.data)
         })
     }, [saleDialogOpen])
     useEffect(() => {
         if (eventInfo !== null) {
-            axios.get(`http://120.25.216.186:8888/roomtype?id=${eventInfo.roomtypeid}`).then((resp) => {
+            axios.get(`http://10.26.111.227:8888/roomtype?id=${eventInfo.roomtypeid}`).then((resp) => {
                 setSaleRoomInfo(resp.data)
             })
         }

@@ -80,10 +80,10 @@ export default function BranchIntro({
             }
         }
         if (isChecked) {
-            await fetch("http://120.25.216.186:8888/hotelwishlist/add", options)
+            await fetch("http://10.26.111.227:8888/hotelwishlist/add", options)
                 .then((response) => response.text()).then(data => console.log(data))
         } else {
-            await fetch("http://120.25.216.186:8888/hotelwishlist/remove", options)
+            await fetch("http://10.26.111.227:8888/hotelwishlist/remove", options)
                 .then((response) => response.text()).then(data => console.log(data))
         }
         // refreshRooms()

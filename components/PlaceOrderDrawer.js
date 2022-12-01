@@ -87,7 +87,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
     }, [bookingInfo.startDate, bookingInfo.endDate])
 
     React.useEffect(() => {
-        axios.get(`http://120.25.216.186:8888/roomtype/haveRoom?roomtypeid=${roomInfo.roomtypeid}`).then((resp) => {
+        axios.get(`http://10.26.111.227:8888/roomtype/haveRoom?roomtypeid=${roomInfo.roomtypeid}`).then((resp) => {
             setEmptyRooms(resp.data)
         })
     }, [roomInfo.roomtypeid])
@@ -121,7 +121,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
         }
         const uname = localStorage.getItem("username")
         const uid = localStorage.getItem("userID")
-        axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`).then((resp)=>{
+        axios.get(`http://10.26.111.227:8888/customer/getbyid?id=${uid}`).then((resp)=>{
             if(resp.data.money<bookingCost){
                 alert("用户余额不足！")
                 return false
@@ -138,11 +138,18 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
                 username: uname,
                 roomtypeid: roomInfo.roomtypeid
             }
-            fetch('http://120.25.216.186:8888/sec', {
+            fetch('http://10.26.111.227:8888/sec', {
                 method: 'POST',
                 body: JSON.stringify(saleOrderInfo),
                 headers: {
                     'Content-type': 'application/json'
+                }
+            }).then((resp)=>{
+                if(resp.status==201){
+                    setOrderReply('您选择的日期已无空房，请重新选择日期')
+                }
+                else{
+                    setOrderReply('预定成功！')
                 }
             })
 
@@ -158,7 +165,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
         }
         console.log(orderInfo)
 
-        fetch('http://120.25.216.186:8888/orders/booking', {
+        fetch('http://10.26.111.227:8888/orders/booking', {
             method: 'POST',
             body: JSON.stringify(orderInfo),
             headers: {

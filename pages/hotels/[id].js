@@ -47,7 +47,7 @@ export default function HotelDetail() {
     const [markedRooms, setMarkedRooms] = useState([])
     async function getMarked() {
         let roomsInfo = ""
-        await axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
+        await axios.get("http://10.26.111.227:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
             roomsInfo = response.data
         });
         console.log("userid: ", userID)
@@ -57,7 +57,7 @@ export default function HotelDetail() {
         }
         setMarkedRooms(newList)
         let hotelsInfo = ""
-        await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
+        await axios.get("http://10.26.111.227:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
             hotelsInfo = response.data
             console.log(response.data)
         });
@@ -78,7 +78,7 @@ export default function HotelDetail() {
         if (userID !== "0") {
             getMarked()
             // let roomsInfo = ""
-            // axios.get("http://120.25.216.186:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
+            // axios.get("http://10.26.111.227:8888/roomtypewishlist", {params: {"userId": userID}}).then((response) => {
             //     roomsInfo = response.data
             //     let newList = []
             //     for (const roomsInfoKey in roomsInfo) {
@@ -90,7 +90,7 @@ export default function HotelDetail() {
             //
             //
             // let hotelsInfo = ""
-            // axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
+            // axios.get("http://10.26.111.227:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
             //     hotelsInfo = response.data
             //     console.log(response.data)
             // });
@@ -101,14 +101,14 @@ export default function HotelDetail() {
 
     React.useEffect(() => {
         if (router.isReady) {
-            axios.get(`http://120.25.216.186:8888/hotel?hotelName=${hotel_name}`).then((resp) => {
+            axios.get(`http://10.26.111.227:8888/hotel?hotelName=${hotel_name}`).then((resp) => {
                 setHotelInfo(resp.data);
             })
         }
     }, [router.isReady])
     React.useEffect(() => {
         if (router.isReady) {
-            axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel_name}`).then((resp) => {
+            axios.get(`http://10.26.111.227:8888/roomtype/hotel?hotelName=${hotel_name}`).then((resp) => {
                 setRoomList(resp.data)
             })
         }

@@ -54,6 +54,7 @@ export default function RoomCard({
     const [roomName, setRoomName] = React.useState(roomInfo === undefined ? "" : roomInfo.roomname)
     const [roomPrice, setRoomPrice] = React.useState(roomInfo === undefined ? "" : roomInfo.price)
     const [roomIntro, setRoomIntro] = React.useState([false, false, false])
+    const [toUpdateIntro, setToUpdateIntro] = React.useState([false,false,false])
     const [isMarked, setIsMarked] = useState(false)
     const [onSale, setOnSale] = useState(false)
     const [orderDrawer, setOrderDrawer] = useState(false);
@@ -97,10 +98,10 @@ export default function RoomCard({
 
 
     async function handleUpdate() { //handle post request here
-        const intro = `窗户|${convertYesNo(roomIntro[0])},阳台|${convertYesNo(roomIntro[1])},洗衣房|${convertYesNo(roomIntro[2])}`
+        const intro = `窗户|${convertYesNo(toUpdateIntro[0])},阳台|${convertYesNo(toUpdateIntro[1])},洗衣房|${convertYesNo(toUpdateIntro[2])}`
         const updatedInfo = { roomTypeName: roomName, price: roomPrice, introduction: intro, roomTypeId: roomInfo.roomtypeid, number: guestNum }
         console.log(updatedInfo)
-        const response = await fetch('http://120.25.216.186:8888/roomtype/updateRoomType', {
+        const response = await fetch('http://10.26.111.227:8888/roomtype/updateRoomType', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -108,10 +109,11 @@ export default function RoomCard({
             body: JSON.stringify(updatedInfo)
         })
         console.log(response)
+        window.location.reload();
     }
 
     function handleDelete() {
-        axios.get(`http://120.25.216.186:8888/roomtype/deleteRoom?roomID=${roomInfo.roomtypeid}`).then((resp) => {
+        axios.get(`http://10.26.111.227:8888/roomtype/deleteRoom?roomID=${roomInfo.roomtypeid}`).then((resp) => {
             console.log(resp.status)
         })
         // console.log(roomInfo.roomtypeid)
@@ -130,7 +132,7 @@ export default function RoomCard({
         }
         console.log("here: ", body)
         if (isChecked) {
-            await fetch("http://120.25.216.186:8888/roomtypewishlist/add", options)
+            await fetch("http://10.26.111.227:8888/roomtypewishlist/add", options)
                 .then((response) => response.text()).then(data => console.log(data))
         } else {
             const info = JSON.stringify(body);
@@ -139,7 +141,7 @@ export default function RoomCard({
                     'Content-Type': 'application/json'
                 }
             };
-            const result = await axios.put('http://120.25.216.186:8888/roomtypewishlist/remove', info, customConfig);
+            const result = await axios.put('http://10.26.111.227:8888/roomtypewishlist/remove', info, customConfig);
             console.log("result: ", result)
         }
         // refreshRooms()
@@ -191,7 +193,13 @@ export default function RoomCard({
                         {needHotelName==undefined && <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
 }
                         <Typography variant="body1">{`推荐入住${roomInfo.number}人`}</Typography>
-
+                        {admin == true && <Typography variant="body1" textAlign='start'>{`${roomInfo.price}RMB / 晚`}</Typography>}
+                        {admin==true &&                             <FormGroup sx={{ flexDirection: 'row', padding: 0 }}>
+                            <FormControlLabel control={<Checkbox readOnly checked={roomIntro[0]} />} label="窗户" />
+                            <FormControlLabel control={<Checkbox readOnly checked={roomIntro[1]} />} label="阳台" />
+                            <FormControlLabel control={<Checkbox readOnly checked={roomIntro[2]} />} label="洗衣房" />
+                        </FormGroup>
+                        }
                     </CardContent>
                     {admin == false &&
                         <CardContent sx={{ mb: 0 }}>
@@ -235,7 +243,7 @@ export default function RoomCard({
                                         "roomTypeID": roomTypeID,
                                         "hotelID": hotelID
                                     }
-                                    await fetch('http://120.25.216.186:8888/roomtypewishlist/add', {
+                                    await fetch('http://10.26.111.227:8888/roomtypewishlist/add', {
                                         method: 'PUT',
                                         headers: {
                                             'Content-type': 'application/json'
@@ -279,9 +287,9 @@ export default function RoomCard({
                         </TextField>
                         <Typography variant="h6">杂项</Typography>
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox checked={roomIntro[0]} onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])} />} label="窗户" />
-                            <FormControlLabel control={<Checkbox checked={roomIntro[1]} onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])} />} label="阳台" />
-                            <FormControlLabel control={<Checkbox checked={roomIntro[2]} onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])} />} label="洗衣房" />
+                            <FormControlLabel control={<Checkbox checked={toUpdateIntro[0]} onChange={(event) => setToUpdateIntro([event.target.checked, toUpdateIntro[1], toUpdateIntro[2]])} />} label="窗户" />
+                            <FormControlLabel control={<Checkbox checked={toUpdateIntro[1]} onChange={(event) => setToUpdateIntro([toUpdateIntro[0], event.target.checked, toUpdateIntro[2]])} />} label="阳台" />
+                            <FormControlLabel control={<Checkbox checked={toUpdateIntro[2]} onChange={(event) => setToUpdateIntro([toUpdateIntro[0], toUpdateIntro[1], event.target.checked])} />} label="洗衣房" />
                         </FormGroup>
                     </Stack>
                     <Button onClick={() => setchangeInfo(false)}>取消</Button>
