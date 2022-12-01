@@ -179,7 +179,7 @@ export default function HotelDetail() {
                     </Grid>
                 </Box>
                 <Box sx={{paddingX: {xs: 0, sm: 4}, paddingY: 6}}>
-                    <CommentArea hotelID={hotel_name}/>
+                    <CommentArea hotelName={hotel_name}/>
                 </Box>
             </Box>
             <Dialog keepMounted fullScreen={fullScreenMap} fullWidth maxWidth='lg'

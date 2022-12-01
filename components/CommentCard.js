@@ -62,12 +62,12 @@ export default function CommentCard({ comments, meanScore }) {
             <Card elevation={false} sx={{ borderRadius: 0 }}>
                 <CardHeader sx={{ paddingBottom: 0 }} avatar={
                     <Avatar variant="rounded" src={getCommentScore(comments.score)}></Avatar>
-                } title={comments.roomType} subheader={comments.commentTime.substring(0, 7)}>
+                } title={comments.roomtypename} subheader={comments.commenttime.substring(0, 7)}>
 
                 </CardHeader>
                 <CardContent>
-                    <Typography>{comments.text}</Typography>
-                    <Rating value={comments.score} max={5} precision={2} readOnly />
+                    <Typography>{comments.words}</Typography>
+                    <Rating value={comments.score/2} max={5} precision={1} readOnly />
                 </CardContent>
                 <CardActions sx={{ paddingTop: 0, paddingBottom: 2, paddingX: 2, display: { xs: 'none', sm: 'flex' } }}>
                     {comments.picture1 !== null && <Button onClick={handleZoom}   sx={{ backgroundImage: `url(${comments.picture1})`, height: '120px', width: '10vw', backgroundSize: 'cover', borderRadius: 1 }}></Button>}

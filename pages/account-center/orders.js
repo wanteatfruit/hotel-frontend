@@ -346,7 +346,7 @@ export default function Orders({id}) {
                                     <VideoCallIcon/>
                                 </IconButton>
                             </Grid>
-                            <Grid><Typography>You can upload three photos and one video</Typography></Grid>
+                            <Grid><Typography>您可以最多上传三张照片和一个视频</Typography></Grid>
                             {showUploadedImages()}
                             {showUploadedVideo()}
                         </Grid>
