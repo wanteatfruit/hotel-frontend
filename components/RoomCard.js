@@ -25,10 +25,10 @@ import {
 } from "@mui/material"
 import styles from "../styles/RoomCard.module.css"
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {ChevronLeftOutlined} from "@mui/icons-material";
+import { ChevronLeftOutlined } from "@mui/icons-material";
 import Image from "next/image";
-import React, {useState, useSyncExternalStore} from "react";
-import {CheckBox, ColorLensSharp, DiscountOutlined} from "@mui/icons-material";
+import React, { useState, useSyncExternalStore } from "react";
+import { CheckBox, ColorLensSharp, DiscountOutlined } from "@mui/icons-material";
 import axios from "axios";
 import Grid from "@mui/material/Grid";
 import PlaceOrder from "./PlaceOrderDrawer";
@@ -45,6 +45,8 @@ export default function RoomCard({
                                      markedRooms,
                                      userID,
                                      needMarkBox,
+                                     needHotelName,
+                                     refreshRooms
                                  }) {
     const [deleteDialog, setDeleteDialog] = React.useState(false);
     const [changeInfo, setchangeInfo] = React.useState(false)
@@ -55,7 +57,6 @@ export default function RoomCard({
     const [isMarked, setIsMarked] = useState(false)
     const [onSale, setOnSale] = useState(false)
     const [orderDrawer, setOrderDrawer] = useState(false);
-
     function handleIntroduction() {
         let intro = roomInfo.introduction
         const intro_array = intro.split(",")
@@ -90,19 +91,14 @@ export default function RoomCard({
     function convertYesNo(bool) {
         if (bool === false) {
             return "无"
-        } else return "有"
+        }
+        else return "有"
     }
 
 
     async function handleUpdate() { //handle post request here
         const intro = `窗户|${convertYesNo(roomIntro[0])},阳台|${convertYesNo(roomIntro[1])},洗衣房|${convertYesNo(roomIntro[2])}`
-        const updatedInfo = {
-            roomTypeName: roomName,
-            price: roomPrice,
-            introduction: intro,
-            roomTypeId: roomInfo.roomtypeid,
-            number: guestNum
-        }
+        const updatedInfo = { roomTypeName: roomName, price: roomPrice, introduction: intro, roomTypeId: roomInfo.roomtypeid, number: guestNum }
         console.log(updatedInfo)
         const response = await fetch('http://120.25.216.186:8888/roomtype/updateRoomType', {
             method: 'POST',
@@ -180,38 +176,39 @@ export default function RoomCard({
 
     return (
         <>
-            <Card sx={{borderWidth: 1, borderRadius: 3, borderSpacing: 1}}>
+            <Card sx={{ borderWidth: 1, borderRadius: 3, borderSpacing: 1 }}>
                 <CardMedia component='img' loading="eager" src={imageUrl}
-                           height="300">
+                    height="300">
 
                 </CardMedia>
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                    <CardContent sx={{paddingBottom: '0px'}}>
-                        <Typography variant="h5" sx={{paddingBottom: '4px'}}>{roomInfo.roomname}</Typography>
-
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <CardContent sx={{ paddingBottom: '0px' }}>
+                        {needHotelName==true &&<Stack direction='row' justifyContent='space-between'>
+                            <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
+                            <Chip label={`${hotelName}`} clickable component='a' href={`/hotels/${hotelName}`}></Chip>
+                            </Stack>}
+                        {needHotelName==undefined && <Typography variant="h5" sx={{ paddingBottom: '4px' }}>{roomInfo.roomname}</Typography>
+}
                         <Typography variant="body1">{`推荐入住${roomInfo.number}人`}</Typography>
 
                     </CardContent>
                     {admin == false &&
-                        <CardContent sx={{mb: 0}}>
-                            <FormGroup sx={{flexDirection: 'row', padding: 0}}>
-                                <FormControlLabel control={<Checkbox readOnly checked={roomIntro[0]}/>} label="窗户"/>
-                                <FormControlLabel control={<Checkbox readOnly checked={roomIntro[1]}/>} label="阳台"/>
-                                <FormControlLabel control={<Checkbox readOnly checked={roomIntro[2]}/>} label="洗衣房"/>
+                        <CardContent sx={{ mb: 0 }}>
+                            <FormGroup sx={{ flexDirection: 'row', padding: 0 }}>
+                                <FormControlLabel control={<Checkbox readOnly checked={roomIntro[0]} />} label="窗户" />
+                                <FormControlLabel control={<Checkbox readOnly checked={roomIntro[1]} />} label="阳台" />
+                                <FormControlLabel control={<Checkbox readOnly checked={roomIntro[2]} />} label="洗衣房" />
                             </FormGroup>
-                            <Divider sx={{mb: 1}}/>
-                            {admin == false && onSale == false &&
-                                <Typography textAlign='center' variant="h6">{`${roomInfo.price}RMB / 晚`}</Typography>}
-                            {admin == true && <Typography variant="body1"
-                                                          textAlign='center'>{`${roomInfo.price}RMB / 晚`}</Typography>}
+                            <Divider sx={{ mb: 1 }} />
+                            {admin == false && onSale == false && <Typography textAlign='center' variant="h6">{`${roomInfo.price}RMB / 晚`}</Typography>}
+                            {admin == true && <Typography variant="body1" textAlign='center'>{`${roomInfo.price}RMB / 晚`}</Typography>}
                             {admin == false && onSale == true &&
                                 <Stack justifyContent='center'>
-                                    <Typography variant="h6" textAlign='center' sx={{textDecoration: 'line-through'}}>
+                                    <Typography variant="h6" textAlign='center' sx={{ textDecoration: 'line-through' }}>
                                         {`${roomInfo.price}RMB / 晚`}
                                     </Typography>
                                     <Stack direction='row' justifyContent='center'>
-                                        <Typography variant="h6" textAlign='center'
-                                                    sx={{paddingRight: 1}}> {`${roomInfo.afterEventPrice}RMB / 晚`}</Typography>
+                                        <Typography variant="h6" textAlign='center' sx={{ paddingRight: 1 }}> {`${roomInfo.afterEventPrice}RMB / 晚`}</Typography>
                                         <Chip size="medium" color="success" label={'-' + getOff() + '%'}></Chip>
                                     </Stack>
                                 </Stack>
@@ -221,7 +218,7 @@ export default function RoomCard({
                     }
                 </div>
                 {admin == false &&
-                    <Grid sx={{display: "flex", flexDirection: "row", alignItems: "center", width: "100%"}}>
+                    <Grid sx={{ display: "flex", flexDirection: "row", alignItems: "center", width: "100%" }}>
                         {MarkBox()}
                         <Grid sx={{
                             display: "flex",
@@ -247,59 +244,47 @@ export default function RoomCard({
                                 }
                                 }>
                                 </IconButton>
-                                <Button variant="contained" onClick={() => setOrderDrawer(true)}>订房</Button>
+                                <Button variant="contained"  onClick={() => setOrderDrawer(true)}>订房</Button>
                             </CardActions>
                         </Grid>
                     </Grid>
                 }
                 {admin &&
-                    <CardActions sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <CardActions sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                         <div>
-                            <Button onClick={() => setchangeInfo(!changeInfo)}>修改信息</Button>
-                            <Button onClick={() => {
-                                setDeleteDialog(true);
-                            }}
+                            <Button onClick={() => setchangeInfo(!changeInfo)} >修改信息</Button>
+                            <Button onClick={() => { setDeleteDialog(true); }}
                             >删除房间</Button>
                         </div>
 
                     </CardActions>
                 }
             </Card>
-            <Backdrop open={changeInfo} sx={{zIndex: 10000}}>
-                <Paper sx={{width: 'max-content', padding: 2}}>
-                    <Typography variant="h4" sx={{marginBottom: 3}}>修改信息</Typography>
-                    <Stack gap={2}>
+            <Backdrop open={changeInfo} sx={{ zIndex: 10000 }}>
+                <Paper sx={{ width: 'max-content', padding: 2 }} >
+                    <Typography variant="h4" sx={{ marginBottom: 3 }}>修改信息</Typography>
+                    <Stack gap={2} >
                         <TextField value={roomName} onChange={(event) => {
                             setRoomName(event.target.value);
                         }} label="房间名" required>
                         </TextField>
                         <TextField value={roomPrice} onChange={(event) => {
                             setRoomPrice(event.target.value)
-                        }} inputProps={{type: 'numeric', pattern: "^([0-9]*[.])?[0-9]+$"}} label="价格" required>
+                        }} inputProps={{ type: 'numeric', pattern: "^([0-9]*[.])?[0-9]+$" }} label="价格" required>
                         </TextField>
                         <TextField value={guestNum} onChange={(event) => {
                             setGuestNum(event.target.value)
-                        }} inputProps={{type: 'numeric', pattern: "^([0-9]*[.])?[0-9]+$"}} label="入住人数" required>
+                        }} inputProps={{ type: 'numeric', pattern: "^([0-9]*[.])?[0-9]+$" }} label="入住人数" required>
                         </TextField>
                         <Typography variant="h6">杂项</Typography>
                         <FormGroup>
-                            <FormControlLabel control={<Checkbox checked={roomIntro[0]}
-                                                                 onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])}/>}
-                                              label="窗户"/>
-                            <FormControlLabel control={<Checkbox checked={roomIntro[1]}
-                                                                 onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])}/>}
-                                              label="阳台"/>
-                            <FormControlLabel control={<Checkbox checked={roomIntro[2]}
-                                                                 onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])}/>}
-                                              label="洗衣房"/>
+                            <FormControlLabel control={<Checkbox checked={roomIntro[0]} onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])} />} label="窗户" />
+                            <FormControlLabel control={<Checkbox checked={roomIntro[1]} onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])} />} label="阳台" />
+                            <FormControlLabel control={<Checkbox checked={roomIntro[2]} onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])} />} label="洗衣房" />
                         </FormGroup>
                     </Stack>
                     <Button onClick={() => setchangeInfo(false)}>取消</Button>
-                    <Button variant="contained" onClick={() => {
-                        handleUpdate();
-                        refresh();
-                        setchangeInfo(false)
-                    }}>提交</Button>
+                    <Button variant="contained" onClick={() => { handleUpdate(); refresh(); setchangeInfo(false) }}>提交</Button>
                 </Paper>
             </Backdrop>
             <Dialog open={deleteDialog}>
@@ -308,17 +293,13 @@ export default function RoomCard({
                     <DialogContentText>你确定要删除这个房间吗？此操作不可逆</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setDeleteDialog(false)}>取消</Button>
-                    <Button onClick={() => {
-                        handleDelete();
-                        refresh("广州1号");
-                        setDeleteDialog(false)
-                    }}>确定</Button>
+                    <Button onClick={() => setDeleteDialog(false)} >取消</Button>
+                    <Button onClick={() => { handleDelete(); refresh("广州1号"); setDeleteDialog(false) }}>确定</Button>
                 </DialogActions>
             </Dialog>
             <PlaceOrder hotelName={hotelName} roomInfo={roomInfo} open={orderDrawer}>
                 <IconButton onClick={() => setOrderDrawer(false)} color="secondary">
-                    <ChevronLeftOutlined fontSize="large"/>
+                    <ChevronLeftOutlined fontSize="large" />
                 </IconButton>
                 <Typography variant="h3" color='secondary'>{hotelName}</Typography>
             </PlaceOrder>

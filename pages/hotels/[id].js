@@ -129,7 +129,9 @@ export default function HotelDetail() {
 
     return (
         <ThemeProvider theme={theme}>
-            <NavBar href={"/hotels/" + hotel_name} refreshUserInfo={() => {setUserID(0)}}/>
+            <NavBar href={"/hotels/" + hotel_name} refreshUserInfo={() => {
+                setUserID(0)
+            }}/>
             <Box
                 component="main"
                 sx={{
@@ -150,8 +152,7 @@ export default function HotelDetail() {
                 }}>
                     <Typography paddingBottom={2} variant="h4">开启您的旅程</Typography>
                     <BranchIntro hotelInfo={hotelInfo} name={hotel_name} userID={userID}
-                                 url={"https://images.unsplash.com/photo-1608381742187-ea4b48c56630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1224&q=80"}
-                                 description={'改革开放的起点'} markedHotels={markedHotels}/>
+                                 markedHotels={markedHotels}/>
                 </Box>
                 <Box sx={{paddingX: {xs: 0, sm: 4}, paddingY: 6}}>
                     <Grid container spacing={4} columns={24}>
@@ -168,8 +169,9 @@ export default function HotelDetail() {
                                 <motion.div viewport={{once: true}} initial='offscreen' whileInView='onscreen'
                                             variants={cardVariants}>
                                     <RoomCard roomInfo={item} hotelName={hotel_name}
-                                              imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
-                                              admin={false} needMarkBox={true} userID={userID} markedRooms={markedRooms}></RoomCard>
+                                              admin={false} needMarkBox={true} userID={userID} markedRooms={markedRooms}
+                                              imageUrl={roomImageUrl[item.roomtypeid]}></RoomCard>
+
                                 </motion.div>
                             </Grid>
                         ))}
@@ -177,7 +179,7 @@ export default function HotelDetail() {
                     </Grid>
                 </Box>
                 <Box sx={{paddingX: {xs: 0, sm: 4}, paddingY: 6}}>
-                    {/*<CommentArea hotelID={hotel_name} />*/}
+                    <CommentArea hotelID={hotel_name}/>
                 </Box>
             </Box>
             <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg'

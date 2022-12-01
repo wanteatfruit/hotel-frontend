@@ -9,6 +9,7 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
+    Stack,
     Typography
 } from "@mui/material";
 import {fullScreenHotelImageUrl} from "../data";
@@ -88,69 +89,79 @@ export default function BranchIntro({
         // refreshRooms()
     }
 
-    const pic_url = fullScreenHotelImageUrl[x]
+    const pic_url = fullScreenHotelImageUrl[hotelInfo.hotelid - 1]
     return (
-        <Card sx={{display: 'flex', width: '98%'}} elevation={5}>
+        <Card sx={{display: 'flex', width: '98%', borderRadius: 5}} elevation={1}>
             <Box sx={{display: 'flex', flexDirection: {xs: 'column', sm: 'column', md: 'row'}, width: 'max-content'}}>
                 <CardMedia component='img' src={pic_url} sx={{width: {md: '60%', sm: '100%'}}}/>
-                <CardContent>
+                <CardContent sx={{justifyContent: 'space-between'}}>
                     <Typography variant="h4">{hotelInfo.hotelname}</Typography>
                     <hr/>
-                    <List>
-                        <ListItem disableGutters>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <LocationCityRoundedIcon/>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={hotelInfo.cityname}/>
-                        </ListItem>
-                        <ListItem disableGutters>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <BeachAccessOutlinedIcon/>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={hotelInfo.explanation}/>
-                        </ListItem>
-                        <ListItem disableGutters>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <HomeRoundedIcon/>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={hotelInfo.address}/>
-                        </ListItem>
-                        <ListItem disableGutters>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <PhoneInTalkRoundedIcon/>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={hotelInfo.telephone}/>
-                        </ListItem>
-                        <ListItem disableGutters>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <AlternateEmailRoundedIcon/>
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText primary={hotelInfo.email}/>
-                        </ListItem>
-                    </List>
+                    <div>
+                        <List>
+                            <ListItem disableGutters>
+                                <ListItemAvatar>
+                                    <Avatar sx={{backgroundColor: 'var(--color-1)'}}>
+                                        <LocationCityRoundedIcon/>
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary={hotelInfo.cityname}/>
+                            </ListItem>
+                            <ListItem disableGutters>
+                                <ListItemAvatar>
+                                    <Avatar sx={{backgroundColor: 'var(--color-2)'}}>
+                                        <BeachAccessOutlinedIcon/>
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary={hotelInfo.explanation}/>
+                            </ListItem>
+                            <ListItem disableGutters>
+                                <ListItemAvatar>
+                                    <Avatar sx={{backgroundColor: 'var(--color-3)'}}>
+                                        <HomeRoundedIcon/>
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary={hotelInfo.address}/>
+                            </ListItem>
+                            <ListItem disableGutters>
+                                <ListItemAvatar>
+                                    <Avatar sx={{backgroundColor: 'var(--color-4)'}}>
+                                        <PhoneInTalkRoundedIcon/>
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary={hotelInfo.telephone}/>
+                            </ListItem>
+                            <ListItem disableGutters>
+                                <ListItemAvatar>
+                                    <Avatar sx={{backgroundColor: 'var(--color-5)'}}>
+                                        <AlternateEmailRoundedIcon/>
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText primary={hotelInfo.email}/>
+                            </ListItem>
+                        </List>
+                    </div>
+                    <Stack direction='row'>
+                        {userID !== "0" && <Typography textAlign='center' sx={{pt: 1}}>收藏</Typography>
+                            && <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
+                                MarkHotel(event.target.checked)
+                            }}/>
+                        }
+                    </Stack>
                 </CardContent>
-                {userID !== "0" && <Grid
-                    sx={{
-                        justifyContent: 'flex-end',
-                        alignItems: "end",
-                        display: "flex",
-                        flexDirection: "row"
-                    }}>
-                    <Typography sx={{marginBottom: "0.55em"}}>收藏</Typography>
-                    <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
-                        MarkHotel(event.target.checked)
-                    }}/>
-                </Grid>}
+                {/*{userID !== "0" && <Grid*/}
+                {/*    sx={{*/}
+                {/*        justifyContent: 'flex-end',*/}
+                {/*        alignItems: "end",*/}
+                {/*        display: "flex",*/}
+                {/*        flexDirection: "row"*/}
+                {/*    }}>*/}
+
+                {/*    <Typography sx={{marginBottom: "0.55em"}}>收藏</Typography>*/}
+                {/*    <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {*/}
+                {/*        MarkHotel(event.target.checked)*/}
+                {/*    }}/>*/}
+                {/*</Grid>*/}
             </Box>
         </Card>
     )

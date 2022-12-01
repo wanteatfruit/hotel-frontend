@@ -23,13 +23,13 @@ import {
     ListSubheader
 
 } from "@mui/material";
-import {Stack} from "@mui/system";
+import { Stack } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import React, {useEffect, useState} from "react";
 import RoomCard from "../components/RoomCard";
-import {AddCircleOutline} from "@mui/icons-material";
-import {roomImageUrl} from "../data";
+import { AddCircleOutline } from "@mui/icons-material";
+import { roomImageUrl } from "../data";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import NavBar from "../components/Navbar";
 
@@ -50,24 +50,25 @@ export async function getStaticProps() {
 }
 
 
-export default function Stay({hotel_list}) {
+export default function Stay({ hotel_list }) {
     const [roomList, setRoomList] = React.useState(null)
     const [openAdd, setOpenAdd] = React.useState(false);
     const [roomName, setRoomName] = React.useState('')
     const [roomIntro, setRoomIntro] = React.useState([true, true, true])  //get roomtype by hotel
-    const [hotel, setHotel] = React.useState('汤臣一品');
+    const [hotel, setHotel] = React.useState('');
     const [priceRange, setPriceRange] = React.useState([270, 1000])
     const [guestsNumber, setGuestNum] = React.useState(2);
     const minPriceDiff = 30;
     const [markedRooms, setMarkedRooms] = useState([])
     const [markedHotels, setMarkedHotels] = useState([])
     const [userID, setUserID] = useState(0)
+    const [refreshRooms, setRefreshRooms] = useState(false)
     const guestsNumberMarks = [
-        {value: 1, label: '1'},
-        {value: 2, label: '2'},
-        {value: 3, label: '3'},
-        {value: 4, label: '4'},
-        {value: 5, label: '5'},
+        { value: 1, label: '1' },
+        { value: 2, label: '2' },
+        { value: 3, label: '3' },
+        { value: 4, label: '4' },
+        { value: 5, label: '5' },
     ]
 
     async function getMarked() {
@@ -80,16 +81,6 @@ export default function Stay({hotel_list}) {
             newList.push(roomsInfo[roomsInfoKey].roomTypeID)
         }
         setMarkedRooms(newList)
-        // let hotelsInfo = ""
-        // await axios.get("http://120.25.216.186:8888/hotelwishlist", {params: {"userId": userID}}).then((response) => {
-        //     hotelsInfo = response.data
-        // });
-        // for (const hotelsInfoKey in hotelsInfo) {
-        //     setMarkedHotels([
-        //         ...markedHotels,
-        //         hotelsInfo[hotelsInfoKey].hotelID
-        //     ])
-        // }
     }
 
 
@@ -126,7 +117,6 @@ export default function Stay({hotel_list}) {
         })
 
     }
-
     function handleReset() {
         if (hotel !== '') {
             axios.get(`http://120.25.216.186:8888/roomtype/hotel?hotelName=${hotel}`).then((resp) => {
@@ -134,6 +124,7 @@ export default function Stay({hotel_list}) {
             })
         }
     }
+
 
 
     function convertYesNo(bool) {
@@ -164,7 +155,7 @@ export default function Stay({hotel_list}) {
             <NavBar href={"/stay"} refreshUserInfo={() => {setUserID(0)}}/>
             <Grid container spacing={2} columns={16} sx={{padding: 1, marginTop: '60px'}}>
                 <Grid item xs={16} sm={3}>
-                    <Paper elevation={false} sx={{padding: 2}}>
+                    <Paper elevation={false} sx={{ padding: 2 }}>
                         <Stack gap={2}>
                             <Typography variant="h5">筛选</Typography>
                             <Typography>
@@ -178,35 +169,35 @@ export default function Stay({hotel_list}) {
                                 价格
                             </Typography>
                             <Slider min={10} max={1000} valueLabelDisplay='on' value={priceRange}
-                                    onChange={(event, newValue, activeThumb) => {
-                                        if (activeThumb == 0) {
-                                            setPriceRange([Math.min(newValue[0], priceRange[1] - minPriceDiff), priceRange[1]])
-                                        } else {
-                                            setPriceRange([priceRange[0], Math.max(newValue[1], priceRange[0] + minPriceDiff)])
-                                        }
-                                    }}>
+                                onChange={(event, newValue, activeThumb) => {
+                                    if (activeThumb == 0) {
+                                        setPriceRange([Math.min(newValue[0], priceRange[1] - minPriceDiff), priceRange[1]])
+                                    } else {
+                                        setPriceRange([priceRange[0], Math.max(newValue[1], priceRange[0] + minPriceDiff)])
+                                    }
+                                }}>
                             </Slider>
                             <Typography>
                                 入住人数
                             </Typography>
                             <Slider min={1} max={5} valueLabelDisplay value={guestsNumber} marks={guestsNumberMarks}
-                                    onChange={(event, newValue) => {
-                                        setGuestNum(newValue);
-                                    }}>
+                                onChange={(event, newValue) => {
+                                    setGuestNum(newValue);
+                                }}>
                             </Slider>
-                            <FormGroup sx={{padding: 0}}>
+                            <FormGroup sx={{ padding: 0 }}>
                                 <FormControlLabel control={<Checkbox checked={roomIntro[0]}
-                                                                     onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])}/>}
-                                                  label="窗户"/>
+                                    onChange={(event) => setRoomIntro([event.target.checked, roomIntro[1], roomIntro[2]])} />}
+                                    label="窗户" />
                                 <FormControlLabel control={<Checkbox checked={roomIntro[1]}
-                                                                     onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])}/>}
-                                                  label="阳台"/>
+                                    onChange={(event) => setRoomIntro([roomIntro[0], event.target.checked, roomIntro[2]])} />}
+                                    label="阳台" />
                                 <FormControlLabel control={<Checkbox checked={roomIntro[2]}
-                                                                     onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])}/>}
-                                                  label="洗衣房"/>
+                                    onChange={(event) => setRoomIntro([roomIntro[0], roomIntro[1], event.target.checked])} />}
+                                    label="洗衣房" />
                             </FormGroup>
                             <Stack direction='row' justifyContent='space-between'>
-                                <Button fullWidth onClick={handleReset}>重设</Button>
+                                <Button fullWidth onClick={handleReset} >重设</Button>
                                 <Button fullWidth variant="outlined" onClick={handleFilter}>提交</Button>
 
                             </Stack>
@@ -228,7 +219,7 @@ export default function Stay({hotel_list}) {
                         <div>
                             <Typography variant="h5">房型查询</Typography>
                         </div>
-                        <FormControl variant="standard" sx={{width: '30%'}}>
+                        <FormControl variant="standard" sx={{ width: '30%' }}>
                             <InputLabel>分店</InputLabel>
                             <Select value={hotel} label="分店" onChange={(e) => {
                                 setHotel(e.target.value)
@@ -237,29 +228,25 @@ export default function Stay({hotel_list}) {
                                     {hotel_list[0].cityname}
                                 </ListSubheader>
                                 {hotel_list !== undefined && hotel_list.map((item) => (
-                                    item.cityname == "深圳" &&
-                                    <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                    item.cityname == "深圳" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
                                 ))}
                                 <ListSubheader>
                                     广州
                                 </ListSubheader>
                                 {hotel_list !== undefined && hotel_list.map((item) => (
-                                    item.cityname == "广州" &&
-                                    <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                    item.cityname == "广州" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
                                 ))}
                                 <ListSubheader>
                                     上海
                                 </ListSubheader>
                                 {hotel_list !== undefined && hotel_list.map((item) => (
-                                    item.cityname == "上海" &&
-                                    <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                    item.cityname == "上海" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
                                 ))}
                                 <ListSubheader>
                                     重庆
                                 </ListSubheader>
                                 {hotel_list !== undefined && hotel_list.map((item) => (
-                                    item.cityname == "重庆" &&
-                                    <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
+                                    item.cityname == "重庆" && <MenuItem key={item.hotelid} value={item.hotelname}>{item.hotelname}</MenuItem>
                                 ))}
 
                             </Select>
@@ -269,13 +256,15 @@ export default function Stay({hotel_list}) {
                         {roomList != null ? (
                             roomList.map((item) => (
                                 <Grid key={item.roomtypeid} item xs={12} md={6} lg={4} xl={4} padding={2}>
-                                    <RoomCard hotelID={item.hotelid} hotelName={hotel} admin={false}
-                                              roomName={item.roomname}
-                                              roomInfo={item} roomTypeID={item.roomtypeid}
-                                              imageUrl={roomImageUrl[item.roomtypeid % roomImageUrl.length]}
-                                              markedRooms={markedRooms}
-                                              userID={userID}
-                                              needMarkBox={true}
+                                    <RoomCard hotelID={item.hotelid} hotelName={item.hotelname} admin={false}
+                                        roomName={item.roomname}
+                                        roomInfo={item} roomTypeID={item.roomtypeid}
+                                        imageUrl={roomImageUrl[item.roomtypeid]}
+                                        markedRooms={markedRooms}
+                                        userID={userID}
+                                        refreshRooms={() => setRefreshRooms(!refreshRooms)}
+                                        needMarkBox={true}
+                                        needHotelName={true}
                                     ></RoomCard>
                                 </Grid>
                             ))

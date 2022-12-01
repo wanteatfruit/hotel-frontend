@@ -42,7 +42,7 @@
   background-size: auto 100%;
   background-repeat: round;
   background-position: 0em;
-  animation: underline 3s ease-in-out;
+  animation: underline 2s ease-in-out;
 }
 
 @media screen and (max-width: 900px) {
