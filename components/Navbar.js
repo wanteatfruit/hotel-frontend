@@ -41,31 +41,39 @@ import {
     Slide,
     ThemeProvider,
     useTheme,
-    createTheme
+    createTheme, Paper
 
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FaceIcon from "@mui/icons-material/Face"; //temporary icon for logged in user
-import { login, pages, roomImageUrl, settings } from "../data";
-import { Stack, width } from "@mui/system";
+import {login, pages, roomImageUrl, settings} from "../data";
+import {Stack, width} from "@mui/system";
 import BookingDrawer from "./BookingDrawer";
-import { AlarmOnOutlined, ChevronLeftOutlined, HotelOutlined, ImportContacts, PlaceOutlined, SportsBarOutlined, StormOutlined } from "@mui/icons-material";
+import {
+    AlarmOnOutlined,
+    ChevronLeftOutlined,
+    HotelOutlined,
+    ImportContacts,
+    PlaceOutlined,
+    SportsBarOutlined,
+    StormOutlined
+} from "@mui/icons-material";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useState } from "react";
+import {useRouter} from "next/router";
+import {useEffect} from "react";
+import {useState} from "react";
 import axios from "axios";
 import PlaceOrder from "./PlaceOrderDrawer";
 import RoomCard from "./RoomCard";
 //传入是否已登录，决定用户处显示内容
 export default function NavBar({
-    hotel_list,
-    room_list,
-    buttonsMode,
-    href,
-    refreshUserInfo
-}) {
+                                   hotel_list,
+                                   room_list,
+                                   buttonsMode,
+                                   href,
+                                   refreshUserInfo
+                               }) {
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -79,7 +87,9 @@ export default function NavBar({
     const [saleDialogOpen, setSaleDialogOpen] = useState(false)
     const [displaySales, setDisplaySalesOpen] = useState(true);
     const [eventInfo, setEventInfo] = useState(null);
+
     const [saleRoomInfo, setSaleRoomInfo] = useState({ roomtypeid: 1 });
+
     const [orderOpen, setOrderOpen] = useState(false) //change it to other pages later
 
 
@@ -126,10 +136,11 @@ export default function NavBar({
     const handleLogin = () => {
         router.push({
             pathname: "/sign-in",
-            query: { href: href },
+            query: {href: href},
         })
     }
     ``
+
     function ChatDialog() {
         return (
             <>
@@ -145,14 +156,16 @@ export default function NavBar({
                     //         width: "100%",
                     //         height: "100%",
                     //         maxWidth: "md",
-                    //         backgroundColor: "#f1cec2"
+                    //         backgroundColor: "transparent"
                     //     }
                     // }}
-                    fullWidth
+                    // fullWidth
                 >
-                    <DialogContent>
-                        <iframe src={"/chat-app.html"} frameBorder="0"></iframe>
-                    </DialogContent>
+                    <Paper width={"100%"} elevation={6} square>
+                        <DialogContent>
+                            <iframe src={"/chat-app.html"} frameBorder="0"></iframe>
+                        </DialogContent>
+                    </Paper>
                 </Dialog>
             </>
         )
@@ -166,7 +179,9 @@ export default function NavBar({
         localStorage.setItem("adminLoggedIn", "false")
         setIsLoggedIn("false")
         setAdminLoggedIn("false")
-        refreshUserInfo()
+        if (refreshUserInfo) {
+            refreshUserInfo()
+        }
     }
 
     function LogoutDialog() {
@@ -205,7 +220,7 @@ export default function NavBar({
                         <IconButton onClick={() => {
                             setIsLogoutDialogOpen(true)
                         }} color="inherit">
-                            <LogoutIcon />
+                            <LogoutIcon/>
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="管理中心">
@@ -214,7 +229,7 @@ export default function NavBar({
                                 pathname: "/admin/dashboard"
                             })
                         }} color="inherit">
-                            <SupervisorAccountIcon />
+                            <SupervisorAccountIcon/>
                         </IconButton>
                     </Tooltip>
                 </>
@@ -226,7 +241,7 @@ export default function NavBar({
                         <IconButton onClick={() => {
                             setChatDialogOpen(true)
                         }} color="inherit">
-                            <ChatIcon />
+                            <ChatIcon/>
                         </IconButton>
                     </Tooltip>
                 </>
@@ -237,7 +252,7 @@ export default function NavBar({
                     <>
                         <Tooltip title={"登录"}>
                             <IconButton onClick={handleLogin} color="inherit">
-                                <LoginIcon />
+                                <LoginIcon/>
                             </IconButton>
                         </Tooltip>
                     </>
@@ -249,7 +264,7 @@ export default function NavBar({
                             <IconButton onClick={() => {
                                 setIsLogoutDialogOpen(true)
                             }} color="inherit">
-                                <LogoutIcon />
+                                <LogoutIcon/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="用户中心">
@@ -259,14 +274,14 @@ export default function NavBar({
                                     pathname: path
                                 }, path)
                             }} color="inherit">
-                                <FaceIcon />
+                                <FaceIcon/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="聊天室">
                             <IconButton onClick={() => {
                                 setChatDialogOpen(true)
                             }} color="inherit">
-                                <ChatIcon />
+                                <ChatIcon/>
                             </IconButton>
                         </Tooltip>
                     </>
@@ -285,34 +300,34 @@ export default function NavBar({
 
 
             <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} open={mapOpen} fullWidth
-                maxWidth='lg' sx={{ zIndex: 1000 }}>
+                    maxWidth='lg' sx={{zIndex: 1000}}>
                 <DialogTitle>
                     实时地图
                     <IconButton onClick={() => setMapOpen(false)}>
-                        <CloseIcon />
+                        <CloseIcon/>
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ flexDirection: { md: 'row', xs: 'column' }, display: 'flex' }}>
+                <DialogContent sx={{flexDirection: {md: 'row', xs: 'column'}, display: 'flex'}}>
                     <iframe src={"/map.html"} id="city_map" height="500" width="600" frameBorder="0"
-                        style={{ borderRadius: 10 }}></iframe>
-                    <Stack sx={{ display: { xs: 'none', md: 'flex' }, marginLeft: 2 }} gap={2}>
+                            style={{borderRadius: 10}}></iframe>
+                    <Stack sx={{display: {xs: 'none', md: 'flex'}, marginLeft: 2}} gap={2}>
                         <TicketSZ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(114.04, 22.57)
-                        }} />
+                        }}/>
                         <TicketGZ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(113.23, 23.16)
-                        }} />
+                        }}/>
                         <TicketCQ onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(106.54, 29.59);
                             console.log("clicked change city position")
-                        }} />
+                        }}/>
                         <TicketSH onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(121.4, 31.2)
-                        }} />
+                        }}/>
 
                     </Stack>
                     <Stack direction='row'
-                        sx={{ display: { xs: 'flex', md: 'none' }, marginTop: 2, justifyContent: 'center' }} gap={2}>
+                           sx={{display: {xs: 'flex', md: 'none'}, marginTop: 2, justifyContent: 'center'}} gap={2}>
                         <Button onClick={() => {
                             document.getElementById('city_map').contentWindow.setNewCenter(114.04, 22.57)
                         }} variant="outlined" fullWidth>深圳</Button>
@@ -330,34 +345,34 @@ export default function NavBar({
             </Dialog>
             <BookingDrawer open={bookingOpen} hotel_list={hotel_list} room_list={room_list}>
                 <IconButton onClick={() => setBookingOpen(false)} color="secondary">
-                    <ChevronLeftOutlined fontSize="large" />
+                    <ChevronLeftOutlined fontSize="large"/>
                 </IconButton>
             </BookingDrawer>
             <AppBar
                 position="fixed"
                 color="transparent"
                 variant='outlined'
-                sx={{ zIndex: 1000, backgroundColor: '#fff', }}
+                sx={{zIndex: 1000, backgroundColor: '#fff',}}
             >
                 {/* <Container maxWidth="xl"> */}
-                <Toolbar sx={{ justifyContent: "space-between" }}>
+                <Toolbar sx={{justifyContent: "space-between"}}>
                     {/*设置小屏菜单显示*/}
-                    <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}>
+                    <Box sx={{display: {xs: "flex", md: "none"}, alignItems: "center"}}>
                         <IconButton onClick={handleDrawerToggle} color="inherit">
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Drawer open={drawerOpen} onClose={handleDrawerToggle}>
                             <List>
-                                <ListItem sx={{ width: "fit-content" }}>
+                                <ListItem sx={{width: "fit-content"}}>
                                     <ListItemButton onClick={handleDrawerToggle}>
-                                        <CloseIcon />
+                                        <CloseIcon/>
                                     </ListItemButton>
                                 </ListItem>
                                 {pages.map((item) => (
                                     <ListItem
                                         key={item.name}
                                         disablePadding
-                                        sx={{ width: "100vw" }}
+                                        sx={{width: "100vw"}}
                                     >
                                         <ListItemButton href={item.link}>
                                             <ListItemText primary={item.name}></ListItemText>
@@ -374,7 +389,7 @@ export default function NavBar({
                     {/* 小屏只显示logo，在屏幕中心*/}
 
                     {/*大屏显示完整跳转名称*/}
-                    <Box sx={{ display: { xs: "none", md: "flex" }, }}>
+                    <Box sx={{display: {xs: "none", md: "flex"},}}>
                         <Button variant="outlined" color='secondary' disableElevation sx={{
                             fontFamily: 'Roboto', '&:hover': {
                                 backgroundColor: 'var(--color-5)',
@@ -382,7 +397,7 @@ export default function NavBar({
                                 boxShadow: 'none',
                             }, backgroundColor: 'var(--color-4)', borderRadius: 10, mr: 1
                         }} href="/" size="large"
-                            startIcon={<SportsBarOutlined fontSize="24px" />}>
+                                startIcon={<SportsBarOutlined fontSize="24px"/>}>
                             盛夏小酒
                         </Button>
                         {pages.map((item) => (
@@ -403,6 +418,7 @@ export default function NavBar({
                         {adminLoggedIn!=true && <>
                             <Tooltip title='秒杀活动'>
                             <IconButton color='secondary'
+
                                 size='large' sx={{
                                     backgroundColor: 'var(--color-4)', '&:hover': {
                                         backgroundColor: 'var(--color-5)',
@@ -415,8 +431,8 @@ export default function NavBar({
                         </Tooltip>
                         <Tooltip title='酒店位置'>
                             <IconButton color="inherit"
-                                size="large" onClick={() => setMapOpen(true)}>
-                                <PlaceOutlined />
+                                        size="large" onClick={() => setMapOpen(true)}>
+                                <PlaceOutlined/>
                             </IconButton>
                         </Tooltip></>}
 
@@ -443,7 +459,12 @@ export default function NavBar({
                         </Menu>
                         {/* 
                         {buttonsMode === 0 && adminLoggedIn === "false" &&
-                            <Button sx={{ px: 3, py: 0, fontSize: '1rem', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )' }} variant="contained" onClick={() => {
+                            <Button sx={{
+                                px: 3,
+                                py: 0,
+                                fontSize: '1rem',
+                                backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )'
+                            }} variant="contained" onClick={() => {
                                 setBookingOpen(!bookingOpen)
                             }}>预定</Button>
                         } */}

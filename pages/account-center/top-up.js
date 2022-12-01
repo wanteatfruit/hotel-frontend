@@ -183,7 +183,7 @@ export default function TopUp() {
                         required
                         id="amount"
                         name="amount"
-                        label="Error"
+                        label="格式错误"
                         helperText="请输入数字"
                         variant="filled"
                     />
