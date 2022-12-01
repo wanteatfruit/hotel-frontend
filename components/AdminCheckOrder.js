@@ -28,12 +28,13 @@ export default function AdminCheckOrder({hotel_list}) {
   const [submit  ,setSubmit] = React.useState(false)
   const [dataRows, setDataRows] = React.useState([])
   const orderColumns = [
+    {field:'orderid', headerName:'ID', width:40},
     { field: 'customerName', headerName: '顾客', width: 90 },
     { field: 'telephone', headerName: '电话', width: 120 },
     { field: 'roomTypeName', headerName: '房型', width: 90 },
     { field: 'hotelName', headerName: '分店', width: 120 },
-    { field: 'checkInTime', headerName: '入住时间', width: 150 },
-    { field: 'checkOutTime', headerName: '退房时间', width: 150 },
+    { field: 'checkInTime', headerName: '入住时间', width: 175 },
+    { field: 'checkOutTime', headerName: '退房时间', width: 175 },
   ]
   // 表格状态，用于搜索
   const [form, setForm] = React.useState({
@@ -44,7 +45,7 @@ export default function AdminCheckOrder({hotel_list}) {
   });
 
   React.useEffect(() => {
-    axios.get("http://120.25.216.186:8888/orders/findAll").then((resp) => setDataRows(resp.data))
+    axios.get("http://10.26.111.227:8888/orders/findAll").then((resp) => setDataRows(resp.data))
   }, [])
 
 
@@ -57,10 +58,10 @@ export default function AdminCheckOrder({hotel_list}) {
  function handleSubmit(event) {
     console.log(form)
 
-    let get_url = "http://120.25.216.186:8888/orders/findbyparameters?customer="+form.customer+"&hotel="+form.hotel+"&city="+form.city+"&telephone="+form.telephone
+    let get_url = "http://10.26.111.227:8888/orders/findbyparameters?customer="+form.customer+"&hotel="+form.hotel+"&city="+form.city+"&telephone="+form.telephone
     console.log(get_url)
     if(form.customer==""&&form.hotel==""&&form.city==""&&form.telephone==""){
-      get_url = "http://120.25.216.186:8888/orders/findAll"
+      get_url = "http://10.26.111.227:8888/orders/findAll"
     }
     console.log(get_url)
     axios.get(get_url).then((resp)=>{setDataRows(resp.data); console.log(resp.data)})
@@ -135,7 +136,7 @@ export default function AdminCheckOrder({hotel_list}) {
           <Card>
             <CardHeader title="订单" />
             <CardContent sx={{}}>
-              <DataGrid  pageSize={10} rowsPerPageOptions={[10,20,50]}  getRowId={(row) => row.customerName + row.orderTime} rows={dataRows} columns={orderColumns} autoHeight localeText={zhCN.components.MuiDataGrid.defaultProps.localeText} />
+              <DataGrid  pageSize={10} rowsPerPageOptions={[10,20,50]}  getRowId={(row) => row.orderid} rows={dataRows} columns={orderColumns} autoHeight localeText={zhCN.components.MuiDataGrid.defaultProps.localeText} />
             </CardContent>
           </Card>
         </Grid>
