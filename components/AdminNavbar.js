@@ -10,7 +10,7 @@ import {
     List,
     ListItem,
     ListItemButton,
-    ListItemText,
+    ListItemText, Paper,
     ThemeProvider,
     Toolbar, Tooltip,
     Typography,
@@ -56,20 +56,24 @@ export default function AdminNavBar({}) {
                     onClose={() => {
                         setChatDialogOpen(false)
                     }}
-                    PaperProps={{
-                        sx: {
-                            position: "fixed",
-                            width: "100%",
-                            height: "100%",
-                            maxWidth: "md",
-                            backgroundColor: "#f1cec2"
-                        }
-                    }}
+                    maxWidth='lg'
+                    // PaperProps={{
+                    //     sx: {
+                    //         position: "fixed",
+                    //         width: "100%",
+                    //         height: "100%",
+                    //         maxWidth: "md",
+                    //         backgroundColor: "transparent"
+                    //     }
+                    // }}
+                    // fullWidth
                 >
-                    <DialogContent>
-                        <iframe id={"chat-frame"} src={"/admin-chat-app.html"} height="95%" width="100%"
-                                frameBorder="0"></iframe>
-                    </DialogContent>
+                    <Paper width={"100%"} elevation={6} square>
+                        <DialogContent>
+                            <iframe id={"chat-frame"} src={"/admin-chat-app.html"}
+                                    frameBorder="0"></iframe>
+                        </DialogContent>
+                    </Paper>
                 </Dialog>
             </>
         )
@@ -122,10 +126,10 @@ export default function AdminNavBar({}) {
             <Box sx={{display: "flex"}}>
                 <CssBaseline/>
                 <AppBar position="fixed" sx={{}} color='secondary'>
-                    
+
                     <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
-                    <IconButton color="inherit" onClick={handleDrawerToggle}>
-                           <MenuIcon/>
+                        <IconButton color="inherit" onClick={handleDrawerToggle}>
+                            <MenuIcon/>
                         </IconButton>
                         <Tooltip title="Chat Room">
                             <IconButton onClick={() => {
