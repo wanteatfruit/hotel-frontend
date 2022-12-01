@@ -239,7 +239,6 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
                                         inputFormat="YYYY/MM/DD"
                                         value={bookingInfo.startDate}
                                         disabled={onSale}
-                                        renderDay={startDateRenderer}
                                         onChange={(newDate) => {
                                             setBookingInfo({ ...bookingInfo, startDate: newDate })
                                         }}
