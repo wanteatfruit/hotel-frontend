@@ -20,9 +20,6 @@ import styles from "../../styles/HotelPage.module.css";
 import axios from "axios";
 import {roomImageUrl} from "../../data";
 import CommentArea from "./comment-area";
-import FloorPlanA from "../../components/floor-plan-a";
-import FloorPlanB from "../../components/floor-plan-b";
-import FloorPlanC from "../../components/floor-plan-c";
 import {CloseOutlined} from "@mui/icons-material";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import NavBar from "../../components/Navbar";
@@ -170,7 +167,8 @@ export default function HotelDetail() {
                                             variants={cardVariants}>
                                     <RoomCard roomInfo={item} hotelName={hotel_name} hotelID={item.hotelid}
                                               admin={false} needMarkBox={true} userID={userID} markedRooms={markedRooms}
-                                              imageUrl={roomImageUrl[item.roomtypeid]} roomTypeID={item.roomtypeid}></RoomCard>
+                                              imageUrl={roomImageUrl[item.roomtypeid]}
+                                              roomTypeID={item.roomtypeid}></RoomCard>
 
                                 </motion.div>
                             </Grid>
@@ -191,11 +189,8 @@ export default function HotelDetail() {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent sx={{display: 'flex', justifyContent: 'center'}}>
-                    {/* 根据hotelname给三家酒店写死平面图 */}
-                    {hotel_name === '深圳湾1号' && <FloorPlanA href1={book_url} href2={book_url}/>}
-                    {hotel_name === '广州1号' && <FloorPlanC href1={book_url} href2={book_url}/>}
-                    {hotel_name === '汤臣一品' && <FloorPlanB href1={book_url} href2={book_url}/>}
-
+                    <iframe src={"/floor-plans/"+hotel_name+".html"} id="floor-plan" height="500" width="600" frameBorder="0"
+                            style={{borderRadius: 10}}></iframe>
                 </DialogContent>
             </Dialog>
 
