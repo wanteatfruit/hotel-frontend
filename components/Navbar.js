@@ -378,9 +378,6 @@ export default function NavBar({
 
                             </List>
                         </Drawer>
-                        <Typography>
-                            盛夏小酒
-                        </Typography>
                     </Box>
                     {/* 小屏只显示logo，在屏幕中心*/}
 
