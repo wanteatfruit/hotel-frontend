@@ -39,6 +39,15 @@ export default function Store() {
     const [telephone, setTelephone] = useState("")
     const [address, setAddress] = useState("")
     const [userID, setUserID] = useState(0)
+    const [nameValid, setNameValid] = useState(true)
+    const [addressValid, setAddressValid] = useState(true)
+    const [phoneValid, setPhoneValid] = useState(true)
+    const validNameRegex = new RegExp(
+        "^[\u4e00-\u9fa5]+$"
+    );
+    const validPhoneRegex = new RegExp(
+        "^[0-9]{11}$"
+    );
 
     async function GetData() {
         await axios.get("http://120.25.216.186:8888/gift/findAll").then((response) => {
@@ -52,7 +61,7 @@ export default function Store() {
     useEffect(() => {
         setUserID(localStorage.getItem("userID"))
         GetData()
-    }, []);
+    });
 
     const purchaseOnClick = async (event) => {
         event.preventDefault();
@@ -60,28 +69,35 @@ export default function Store() {
         const userName = data.get("username")
         const address = data.get("address");
         const telephone = data.get('telephone');
-        // const amount = data.get("amount")
         const amount = 1;
-        const body = {
-            "userID": userID,
-            "telephone": telephone,
-            "amount": amount.toString(),
-            "address": address,
-            "giftName": giftOnDialog.giftname,
-            "userName": userName
+
+        const validName = validNameRegex.test(userName)
+        setNameValid(validName)
+        const validAddress = true
+        const validTelephone = validPhoneRegex.test(telephone)
+        setPhoneValid(validTelephone)
+        if (validName && validAddress && validTelephone) {
+            const body = {
+                "userID": userID,
+                "telephone": telephone,
+                "amount": amount.toString(),
+                "address": address,
+                "giftName": giftOnDialog.giftname,
+                "userName": userName
+            }
+            console.log("body: ", body)
+            let paySucceed = ""
+            await axios.post('http://120.25.216.186:8888/giftorder/creategiftorder', body)
+                .then(response => paySucceed = response.data);
+            console.log("response, ", paySucceed)
+            if (paySucceed.toString() === "true") {
+                setResponse("您已成功兑换！敬请期待礼品抵达")
+            } else {
+                setResponse("您的积分不足够兑换，请尝试兑换其他物品")
+            }
+            setPurchaseDialogOpen(false)
+            setResponseDialogOpen(true)
         }
-        console.log("body: ", body)
-        let paySucceed = ""
-        await axios.post('http://120.25.216.186:8888/giftorder/creategiftorder', body)
-            .then(response => paySucceed = response.data);
-        console.log("response, ", paySucceed)
-        if (paySucceed.toString() === "true") {
-            setResponse("您已成功兑换！敬请期待礼品抵达")
-        } else {
-            setResponse("您的积分不足够兑换，请尝试兑换其他物品")
-        }
-        setPurchaseDialogOpen(false)
-        setResponseDialogOpen(true)
     }
 
     function ResponseDialog() {
@@ -111,8 +127,92 @@ export default function Store() {
         )
     }
 
-    function purchaseDialog() {
+    function PurchaseDialog() {
         const image_url = "url(" + giftImageUrl[giftOnDialog.giftid % (giftImageUrl.length + 1)] + ")"
+
+        function getNameTextField() {
+            if (nameValid) {
+                return (
+                    <>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="username"
+                            label="姓名"
+                            name="username"
+                            autoFocus
+                            value={username}
+                            onChange={(event) => {
+                                setUsername(event.target.value);
+                            }}
+                        />
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <TextField
+                            error
+                            required
+                            id="username"
+                            name="username"
+                            label="格式错误"
+                            helperText="请输入中文名"
+                            variant="filled"
+                            autoFocus
+                            value={username}
+                            onChange={(event) => {
+                                setUsername(event.target.value);
+                                setNameValid(true)
+                            }}
+                        />
+                    </>
+                )
+            }
+        }
+
+        function getPhoneTextField() {
+            if (phoneValid) {
+                return (
+                    <>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="telephone"
+                            label="电话"
+                            id="telephone"
+                            value={telephone}
+                            onChange={(event) => {
+                                setTelephone(event.target.value);
+                            }}
+                        />
+                    </>
+                )
+            } else {
+                return (
+                    <>
+                        <TextField
+                            error
+                            required
+                            id="telephone"
+                            name="telephone"
+                            label="格式错误"
+                            helperText="请输入11位中国电话号码"
+                            variant="filled"
+                            autoFocus
+                            value={telephone}
+                            onChange={(event) => {
+                                setTelephone(event.target.value);
+                                setPhoneValid(true)
+                            }}
+                        />
+                    </>
+                )
+            }
+        }
+
         return (
             <>
                 <Dialog open={purchaseDialogOpen} onClose={() => setPurchaseDialogOpen(false)}
@@ -127,7 +227,7 @@ export default function Store() {
                     <DialogContent>
                         <Grid container component="main" sx={{width: '100%'}}>
                             <CssBaseline/>
-                            <Grid width={"100%"} elevation={6} sx={{backgroundImage: image_url}} square>
+                            <Paper width={"100%"} elevation={6} sx={{backgroundImage: image_url}} square>
                                 <Box container width={"100%"} justifyContent={"center"} my={8}>
                                     <Box sx={{display: "flex", alignItems: "flex-start", justifyContent: "center"}}>
                                         <Typography>您拥有{userCredits}积分</Typography>
@@ -146,19 +246,7 @@ export default function Store() {
                                     }}
                                 >
                                     <Box component="form" noValidate onSubmit={purchaseOnClick} sx={{mt: 3}}>
-                                        <TextField
-                                            margin="normal"
-                                            required
-                                            fullWidth
-                                            id="username"
-                                            label="姓名"
-                                            name="username"
-                                            autoFocus
-                                            value={username}
-                                            onChange={(event) => {
-                                                setUsername(event.target.value);
-                                            }}
-                                        />
+                                        {getNameTextField()}
                                         <TextField
                                             margin="normal"
                                             required
@@ -171,29 +259,18 @@ export default function Store() {
                                                 setAddress(event.target.value);
                                             }}
                                         />
-                                        <TextField
-                                            margin="normal"
-                                            required
-                                            fullWidth
-                                            name="telephone"
-                                            label="电话"
-                                            id="telephone"
-                                            value={telephone}
-                                            onChange={(event) => {
-                                                setTelephone(event.target.value);
-                                            }}
-                                        />
+                                        {getPhoneTextField()}
                                         <Button
                                             type="submit"
                                             fullWidth
-                                            variant=" contained"
+                                            variant="contained"
                                             sx={{mt: 3, mb: 2}}
                                         >
                                             兑换
                                         </Button>
                                     </Box>
                                 </Box>
-                            </Grid>
+                            </Paper>
                         </Grid>
                     </DialogContent>
                 </Dialog>
@@ -217,7 +294,7 @@ export default function Store() {
     return (
         <ThemeProvider theme={theme}>
             {ResponseDialog()}
-            {purchaseDialog()}
+            {PurchaseDialog()}
             <Grid sx={{marginLeft: "4em", marginTop: "1em"}}>
                 <Link
                     href={{
