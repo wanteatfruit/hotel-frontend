@@ -41,7 +41,6 @@ export default function BranchIntro({
         } else {
             setIsMarked(false)
         }
-        console.log("marked hotels: ", markedHotels)
     }, [markedHotels, userID])
 
     function handleIntroduction(info) {
@@ -79,7 +78,6 @@ export default function BranchIntro({
                 "Content-Type": "application/json"
             }
         }
-        console.log("here: ", body)
         if (isChecked) {
             await fetch("http://120.25.216.186:8888/hotelwishlist/add", options)
                 .then((response) => response.text()).then(data => console.log(data))
@@ -141,19 +139,18 @@ export default function BranchIntro({
                         </ListItem>
                     </List>
                 </CardContent>
-                <Grid
+                {userID !== "0" && <Grid
                     sx={{
                         justifyContent: 'flex-end',
                         alignItems: "end",
                         display: "flex",
                         flexDirection: "row"
                     }}>
-
                     <Typography sx={{marginBottom: "0.55em"}}>收藏</Typography>
                     <Checkbox id="admin" label={"收藏该房间"} checked={isMarked} onChange={(event) => {
                         MarkHotel(event.target.checked)
                     }}/>
-                </Grid>
+                </Grid>}
             </Box>
         </Card>
     )

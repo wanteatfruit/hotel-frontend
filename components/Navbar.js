@@ -63,7 +63,8 @@ export default function NavBar({
     hotel_list,
     room_list,
     buttonsMode,
-    href
+    href,
+    refreshUserInfo
 }) {
     const router = useRouter()
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -159,12 +160,13 @@ export default function NavBar({
 
     function clearLogInfo() {
         localStorage.setItem("username", "")
-        localStorage.setItem("userID", 0)
+        localStorage.setItem("userID", "0")
         localStorage.setItem("sessionKey", "")
         localStorage.setItem("isLoggedIn", "false")
         localStorage.setItem("adminLoggedIn", "false")
         setIsLoggedIn("false")
         setAdminLoggedIn("false")
+        refreshUserInfo()
     }
 
     function LogoutDialog() {
