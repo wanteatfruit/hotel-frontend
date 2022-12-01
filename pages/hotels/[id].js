@@ -180,7 +180,7 @@ export default function HotelDetail() {
                     <CommentArea hotelID={hotel_name}/>
                 </Box>
             </Box>
-            <Dialog keepMounted onClose={() => setMapOpen(false)} fullScreen={fullScreenMap} fullWidth maxWidth='lg'
+            <Dialog keepMounted fullScreen={fullScreenMap} fullWidth maxWidth='lg'
                     sx={{zIndex: 1000}} open={openFloorPlan}>
                 <DialogTitle>
                     酒店平面图
