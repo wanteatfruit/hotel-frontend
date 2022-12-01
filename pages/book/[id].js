@@ -62,6 +62,8 @@ export default function BookingPage({ }) {
     const [selectedRoom, setSelectedRoom] = React.useState(0)
     const [loadingDialog, setLoadingDialog] = React.useState(false);
     const [roomNumber, setRoomNumber] = React.useState(101)
+    const [orderReply, setOrderReply] = React.useState('订房成功')
+
     const [bookingInfo, setBookingInfo] = React.useState({
         startDate: dayjs().startOf("day"),
         endDate: dayjs().startOf("day").add(7, 'day'),
@@ -69,8 +71,14 @@ export default function BookingPage({ }) {
         roomPrice: 0,
         hotelName: hotelName == null ? '' : hotelName.toString(),
         cost: 0,
-        guestNum:2
+        guestNum: 2
     })
+    function handleInvalidDate() {
+        if (bookingCost < 0) {
+            alert("请重新选择日期！")
+            return false
+        }
+    }
     React.useEffect(
         () => () => {
             clearTimeout(timerRef.current);
@@ -114,20 +122,20 @@ export default function BookingPage({ }) {
             console.log(bookingInfo)
         }
     }, [roomList])
-    const startDateRenderer=(date,selectedDates, pickerDayProps)=>{
+    const startDateRenderer = (date, selectedDates, pickerDayProps) => {
         let validDates = []
         const today = dayjs().startOf('day')
         validDates.push(today)
         for (const key in emptyRooms) {
             if (Object.hasOwnProperty.call(emptyRooms, key)) {
                 const element = emptyRooms[key];
-                if(element==1){ // dont have room
-                    const newDay = today.add(key,'days')
+                if (element == 1) { // dont have room
+                    const newDay = today.add(key, 'days')
                     validDates.push(newDay)
                 }
             }
         }
-        if(validDates.includes(date)){
+        if (validDates.includes(date)) {
             return <PickersDay {...pickerDayProps} />
         }
         return <PickersDay disabled {...pickerDayProps} />
@@ -193,18 +201,20 @@ export default function BookingPage({ }) {
         setBookingCost(cost1)
     }
 
-    async function handleOrder() {
+    function handleOrder() {
         if (localStorage.getItem("isLoggedIn") === "false") {
             alert("请先登录！")
-            return
+            return false
         }
         const uname = localStorage.getItem("username")
         const uid = localStorage.getItem("userID")
-        const userInfo = await axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`)
-        if (userInfo.data.money < bookingCost) {
-            alert("用户余额不足！")
-            return
-        }
+        axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`).then((resp) => {
+            if (resp.data.money < bookingCost) {
+                alert("用户余额不足！")
+                return false
+            }
+        })
+
         const orderInfo = {
             startDate: bookingInfo.startDate.format('YYYY-MM-DD HH:mm:ss'),
             endDate: bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss'),
@@ -212,37 +222,43 @@ export default function BookingPage({ }) {
             hotelName: hotelName,
             cost: bookingCost,
             username: uname,
-            location:roomNumber.toString()
+            location: roomNumber.toString()
         }
 
-        const resp = await fetch('http://10.26.111.227:8888/orders/bookroom', {
+        fetch('http://10.26.111.227:8888/orders/bookroom', {
             method: 'POST',
             body: JSON.stringify(orderInfo),
             headers: {
                 'Content-type': 'application/json'
             }
+        }).then((resp) => {
+            if (resp.status == 201) {
+                setOrderReply('您选择的日期已无空房，请重新选择日期')
+            }
+            else {
+                setOrderReply('预定成功！')
+            }
         })
-        let clone = resp.clone()
-        console.log(clone)
+
     }
 
     return (
         <>
 
             <ThemeProvider theme={theme}>
-            <Dialog open={loadingDialog} maxWidth='lg'  onClose={() => setLoadingDialog(false)} sx={{ zIndex: 100000001 }} >
-                <DialogContent>
-                    {query === 'success' ? (
-                        <Typography>订房成功！</Typography>
-                    ) : (<CircularProgress />)}
+                <Dialog open={loadingDialog} maxWidth='lg' onClose={() => setLoadingDialog(false)} sx={{ zIndex: 100000001 }} >
+                    <DialogContent>
+                        {query === 'success' ? (
+                            <Typography variant="h6">{orderReply}</Typography>
+                        ) : (<CircularProgress />)}
 
-                </DialogContent>
-                {query === 'success' &&
-                    <Stack direction='row'>
-                        <Button href={'/account-center/account-center'}>用户中心</Button>
-                        <Button onClick={() => { setLoadingDialog(false); handleClickQuery() }}>确定</Button>
-                    </Stack>}
-            </Dialog>
+                    </DialogContent>
+                    {query === 'success' &&
+                        <Stack direction='row'>
+                            <Button href={'/account-center/account-center'}>用户中心</Button>
+                            <Button onClick={() => { setLoadingDialog(false); handleClickQuery() }}>确定</Button>
+                        </Stack>}
+                </Dialog>
 
                 <NavBar />
                 <Box sx={{ mt: '60px', }}>
@@ -280,80 +296,80 @@ export default function BookingPage({ }) {
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                        <Stack mt={3} gap={0} alignItems='center' width={{xs:'90vw', md:'50vw'}}>
-                            <Typography gutterBottom textAlign='start' variant='h6'>{`￥${bookingInfo.roomPrice}/晚`}</Typography>
-                            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={zhCN} >
-                                <Stack mt={2} marginBottom={0} direction='row' gap={0} justifyContent='center' >
-                                    <DatePicker
-                                        label='入住日期'
-                                        minDate={dayjs().startOf("day")}
-                                        maxDate={dayjs().startOf('day').add(29,'days')}
-                                        inputFormat="YYYY/MM/DD"
-                                        value={bookingInfo.startDate}
-                                        renderDay={startDateRenderer}
-                                        onChange={(newDate) => {
-                                            setBookingInfo({ ...bookingInfo, startDate: newDate })
-                                        }}
-                                        renderInput={({ inputRef, inputProps, InputProps }) => (
-                                            <TextField
-                                                label="入住日期"
-                                                {...inputProps}
-                                                ref={inputRef}
-                                                InputProps={{ sx: { mb: 0, borderTopLeftRadius: 15, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0, borderRightStyle: 'none' }, endAdornment: InputProps.endAdornment }}
-                                                required
-                                                margin="none"
-                                                onKeyDown={(e) => e.preventDefault()}
-                                            />
-                                        )}
-                                    >
-                                    </DatePicker>
-                                    <DatePicker
-                                        label="离开日期"
-                                        value={bookingInfo.endDate}
-                                        minDate={bookingInfo.startDate.add(1, 'day')}
-                                        maxDate={dayjs().startOf('day').add(30,'days')}
-                                        inputFormat="YYYY/MM/DD"
-                                        
-                                        onChange={(newDate) => {
-                                            setBookingInfo({ ...bookingInfo, endDate: newDate })
-                                        }}
-                                        renderInput={({ inputRef, inputProps, InputProps }) => (
-                                            <TextField
-                                                {...inputProps}
-                                                label='离开日期'
-                                                ref={inputRef}
-                                                InputProps={{ sx: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 15, borderBottomRightRadius: 0, borderLeftColor: '#fff' }, endAdornment: InputProps.endAdornment }}
-                                                placeholder='离开日期'
-                                                required
+                                <Stack mt={3} gap={0} alignItems='center' width={{ xs: '90vw', md: '50vw' }}>
+                                    <Typography gutterBottom textAlign='start' variant='h6'>{`￥${bookingInfo.roomPrice}/晚`}</Typography>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={zhCN} >
+                                        <Stack mt={2} marginBottom={0} direction='row' gap={0} justifyContent='center' >
+                                            <DatePicker
+                                                label='入住日期'
+                                                minDate={dayjs().startOf("day")}
+                                                maxDate={dayjs().startOf('day').add(29, 'days')}
+                                                inputFormat="YYYY/MM/DD"
+                                                value={bookingInfo.startDate}
+                                                renderDay={startDateRenderer}
+                                                onChange={(newDate) => {
+                                                    setBookingInfo({ ...bookingInfo, startDate: newDate })
+                                                }}
+                                                renderInput={({ inputRef, inputProps, InputProps }) => (
+                                                    <TextField
+                                                        label="入住日期"
+                                                        {...inputProps}
+                                                        ref={inputRef}
+                                                        InputProps={{ sx: { mb: 0, borderTopLeftRadius: 15, borderBottomLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0, borderRightStyle: 'none' }, endAdornment: InputProps.endAdornment }}
+                                                        required
+                                                        margin="none"
+                                                        onKeyDown={(e) => e.preventDefault()}
+                                                    />
+                                                )}
+                                            >
+                                            </DatePicker>
+                                            <DatePicker
+                                                label="离开日期"
+                                                value={bookingInfo.endDate}
+                                                minDate={bookingInfo.startDate.add(1, 'day')}
+                                                maxDate={dayjs().startOf('day').add(30, 'days')}
+                                                inputFormat="YYYY/MM/DD"
 
-                                                onKeyDown={(e) => e.preventDefault()}
-                                            />
-                                        )}
-                                    >
-                                    </DatePicker>
-                                </Stack>
-                            </LocalizationProvider>
-                            <FormControl>
+                                                onChange={(newDate) => {
+                                                    setBookingInfo({ ...bookingInfo, endDate: newDate })
+                                                }}
+                                                renderInput={({ inputRef, inputProps, InputProps }) => (
+                                                    <TextField
+                                                        {...inputProps}
+                                                        label='离开日期'
+                                                        ref={inputRef}
+                                                        InputProps={{ sx: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 15, borderBottomRightRadius: 0, borderLeftColor: '#fff' }, endAdornment: InputProps.endAdornment }}
+                                                        placeholder='离开日期'
+                                                        required
 
-                                <Select placeholder="入住人数" sx={{ width: {xs:'90vw', md:'41.5vw'}, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderTopRightRadius: 0 }} value={bookingInfo.guestNum} onChange={(e) => setBookingInfo({ ...bookingInfo, guestNum: e.target.value })}>
-                                    <MenuItem value={1}>1位</MenuItem>
-                                    <MenuItem value={2}>2位</MenuItem>
-                                    <MenuItem value={3}>3位</MenuItem>
-                                    <MenuItem value={4}>4位</MenuItem>
-                                    <MenuItem value={5}>5位</MenuItem>
-                                </Select>
-                            </FormControl>
-                            {/* <Button onClick={()=>{
+                                                        onKeyDown={(e) => e.preventDefault()}
+                                                    />
+                                                )}
+                                            >
+                                            </DatePicker>
+                                        </Stack>
+                                    </LocalizationProvider>
+                                    <FormControl>
+
+                                        <Select placeholder="入住人数" sx={{ width: { xs: '90vw', md: '41.5vw' }, borderBottomLeftRadius: 15, borderBottomRightRadius: 15, borderTopLeftRadius: 0, borderTopRightRadius: 0 }} value={bookingInfo.guestNum} onChange={(e) => setBookingInfo({ ...bookingInfo, guestNum: e.target.value })}>
+                                            <MenuItem value={1}>1位</MenuItem>
+                                            <MenuItem value={2}>2位</MenuItem>
+                                            <MenuItem value={3}>3位</MenuItem>
+                                            <MenuItem value={4}>4位</MenuItem>
+                                            <MenuItem value={5}>5位</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    {/* <Button onClick={()=>{
                                 if( handleInvalidDate()==false){
                                     return
                                 }
                                 setConfirmDialog(true)
                                 
                             }} color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button> */}
-                            {<Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`您选择了${roomNumber}号房间`}</Typography>}
-                            {/* <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography> */}
+                                    {<Typography variant="h6" sx={{ mt: 2, pb: 2 }}>{`您选择了${roomNumber}号房间`}</Typography>}
+                                    {/* <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography> */}
 
-                        </Stack>
+                                </Stack>
 
                                 {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <Stack direction='row' gap={2}>
@@ -466,7 +482,7 @@ export default function BookingPage({ }) {
                                     </Card>
                                 </Grid>
                                 <Grid item xs={3} sm={2}>
-                                <Card sx={{ flexDirection: 'row' }}>
+                                    <Card sx={{ flexDirection: 'row' }}>
                                         <CardHeader title="房间号"></CardHeader>
                                         <CardContent>
                                             <Typography variant="h6">
@@ -474,7 +490,7 @@ export default function BookingPage({ }) {
                                             </Typography>
                                         </CardContent>
                                     </Card>
- 
+
                                     {/* <Button type="submit" variant="contained" sx={{ width: '100%', height: '100%', fontSize: '2rem' }}>提交订单</Button> */}
                                 </Grid>
                             </Grid>
@@ -482,7 +498,13 @@ export default function BookingPage({ }) {
                                 <Button variant="outlined" sx={{ width: '20vh', marginRight: 5, marginBottom: 4 }} onClick={() => {
                                     setActiveStep(activeStep - 1)
                                 }}>上一步</Button>
-                                <Button onClick={()=>{setLoadingDialog(true); handleOrder(); handleClickQuery()}} variant="contained" sx={{bgcolor:'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', width: '20vh', marginRight: 5, marginBottom: 4 }}>提交订单</Button>
+                                <Button onClick={() => {
+                                    if (handleOrder() !== false && handleInvalidDate()!==false) {
+                                        setLoadingDialog(true);
+                                        handleClickQuery()
+                                    }
+                                    // handleOrder(); 
+                                }} variant="contained" sx={{ bgcolor: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', width: '20vh', marginRight: 5, marginBottom: 4 }}>提交订单</Button>
 
                             </div>
                         </form>

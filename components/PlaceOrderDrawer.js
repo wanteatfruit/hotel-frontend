@@ -1,5 +1,5 @@
 import { ChevronLeftOutlined, ChevronRightRounded, IcecreamOutlined } from "@mui/icons-material";
-import { Dialog, DialogActions, Drawer, Box, Stack, TextField, Tabs, Button, Tab, Typography, List, ListItem, ListItemButton, ListItemText, IconButton, Slider, createTheme, ThemeProvider, Autocomplete, FormControl, InputLabel, Select, MenuItem, Grid, DialogTitle, DialogContent, Chip, CircularProgress } from "@mui/material";
+import { Dialog, DialogActions, Drawer, Box, Stack, TextField, Tabs, Button, Tab, Typography, List, ListItem, ListItemButton, ListItemText, IconButton, Slider, createTheme, ThemeProvider, Autocomplete, FormControl, InputLabel, Select, MenuItem, Grid, DialogTitle, DialogContent, Chip, CircularProgress, CardHeader } from "@mui/material";
 import { DatePicker, LocalizationProvider, PickersDay, zhCN } from "@mui/x-date-pickers";
 import React from "react";
 // import 'react-modern-calendar-datepicker/lib/DatePicker.css';
@@ -43,8 +43,8 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
     };
 
     const [bookingInfo, setBookingInfo] = React.useState({
-        startDate: dayjs().startOf("day"),
-        endDate: dayjs().startOf("day").add(7, 'day'),
+        startDate: dayjs().startOf("day").add(1, 'day'),
+        endDate: dayjs().startOf("day").add(2, 'day'),
         roomName: roomInfo.roomname,
         roomPrice: roomInfo.price,
         roomID: roomInfo !== null ? roomInfo.roomtypeid : '',
@@ -90,7 +90,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
         axios.get(`http://120.25.216.186:8888/roomtype/haveRoom?roomtypeid=${roomInfo.roomtypeid}`).then((resp) => {
             setEmptyRooms(resp.data)
         })
-    },[roomInfo.roomtypeid])
+    }, [roomInfo.roomtypeid])
     const theme = createTheme({
         palette: {
             primary: {
@@ -113,55 +113,67 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
         }
     }
 
-    async function handleOrder(event) {
+     function handleOrder(event) {
 
         if (localStorage.getItem("isLoggedIn") === "false") {
             alert("请先登录！")
-            return
+            return false
         }
         const uname = localStorage.getItem("username")
         const uid = localStorage.getItem("userID")
-        const userInfo = await axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`)
-        if (userInfo.data.money < bookingCost) {
-            alert("用户余额不足！")
-            return
-        }
-        if(onSale){
+        axios.get(`http://120.25.216.186:8888/customer/getbyid?id=${uid}`).then((resp)=>{
+            if(resp.data.money<bookingCost){
+                alert("用户余额不足！")
+                return false
+            }
+        })
+
+        if (onSale) {
             const saleOrderInfo = {
                 startDate: bookingInfo.startDate.format('YYYY-MM-DD HH:mm:ss'),
                 endDate: bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss'),
                 roomType: bookingInfo.roomName,
-                hotelName: bookingInfo.hotelName,
+                hotelName: hotelName,
                 cost: bookingCost,
                 username: uname,
-                roomtypeid:roomInfo.roomtypeid
+                roomtypeid: roomInfo.roomtypeid
             }
-            const resp = await fetch('http://120.25.216.186:8888/sec', {
+            fetch('http://120.25.216.186:8888/sec', {
                 method: 'POST',
                 body: JSON.stringify(saleOrderInfo),
                 headers: {
                     'Content-type': 'application/json'
                 }
             })
+
             return
         }
         const orderInfo = {
             startDate: bookingInfo.startDate.format('YYYY-MM-DD HH:mm:ss'),
             endDate: bookingInfo.endDate.format('YYYY-MM-DD HH:mm:ss'),
             roomType: bookingInfo.roomName,
-            hotelName: bookingInfo.hotelName,
+            hotelName: hotelName,
             cost: bookingCost,
             username: uname
         }
-        // console.log(orderInfo)
+        console.log(orderInfo)
 
-        const resp = await fetch('http://120.25.216.186:8888/orders/booking', {
+        fetch('http://120.25.216.186:8888/orders/booking', {
             method: 'POST',
             body: JSON.stringify(orderInfo),
             headers: {
                 'Content-type': 'application/json'
             }
+        }).then((resp)=>{
+            if(resp.status==201){
+                setOrderReply('您选择的日期已无空房，请重新选择日期')
+            }
+            else{
+                setOrderReply('预定成功！')
+            }
         })
+
+        return true;
         console.log(resp)
         // router.push("/account-center/account-center")
     }
@@ -171,18 +183,20 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
 
     return (
         <ThemeProvider theme={theme}>
-            <Dialog open={loadingDialog} maxWidth='lg'  onClose={() => setLoadingDialog(false)} sx={{ zIndex: 100000001 }} >
-                <DialogContent>
+            <Dialog open={loadingDialog} maxWidth='md' onClose={() => setLoadingDialog(false)} sx={{ zIndex: 100000001 }} >
+                <DialogContent sx={{ justifyContent: 'center', p: 8 }}>
                     {query === 'success' ? (
-                        <Typography>订房成功！</Typography>
+                        <Typography variant="h5">{orderReply}</Typography>
                     ) : (<CircularProgress />)}
 
                 </DialogContent>
                 {query === 'success' &&
-                    <Stack direction='row'>
-                        <Button href={'/account-center/account-center'}>用户中心</Button>
+                    <DialogActions>
+
+                        <Button href={'/account-center/account-center'}>前往用户中心</Button>
                         <Button onClick={() => { setLoadingDialog(false); handleClickQuery() }}>确定</Button>
-                    </Stack>}
+
+                    </DialogActions>}
             </Dialog>
             <Dialog open={confirmDialog} sx={{ zIndex: 100000000 }}>
                 <DialogTitle>确定订单</DialogTitle>
@@ -193,7 +207,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setConfirmDialog(false)}>取消</Button>
-                    <Button onClick={() => { setConfirmDialog(false); setLoadingDialog(true); handleClickQuery(); handleOrder() }}>确认订单</Button>
+                    <Button onClick={() => { setConfirmDialog(false); if (handleOrder() !== false) { handleClickQuery();  setLoadingDialog(true);} }}>确认订单</Button>
                 </DialogActions>
             </Dialog>
             <Drawer id="select_city" anchor="right" open={open} sx={{ position: 'absolute', width: '80vw', zIndex: 1003 }}>
@@ -217,6 +231,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
                                         maxDate={dayjs().startOf('day').add(29, 'days')}
                                         inputFormat="YYYY/MM/DD"
                                         value={bookingInfo.startDate}
+                                        disabled={onSale}
                                         renderDay={startDateRenderer}
                                         onChange={(newDate) => {
                                             setBookingInfo({ ...bookingInfo, startDate: newDate })
@@ -240,7 +255,7 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
                                         minDate={bookingInfo.startDate.add(1, 'day')}
                                         maxDate={dayjs().startOf('day').add(30, 'days')}
                                         inputFormat="YYYY/MM/DD"
-
+                                        disabled={onSale}
                                         onChange={(newDate) => {
                                             setBookingInfo({ ...bookingInfo, endDate: newDate })
                                         }}
@@ -271,10 +286,9 @@ export default function PlaceOrder({ open, hotelName, roomInfo, children, onSale
                                 </Select>
                             </FormControl>
                             <Button onClick={() => {
-                                if (handleInvalidDate() == false) {
-                                    return
+                                if (handleInvalidDate() !== false) {
+                                    setConfirmDialog(true)
                                 }
-                                setConfirmDialog(true)
 
                             }} color="secondary" fullWidth sx={{ borderRadius: 3, height: '50px', fontSize: '1.2rem', mt: 2, width: '25vw', backgroundImage: 'linear-gradient(90deg, #FF385C 0%, #E61E4D 27.5%, #E31C5F 40%, #D70466 57.5%, #BD1E59 75%, #BD1E59 100% )', }}>立即预定</Button>
                             {/* <Typography variant="h6" sx={{ mt: 2,pb:2 }}>{`合计 ￥${bookingCost}`}</Typography> */}
